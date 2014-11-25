@@ -86,6 +86,8 @@ class DoubleClick {
 			$this->register_adslot($identifier);
 		}
 
+		return $identifier;
+
 	}
 
 	/**
@@ -101,29 +103,6 @@ class DoubleClick {
 	}
 
 	public static function header_script() {
-/*
-		echo "
-			<!-- DoubleClick for Wordpress script -->
-			<script type='text/javascript'>
-			var googletag = googletag || {};
-			googletag.cmd = googletag.cmd || [];
-			(function() {
-			var gads = document.createElement('script');
-			gads.async = true;
-			gads.type = 'text/javascript';
-			var useSSL = 'https:' == document.location.protocol;
-			gads.src = (useSSL ? 'https:' : 'http:') + 
-			'//www.googletagservices.com/tag/js/gpt.js';
-			var node = document.getElementsByTagName('script')[0];
-			node.parentNode.insertBefore(gads, node);
-			})();
-			</script>
-		"; */
-
-
-	}
-
-	public function footer_script() {
 
 		echo "
 		<script type='text/javascript'>
@@ -140,6 +119,10 @@ class DoubleClick {
 		node.parentNode.insertBefore(gads, node);
 		})();
 		</script>";
+
+	}
+
+	public function footer_script() {
 
 		echo "\n<script type='text/javascript'>\n";
 		echo "googletag.cmd.push(function() {\n";
@@ -166,7 +149,7 @@ class DoubleClick {
 			echo "}\n";
 		}
 
-		//echo "googletag.pubads().enableSingleRequest();\n";
+		echo "googletag.pubads().enableSingleRequest();\n";
 		echo "googletag.enableServices();\n";
 		echo "});";
 
@@ -174,10 +157,22 @@ class DoubleClick {
 
 	}
 
-	public function display_ad($identifier,$breakpoint = null) {
+	/**
+	 * 
+	 * @param $identifier
+	 * @param $breakpoint
+	 * @param $return Boolean. If this is true it will return a string instead.
+	 */
+	public function display_ad($identifier,$breakpoint = null,$return = false) {
 
-		if(array_key_exists($identifier,$this->adSlots))
-			$this->adSlots[$identifier]->display($breakpoint);
+		if(array_key_exists($identifier,$this->adSlots)) {
+			if($return) {
+				return $this->adSlots[$identifier]->display($breakpoint,$return);
+			}
+			else {
+				$this->adSlots[$identifier]->display($breakpoint,$return);
+			}
+		}
 
 	}
 
@@ -376,7 +371,7 @@ class DoubleClickAdSlot {
 		echo " ).addService(googletag.pubads());\n";
 	}
 
-	public function display($breakpoints = null) {
+	public function display($breakpoints = null,$return = false) {
 
 		if( is_string($breakpoints) ) {
 			$breakpoints = array($breakpoints);
@@ -400,16 +395,23 @@ class DoubleClickAdSlot {
 			}
 		}
 
-		echo "\n<!-- $this->adCode -->\n";
-		echo "<div id='dfw-" . $this->identifier . "' style='width:{$this->size[0][0]}px;height:{$this->size[0][1]}px;'>";
-		echo "<script type='text/javascript'>";
-		echo "if($displayBool) {";
-		echo "googletag.cmd.push(function() { googletag.display('dfw-" . $this->identifier . "'); });";
-		echo "}";
-		echo "</script>";
-		echo "</div>";
+		$s = "";
+		$s .= "\n<!-- $this->adCode -->\n";
+		$s .= "<div id='dfw-" . $this->identifier . "' style='width:{$this->size[0][0]}px;height:{$this->size[0][1]}px;'>";
+		$s .= "<script type='text/javascript'>";
+		$s .= "if($displayBool) {";
+		$s .= "googletag.cmd.push(function() { googletag.display('dfw-" . $this->identifier . "'); });";
+		$s .= "}";
+		$s .= "</script>";
+		$s .= "</div>";
 
 		$this->displayedFor = array_merge($this->displayedFor,$breakpoints);
+
+		if($return){
+			return $s;
+		} else {
+			echo $s;
+		}
 
 	}
 
