@@ -29,6 +29,7 @@ class DoubleClick {
 
 	public $breakpoints = array();
 	public $adSlots = array();
+	public $definedAdSlots = array();
 
 	/**
 	 * Whether we have hooked enqueue of the script
@@ -50,7 +51,6 @@ class DoubleClick {
 		// Script enqueue is static because we only ever want to print it once.
 		if(!$this->enqueued) {
 
-			error_log('adding action');
 			add_action('wp_head', array(get_called_class(), 'header_script'));
 			$this->enqueued = true;
 
@@ -58,6 +58,9 @@ class DoubleClick {
 
 		// Footer script is not static because we could have multiple objects.
 		add_action('wp_head', array($this, 'footer_script'));
+
+		// 
+		add_action('shutdown', array($this, 'check_delivery'));
 	
 	}
 
@@ -71,17 +74,34 @@ class DoubleClick {
 	}
 
 	/**
-	 * Register Ad Slot
+	 * Register ad slot.
 	 * 
 	 */
-	public function register_adslot($identifer,$adCode,$size,$breakpoints = null) {
-		$newAd = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints);
+	public function register_adslot($identifier, $adCode = null, $size = null, $breakpoints = null) {
+		
+		if( $adCode == null ) {
+			$this->adSlots[$identifier] = $this->definedAdSlots[$identifier];
+		} else {
+			$this->define_adslot($identifier,$adCode,$size,$breakpoints);
+			$this->register_adslot($identifier);
+		}
+
+	}
+
+	/**
+	 * Define an ad slot.
+	 * 
+	 */
+	public function define_adslot($identifier,$adCode,$size,$breakpoints = null) {
+		
+		$newAd = new DoubleClickAdSlot($identifier,$adCode,$size,$breakpoints);
 		$newAd->DoubleClickObject = $this;
-		$this->adSlots[$identifer] = $newAd;
+		$this->definedAdSlots[$identifier] = $newAd;
+
 	}
 
 	public static function header_script() {
-
+/*
 		echo "
 			<!-- DoubleClick for Wordpress script -->
 			<script type='text/javascript'>
@@ -98,11 +118,28 @@ class DoubleClick {
 			node.parentNode.insertBefore(gads, node);
 			})();
 			</script>
-		";
+		"; */
+
 
 	}
 
 	public function footer_script() {
+
+		echo "
+		<script type='text/javascript'>
+		var googletag = googletag || {};
+		googletag.cmd = googletag.cmd || [];
+		(function() {
+		var gads = document.createElement('script');
+		gads.async = true;
+		gads.type = 'text/javascript';
+		var useSSL = 'https:' == document.location.protocol;
+		gads.src = (useSSL ? 'https:' : 'http:') + 
+		'//www.googletagservices.com/tag/js/gpt.js';
+		var node = document.getElementsByTagName('script')[0];
+		node.parentNode.insertBefore(gads, node);
+		})();
+		</script>";
 
 		echo "\n<script type='text/javascript'>\n";
 		echo "googletag.cmd.push(function() {\n";
@@ -129,7 +166,7 @@ class DoubleClick {
 			echo "}\n";
 		}
 
-		echo "googletag.pubads().enableSingleRequest();\n";
+		//echo "googletag.pubads().enableSingleRequest();\n";
 		echo "googletag.enableServices();\n";
 		echo "});";
 
@@ -139,8 +176,27 @@ class DoubleClick {
 
 	public function display_ad($identifier,$breakpoint = null) {
 
-		$this->adSlots[$identifier]->display($breakpoint);
+		if(array_key_exists($identifier,$this->adSlots))
+			$this->adSlots[$identifier]->display($breakpoint);
 
+	}
+
+	public function check_delivery() {
+
+		error_log("======= checking ad delivery.");
+		$err = false;
+		foreach ($this->adSlots as $ad) {
+			# code...
+			if(!$ad->fully_delivered()) {
+				error_log(" - " . $ad->identifier . " Failed to deliver " . print_r($ad->not_delivered_for(),true));
+				$err = true;
+			}
+		}
+
+		if(!$err) {
+			error_log(" - All ads delivered successfully.");
+		}
+		error_log("======= done checking ad delivery.");
 	}
 
 }
@@ -241,6 +297,12 @@ class DoubleClickAdSlot {
 	 */
 	public $DoubleClickObject;
 
+	/**
+	 * 
+	 * 
+	 */
+	private $displayedFor = array();
+
 	public function __construct($identifer,$adCode,$size,$breakpoints = null) {
 		
 		$this->identifier = $identifer;
@@ -339,13 +401,34 @@ class DoubleClickAdSlot {
 		}
 
 		echo "\n<!-- $this->adCode -->\n";
-		echo "<div id='dfw-" . $this->identifier . "'>";
+		echo "<div id='dfw-" . $this->identifier . "' style='width:{$this->size[0][0]}px;height:{$this->size[0][1]}px;'>";
 		echo "<script type='text/javascript'>";
 		echo "if($displayBool) {";
 		echo "googletag.cmd.push(function() { googletag.display('dfw-" . $this->identifier . "'); });";
 		echo "}";
 		echo "</script>";
 		echo "</div>";
+
+		$this->displayedFor = array_merge($this->displayedFor,$breakpoints);
+
+	}
+
+	public function fully_delivered() {
+
+		//error_log( "#####not delivered: " .$this->identifier . print_r($this->not_delivered_for(),true) );
+		if( sizeof($this->not_delivered_for()) != 0 )
+			return false;
+		else
+			return true;
+
+
+	}
+
+	public function not_delivered_for() {
+		//error_log( $this->identifier );
+		//error_log( print_r($this->displayedFor,true) . sizeof($this->displayedFor) );
+		//error_log( print_r($this->breakpoints,true) . sizeof($this->breakpoints) );
+		return array_diff($this->breakpoints,$this->displayedFor);
 	}
 
 }
