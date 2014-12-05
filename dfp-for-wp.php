@@ -52,6 +52,7 @@ class DoubleClick {
 		if(!$this->enqueued) {
 
 			add_action('wp_head', array(get_called_class(), 'header_script'));
+			add_action('wp_enqueue_scripts', array(get_called_class(), 'enqueue_scripts'));
 			$this->enqueued = true;
 
 		}
@@ -102,56 +103,21 @@ class DoubleClick {
 
 	}
 
-	public static function header_script() {
+	public static function enqueue_scripts() {
 
-		echo "
-		<script type='text/javascript'>
-		var googletag = googletag || {};
-		googletag.cmd = googletag.cmd || [];
-		(function() {
-		var gads = document.createElement('script');
-		gads.async = true;
-		gads.type = 'text/javascript';
-		var useSSL = 'https:' == document.location.protocol;
-		gads.src = (useSSL ? 'https:' : 'http:') + 
-		'//www.googletagservices.com/tag/js/gpt.js';
-		var node = document.getElementsByTagName('script')[0];
-		node.parentNode.insertBefore(gads, node);
-		})();
-		</script>";
+		wp_enqueue_script( 'jquery.dfp.js', plugins_url( 'js/jquery.dfp.min.js', __FILE__ ) , array('jquery'), '1.1.5', true );
+
+	} 
+
+
+	public static function header_script() {
 
 	}
 
 	public function footer_script() {
 
 		echo "\n<script type='text/javascript'>\n";
-		echo "googletag.cmd.push(function() {\n";
-		
-		foreach($this->adSlots as $a) {
-			if($a->breakpoints == null) {
-				$a->define_slot();
-			}
-		}
 
-		foreach ($this->breakpoints as $b) {
-
-			echo "if(" . $b->get_js_logic() . ") {\n";
-			echo "console.log('adding ".$b->identifier." units');\n";
-			
-			foreach($this->adSlots as $a) {
-				
-				if(in_array($b->identifier,$a->breakpoints)) {
-					$a->define_slot();
-				}
-
-			}
-
-			echo "}\n";
-		}
-
-		echo "googletag.pubads().enableSingleRequest();\n";
-		echo "googletag.enableServices();\n";
-		echo "});";
 
 		echo "</script>";
 
@@ -302,7 +268,8 @@ class DoubleClickAdSlot {
 		
 		$this->identifier = $identifer;
 		
-		$this->adCode = str_replace('/','//',$adCode);
+		// $this->adCode = str_replace('/','//',$adCode);
+		$this->adCode = $adCode;
 
 		if( is_array( $size[0] )) {
 
@@ -333,42 +300,8 @@ class DoubleClickAdSlot {
 	 */
 	public function define_slot() {
 
-		echo "googletag.defineSlot( ";
-				
-		// Ad Unit Tag
-		echo "'/{$this->DoubleClickObject->networkCode}/$this->adCode'";
+		echo "";
 		
-		echo ",";
-		
-		// Size
-		if( sizeof($this->size)==1 ) {
-		
-			echo "[" . $this->size[0][0] . "," . $this->size[0][1] . "]";
-		
-		} else {
-			
-			echo "[";
-			$first = true;
-
-			foreach ($this->size as $sz) {
-
-				if( !$first ) {
-					echo ", ";
-				} else { $first = false; }
-			
-				echo "[" . $sz[0] . "," . $sz[1] . "]";
-			
-			}
-		
-			echo "]";
-		
-		}
-
-		echo ",";
-
-		echo "'dfw-" . $this->identifier . "'";
-				
-		echo " ).addService(googletag.pubads());\n";
 	}
 
 	public function display($breakpoints = null,$return = false) {
