@@ -178,7 +178,7 @@ class DoubleClick {
 
 	public function check_delivery() {
 
-		error_log("======= checking ad delivery.");
+		// error_log("======= checking ad delivery.");
 		$err = false;
 		foreach ($this->adSlots as $ad) {
 			# code...
@@ -189,9 +189,9 @@ class DoubleClick {
 		}
 
 		if(!$err) {
-			error_log(" - All ads delivered successfully.");
+			// error_log(" - All ads delivered successfully.");
 		}
-		error_log("======= done checking ad delivery.");
+		// error_log("======= done checking ad delivery.");
 	}
 
 }
