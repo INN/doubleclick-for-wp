@@ -29,6 +29,8 @@ class DoubleClick {
 
 	public $networkCode;
 
+	public $debug = false;
+
 	public $breakpoints = array();
 	public $adSlots = array();
 	public $definedAdSlots = array();
@@ -121,7 +123,13 @@ class DoubleClick {
 	 */
 	public function place_ad($identifier,$dimensions,$breakpoints = null) {
 
-		// Paramater validation:
+		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints);
+
+	}
+
+	public function get_ad_placement($identifier,$dimensions,$breakpoints = null) {
+
+				// Paramater validation:
 		if( is_string($dimensions) ) {
 			$dimensions = array($dimensions);
 			$dim = "";
@@ -152,57 +160,61 @@ class DoubleClick {
 			$classes .= " dfw-all";
 		endif;
 
-		echo "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
+		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
 
 		$size = explode('x',$dimensions[0]);
 		$w = $size[0] - 20;
 		$h = $size[1] - 20;
 
 		// Print a fake debugging ad unit.
-		/*
-		echo "<div 
-				style='
-					background: rgba(0,0,0,.1);
-					font-family: monospace;
-					padding:10px;
-					width:{$w}px;
-					height:{$h}px;
-					text-align:left;
-					font-size:12px;
-				'>";
-			
-			// Print the identifier
-			echo "<b style='border-bottom:1px solid rgba(0,0,0,.2);display:inline-block;margin-bottom:6px;'>$identifier</b></br>";
-
-			// Print the size.
-			$sizes = "";
-
-			foreach($dimensions as $i=>$d) {
-				if( $i ) $sizes .= ", ";
-				$sizes .= $d;
-			}
-
-			if(sizeof($dimensions)<=1) {
-				echo "<b>size</b> ";
-			} else {
-				echo "<b>sizes</b> ";
-			}
-
-			echo "$sizes</br>";
-
-			// Print the breakpoints.
-
-			if(sizeof($breakpoints)<=1 && $breakpoints) {
-				echo "<b>breakpoint</b> ";
-			} else {
-				echo "<b>breakpoints</b> ";
-			}
-
-			echo $breakpoints ? $adObject->breakpointIdentifier() : "all";
-			echo "</br>";
 		
-		echo "</div>";
-		*/
+		if($this->debug) {
+			$ad = "<div 
+					style='
+						background: rgba(0,0,0,.1);
+						font-family: monospace;
+						padding:10px;
+						width:{$w}px;
+						height:{$h}px;
+						text-align:left;
+						font-size:12px;
+					'>";
+				
+				// Print the identifier
+				$ad .= "<b style='border-bottom:1px solid rgba(0,0,0,.2);display:inline-block;margin-bottom:6px;'>$identifier</b></br>";
+	
+				// Print the size.
+				$sizes = "";
+	
+				foreach($dimensions as $i=>$d) {
+					if( $i ) $sizes .= ", ";
+					$sizes .= $d;
+				}
+	
+				if(sizeof($dimensions)<=1) {
+					$ad .= "<b>size</b> ";
+				} else {
+					$ad .= "<b>sizes</b> ";
+				}
+	
+				$ad .= "$sizes</br>";
+	
+				// Print the breakpoints.
+	
+				if(sizeof($breakpoints)<=1 && $breakpoints) {
+					$ad .= "<b>breakpoint</b> ";
+				} else {
+					$ad .= "<b>breakpoints</b> ";
+				}
+	
+				$ad .= $breakpoints ? $adObject->breakpointIdentifier() : "all";
+				$ad .= "</br>";
+			
+			$ad .= "</div>";
+		}
+
+		return $ad;
+
 	}
 
 }
