@@ -4,43 +4,35 @@ A wordpress plugin built for system administrators to manage and serve their ads
 
 Using this plugin it's possible to define ad units for different screen widths. The plugin takes care of the nitty gritty details of loading those slots and creating the display tags.
 
-Pulls ads asynchronously with a single request.
+Pulls ads asynchronously with a single request. Uses [coop182's jquery dfp implementation](https://github.com/coop182/jquery.dfp.js).
 
-## Setup
+## Usage
 
-In `functions.php`, hook to `dfw_setup_ad_units` and using the global `$DoubleClick` object:
+In `functions.php`, hook to `dfw_setup` and using the global `$DoubleClick` object and define your network code and register your breakpoints.
 
-1. Set your network code.
-2. Define breakpoints for your site using `$DoubleClick->register_breakpoint`.
-3. Register each of your ad units using `$DoubleClick->register_adslot`.
-
-An example:
-
-	function my_ad_setup() {
+	function ad_setup() {
 	
 		global $DoubleClick;
-		
-		$DoubleClick->networkCode = "xxxxxxxx";
-		$DoubleClick->register_breakpoint('phone',array('minWidth'=>	0,'maxWidth'=>720));
-		$DoubleClick->register_breakpoint('ipad',	array('minWidth'=>720,'maxWidth'=>1040));
-		$DoubleClick->register_breakpoint('desktop',	array('minWidth'=>1040,'maxWidth'=>9999));
-		$DoubleClick->register_adslot(
-			'leaderboard',
-			'wjh/leaderboard/728x90',
-			array("728","90"),
-			array('ipad','desktop')
-			);
-		
-		$DoubleClick->register_adslot(
-			'small-rect',
-			'wjh/smallrect/300x250',
-			array("300","250"),
-			'phone'
-			);
+	
+		$DoubleClick->networkCode = "xxxxxxx";
+			
+		/* breakpoints */
+		$DoubleClick->register_breakpoint('phone', array('minWidth'=>	0,'maxWidth'=>720));
+		$DoubleClick->register_breakpoint('tablet', array('minWidth'=>760,'maxWidth'=>1040));
+		$DoubleClick->register_breakpoint('desktop', array('minWidth'=>1040,'maxWidth'=>1220));
+		$DoubleClick->register_breakpoint('xl', array('minWidth'=>1220,'maxWidth'=>9999));
+	
 	}
-	add_action('dfw_setup_ad_units','my_ad_setup');
+	add_action('dfw_setup','ad_setup');
 
-Then, use `$DoubleClick->display_ad($identifier)` in your template files to display that ad. `display_ad` will surround the ad tag in a javascript if statement that will only call that ad if it's applicable for the current device breakpoint.
+Then when you want to place an ad call `$DoubleClick->place_ad`
+
+	// Places a 728x90 leaderboard ad for all breakpoints but mobile.
+	$DoubleClick->place_ad('bh:leaderboard','728x90',array('desktop','xl','tablet'));
+
+	// Places an ad for all breakpoints.
+	$DoubleClick->place_ad('bh:leaderboard','300x250');
+
 
 ## Function reference
 
@@ -52,8 +44,6 @@ Then, use `$DoubleClick->display_ad($identifier)` in your template files to disp
     
 Define a new breakpoint. This will output javascript to only load the ad if the target screen is between the min and max width.
 
-    
-
 ##### Paramaters
 
 ###### $identifer
@@ -61,27 +51,4 @@ Define a new breakpoint. This will output javascript to only load the ad if the 
 
 ###### $args
 `Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
-
-### $DoubleClick->register_adslot
-
-##### Usage
-
-    $DoubleClick->register_adslot($identifier,$adCode,$sizes,$breakpoints = null)
-    
-##### Parameters
-
-###### $identifier
-`String` A unique identifier for this breakpoint
-
-###### $adcode
-`String` The adcode ad defined in DFP
-
-###### $sizes
-`Array` If only one size, this is an array where [0] is width and [1] is height. If more than one size, this is an array of arrays (as described in the previous sentence).
-
-###### $breakpoints
-`Optional` `Mixed` Either a string or array of strings. Use this to specify which breakpoint(s) this ad should be loaded for.
-
-
-
 

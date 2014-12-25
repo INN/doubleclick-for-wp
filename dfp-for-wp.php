@@ -3,8 +3,8 @@
 Plugin Name: 	DoubleClick for Wordpress
 Description: 	Gives site administrators control over ad units loaded and displayed on their site.
 Author: 		Will Haynes
-Author URI: 	http://badgerherald.com
-License: 		Copyright (c) 2013 The Badger Herald
+Author URI: 	http://willhaynes.com
+License: 		Released under the MIT license
 */
 
 
@@ -17,8 +17,10 @@ $DoubleClick = new DoubleClick();
 function dfw_add_action() {
 	/**
 	 * 
+	 * 
+	 * 
 	 */
-	do_action('dfw_setup_ad_units');
+	do_action('dfw_setup');
 }
 add_action('wp', 'dfw_add_action');
 
@@ -50,18 +52,11 @@ class DoubleClick {
 
 		// Script enqueue is static because we only ever want to print it once.
 		if(!$this->enqueued) {
-
-			add_action('wp_head', array(get_called_class(), 'header_script'));
 			add_action('wp_enqueue_scripts', array(get_called_class(), 'enqueue_scripts'));
 			$this->enqueued = true;
-
 		}
 
-		// Footer script is not static because we could have multiple objects.
-		add_action('wp_head', array($this, 'footer_script'));
-
-		// 
-		add_action('shutdown', array($this, 'check_delivery'));
+		add_action('wp_print_footer_scripts', array($this, 'footer_script'));
 	
 	}
 
@@ -71,35 +66,8 @@ class DoubleClick {
 	 * @param DoubleClickBreakpoint
 	 */
 	public function register_breakpoint($identifier,$args = null) {
+
 		$this->breakpoints[$identifier] = new DoubleClickBreakpoint($identifier,$args);
-	}
-
-	/**
-	 * Register ad slot.
-	 * 
-	 */
-	public function register_adslot($identifier, $adCode = null, $size = null, $breakpoints = null) {
-		
-		if( $adCode == null ) {
-			$this->adSlots[$identifier] = $this->definedAdSlots[$identifier];
-		} else {
-			$this->define_adslot($identifier,$adCode,$size,$breakpoints);
-			$this->register_adslot($identifier);
-		}
-
-		return $identifier;
-
-	}
-
-	/**
-	 * Define an ad slot.
-	 * 
-	 */
-	public function define_adslot($identifier,$adCode,$size,$breakpoints = null) {
-		
-		$newAd = new DoubleClickAdSlot($identifier,$adCode,$size,$breakpoints);
-		$newAd->DoubleClickObject = $this;
-		$this->definedAdSlots[$identifier] = $newAd;
 
 	}
 
@@ -109,56 +77,224 @@ class DoubleClick {
 
 	} 
 
-
-	public static function header_script() {
-
-	}
-
 	public function footer_script() {
 
 		echo "\n<script type='text/javascript'>\n";
 
+		// Load each breakpoint
 
-		echo "</script>";
+		$first = true;
+		foreach($this->breakpoints as $b) :
+
+			
+			if(!$first) echo "else ";
+
+			echo "if( " . $b->get_js_logic() . " ) { \n";
+				echo "\t$('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
+        	    	echo "\t\tdfpID: '". $this->networkCode ."',\n";
+        	    	echo "\t\trefreshExisting: false\n";
+        		echo "\t});\n";
+			echo "} ";
+
+			$first = false;
+
+		endforeach;
+
+		// Load for all breakpoints
+/*
+		echo "else {\n";
+		echo "\t$('.dfw-all').dfp({ \n";
+            echo "\t\tdfpID: '". $this->networkCode ."',\n";
+            echo "\t\trefreshExisting: false\n";
+        echo "\t});\n";
+		echo "}";
+*/
+		echo "\n</script>\n";
 
 	}
 
 	/**
 	 * 
-	 * @param $identifier
-	 * @param $breakpoint
+	 * @param string $identifier A DFP
+	 * @param mixed $breakpoint (string/array)
 	 * @param $return Boolean. If this is true it will return a string instead.
 	 */
-	public function display_ad($identifier,$breakpoint = null,$return = false) {
+	public function place_ad($identifier,$dimensions,$breakpoints = null) {
 
-		if(array_key_exists($identifier,$this->adSlots)) {
-			if($return) {
-				return $this->adSlots[$identifier]->display($breakpoint,$return);
+		// Paramater validation:
+		if( is_string($dimensions) ) {
+			$dimensions = array($dimensions);
+			$dim = "";
+			foreach($dimensions as $i=>$d) {
+				if( $i ) {
+					$dim .= ",";
+				}
+				$dim .= $d;
 			}
-			else {
-				$this->adSlots[$identifier]->display($breakpoint,$return);
+		}
+
+		if( is_string($breakpoints) ) {
+			$breakpoints = array($breakpoints);
+		}
+
+		$adObject = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints);
+		$this->adSlots[] = $adObject;
+
+		// Print the ad tag.
+
+		$classes = "dfw-unit";
+
+		if($breakpoints):
+			foreach($breakpoints as $i=>$b) {
+				$classes .= " dfw-" . $b;
 			}
+		else:
+			$classes .= " dfw-all";
+		endif;
+
+		echo "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
+
+		$size = explode('x',$dimensions[0]);
+		$w = $size[0] - 20;
+		$h = $size[1] - 20;
+
+		// Print a fake debugging ad unit.
+		/*
+		echo "<div 
+				style='
+					background: rgba(0,0,0,.1);
+					font-family: monospace;
+					padding:10px;
+					width:{$w}px;
+					height:{$h}px;
+					text-align:left;
+					font-size:12px;
+				'>";
+			
+			// Print the identifier
+			echo "<b style='border-bottom:1px solid rgba(0,0,0,.2);display:inline-block;margin-bottom:6px;'>$identifier</b></br>";
+
+			// Print the size.
+			$sizes = "";
+
+			foreach($dimensions as $i=>$d) {
+				if( $i ) $sizes .= ", ";
+				$sizes .= $d;
+			}
+
+			if(sizeof($dimensions)<=1) {
+				echo "<b>size</b> ";
+			} else {
+				echo "<b>sizes</b> ";
+			}
+
+			echo "$sizes</br>";
+
+			// Print the breakpoints.
+
+			if(sizeof($breakpoints)<=1 && $breakpoints) {
+				echo "<b>breakpoint</b> ";
+			} else {
+				echo "<b>breakpoints</b> ";
+			}
+
+			echo $breakpoints ? $adObject->breakpointIdentifier() : "all";
+			echo "</br>";
+		
+		echo "</div>";
+		*/
+	}
+
+}
+
+class DoubleClickAdSlot {
+
+	/** 
+	 * DFP ad code.
+	 * 
+	 * @var String.
+	 */
+	public $adCode;
+
+	/**
+	 * Array of sizes.
+	 * 
+	 * @var Array.
+	 */
+	public $size;
+
+	/**
+	 * Unique identifier for this ad slot.
+	 * 
+	 * @var String.
+	 */
+	public $identifier;
+
+	/**
+	 * Array of associated breakpoints.
+	 * 
+	 * @var Array.
+	 */
+	public $breakpoints = null;
+
+	/**
+	 * The associated DoubleClick Object
+	 * 
+	 * @var DoubleClick
+	 */
+	public $DoubleClickObject;
+
+	/**
+	 * 
+	 * 
+	 */
+	private $displayedFor = array();
+
+	public function __construct($identifer,$adCode,$size,$breakpoints = null) {
+
+		$this->identifier = $identifer;
+		
+		// $this->adCode = str_replace('/','//',$adCode);
+		$this->adCode = $adCode;
+
+		if( is_string( $size ) ) {
+
+			$this->size = array($size);
+
+		} else if( is_array( $size ) ) {
+
+			$this->size = $size;
+
+		}
+
+		if( is_string( $breakpoints ) ) {
+
+			$this->breakpoints = array( $breakpoints );
+
+		} else if( is_array( $breakpoints ) ) {
+
+			sort($breakpoints);
+			$this->breakpoints = $breakpoints;
+
 		}
 
 	}
 
-	public function check_delivery() {
+	public function breakpointIdentifier() {
+		
+		$s = "";
 
-		error_log("======= checking ad delivery.");
-		$err = false;
-		foreach ($this->adSlots as $ad) {
-			# code...
-			if(!$ad->fully_delivered()) {
-				error_log(" - " . $ad->identifier . " Failed to deliver " . print_r($ad->not_delivered_for(),true));
-				$err = true;
+		foreach($this->breakpoints as $i=>$b) {
+			if( $i ) {
+				$s .= "+";
 			}
+			$s .= $b;	
 		}
+		return $s;
 
-		if(!$err) {
-			error_log(" - All ads delivered successfully.");
-		}
-		error_log("======= done checking ad delivery.");
+
 	}
+
 
 }
 
@@ -217,153 +353,6 @@ class DoubleClickBreakpoint {
 		
 		return "($this->minWidth <= document.documentElement.clientWidth && document.documentElement.clientWidth < $this->maxWidth)";
 	
-	}
-
-}
-
-class DoubleClickAdSlot {
-
-	/** 
-	 * DFP ad code.
-	 * 
-	 * @var String.
-	 */
-	public $adCode;
-
-	/**
-	 * Array of sizes.
-	 * 
-	 * @var Array.
-	 */
-	public $size;
-
-	/**
-	 * Unique identifier for this ad slot.
-	 * 
-	 * @var String.
-	 */
-	public $identifier;
-
-	/**
-	 * Array of associated breakpoints.
-	 * 
-	 * @var Array.
-	 */
-	public $breakpoints = null;
-
-	/**
-	 * The associated DoubleClick Object
-	 * 
-	 * @var DoubleClick
-	 */
-	public $DoubleClickObject;
-
-	/**
-	 * 
-	 * 
-	 */
-	private $displayedFor = array();
-
-	public function __construct($identifer,$adCode,$size,$breakpoints = null) {
-		
-		$this->identifier = $identifer;
-		
-		// $this->adCode = str_replace('/','//',$adCode);
-		$this->adCode = $adCode;
-
-		if( is_array( $size[0] )) {
-
-			$this->size = $size;
-
-		} else if( is_array( $size ) ) {
-
-			$this->size = array($size);
-
-		}
-
-		if( is_string( $breakpoints ) ) {
-
-			$this->breakpoints = array( $breakpoints );
-
-		} else if( is_array( $breakpoints ) ) {
-
-			$this->breakpoints = $breakpoints;
-
-		}
-
-	}
-
-	/**
-	 * Prints the javascript statement that defines the slot.
-	 * Called from DoubleClick->print_footer();
-	 * 
-	 */
-	public function define_slot() {
-
-		echo "";
-		
-	}
-
-	public function display($breakpoints = null,$return = false) {
-
-		if( is_string($breakpoints) ) {
-			$breakpoints = array($breakpoints);
-		} 
-		else if( is_null($breakpoints) ) {
-			$breakpoints = $this->breakpoints;
-		}
-
-		$displayBool = "";
-		if( !$breakpoints ) {
-			$displayBool = "true";
-		} 
-		else {
-			$first = true;
-			foreach($breakpoints as $b) {
-				if(!$first) {
-					$displayBool .= " || ";
-				} 
-				else { $first = false; }
-				$displayBool .= $this->DoubleClickObject->breakpoints[$b]->get_js_logic();
-			}
-		}
-
-		$s = "";
-		$s .= "\n<!-- $this->adCode -->\n";
-		$s .= "<div id='dfw-" . $this->identifier . "' style='width:{$this->size[0][0]}px;height:{$this->size[0][1]}px;'>";
-		$s .= "<script type='text/javascript'>";
-		$s .= "if($displayBool) {";
-		$s .= "googletag.cmd.push(function() { googletag.display('dfw-" . $this->identifier . "'); });";
-		$s .= "}";
-		$s .= "</script>";
-		$s .= "</div>";
-
-		$this->displayedFor = array_merge($this->displayedFor,$breakpoints);
-
-		if($return){
-			return $s;
-		} else {
-			echo $s;
-		}
-
-	}
-
-	public function fully_delivered() {
-
-		//error_log( "#####not delivered: " .$this->identifier . print_r($this->not_delivered_for(),true) );
-		if( sizeof($this->not_delivered_for()) != 0 )
-			return false;
-		else
-			return true;
-
-
-	}
-
-	public function not_delivered_for() {
-		//error_log( $this->identifier );
-		//error_log( print_r($this->displayedFor,true) . sizeof($this->displayedFor) );
-		//error_log( print_r($this->breakpoints,true) . sizeof($this->breakpoints) );
-		return array_diff($this->breakpoints,$this->displayedFor);
 	}
 
 }
