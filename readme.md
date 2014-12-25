@@ -28,10 +28,10 @@ In `functions.php`, hook to `dfw_setup` and using the global `$DoubleClick` obje
 Then when you want to place an ad call `$DoubleClick->place_ad`
 
 	// Places a 728x90 leaderboard ad for all breakpoints but mobile.
-	$DoubleClick->place_ad('bh:leaderboard','728x90',array('desktop','xl','tablet'));
+	$DoubleClick->place_ad('site-leaderboard','728x90',array('desktop','xl','tablet'));
 
 	// Places an ad for all breakpoints.
-	$DoubleClick->place_ad('bh:leaderboard','300x250');
+	$DoubleClick->place_ad('site-rect','300x250');
 
 
 ## Function reference
@@ -52,3 +52,7 @@ Define a new breakpoint. This will output javascript to only load the ad if the 
 ###### $args
 `Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
 
+
+## License
+
+Released under the MIT license
