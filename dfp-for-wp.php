@@ -102,15 +102,6 @@ class DoubleClick {
 
 		endforeach;
 
-		// Load for all breakpoints
-/*
-		echo "else {\n";
-		echo "\t$('.dfw-all').dfp({ \n";
-            echo "\t\tdfpID: '". $this->networkCode ."',\n";
-            echo "\t\trefreshExisting: false\n";
-        echo "\t});\n";
-		echo "}";
-*/
 		echo "\n</script>\n";
 
 	}
@@ -163,21 +154,22 @@ class DoubleClick {
 		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
 
 		$size = explode('x',$dimensions[0]);
-		$w = $size[0] - 20;
-		$h = $size[1] - 20;
+		$w = $size[0];
+		$h = $size[1];
 
 		// Print a fake debugging ad unit.
 		
 		if($this->debug) {
 			$ad = "<div 
 					style='
-						background: rgba(0,0,0,.1);
-						font-family: monospace;
-						padding:10px;
-						width:{$w}px;
-						height:{$h}px;
-						text-align:left;
-						font-size:12px;
+						background: 	rgba(0,0,0,.1);
+						font-family: 	monospace;
+						padding:		10px;
+						width:			{$w}px;
+						height:			{$h}px;
+						text-align:		left;
+						font-size:		12px;
+						box-sizing:		border-box;
 					'>";
 				
 				// Print the identifier
