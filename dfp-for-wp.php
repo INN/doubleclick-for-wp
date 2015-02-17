@@ -81,6 +81,7 @@ class DoubleClick {
 
 	public function footer_script() {
 
+		if(!$this->debug) :
 		echo "\n<script type='text/javascript'>\n";
 
 		// Load each breakpoint
@@ -103,6 +104,7 @@ class DoubleClick {
 		endforeach;
 
 		echo "\n</script>\n";
+		endif;
 
 	}
 
@@ -169,8 +171,9 @@ class DoubleClick {
 						height:			{$h}px;
 						text-align:		left;
 						font-size:		12px;
-						box-sizing:		border-box;
-					'>";
+						box-sizing:		border-box;'
+					class='$classes' 
+					>";
 				
 				// Print the identifier
 				$ad .= "<b style='border-bottom:1px solid rgba(0,0,0,.2);display:inline-block;margin-bottom:6px;'>$identifier</b></br>";
