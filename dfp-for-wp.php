@@ -93,7 +93,7 @@ class DoubleClick {
 			if(!$first) echo "else ";
 
 			echo "if( " . $b->get_js_logic() . " ) { \n";
-				echo "\t$('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
+				echo "\tjQuery('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
         	    	echo "\t\tdfpID: '". $this->networkCode ."',\n";
         	    	echo "\t\trefreshExisting: false\n";
         		echo "\t});\n";
