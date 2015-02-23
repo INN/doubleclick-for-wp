@@ -1,12 +1,10 @@
 <?php
 /*
-Plugin Name: 	DoubleClick for Wordpress
-Description: 	Gives site administrators control over ad units loaded and displayed on their site.
-Author: 		Will Haynes
-Author URI: 	http://willhaynes.com
-License: 		Released under the MIT license
+Plugin Name: 	DoubleClick for WordPress
+Description: 	The simplest way to serve DoubleClick ads in WordPress.
+Author: 		Will Haynes for INN
+Author URI: 	http://github.com/inn
 */
-
 
 /**
  * Global instances for doubleclick object.
@@ -15,14 +13,17 @@ License: 		Released under the MIT license
 $DoubleClick = new DoubleClick();
 
 function dfw_add_action() {
+
 	/**
+	 * Use this action to setup 
+	 * breakpoints and network tracking code
+	 * in your theme's functions.php.
 	 * 
-	 * 
-	 * 
+	 * @since v0.1
 	 */
 	do_action('dfw_setup');
 }
-add_action('wp', 'dfw_add_action');
+add_action('wp_loaded', 'dfw_add_action');
 
 
 class DoubleClick {
@@ -59,6 +60,17 @@ class DoubleClick {
 		}
 
 		add_action('wp_print_footer_scripts', array($this, 'footer_script'));
+
+		$breakpoints = unserialize( get_option('dfw_breakpoints') );
+
+		foreach($breakpoints as $b) {
+			$args = array(
+				'minWidth' => $b->minWidth,
+				'maxWidth' => $b->maxWidth,
+				'_option'	=> true	// this breakpoint is set in WordPress options.
+				);
+			$this->register_breakpoint($b->identifier,$args);
+		}
 	
 	}
 
@@ -82,6 +94,7 @@ class DoubleClick {
 	public function footer_script() {
 
 		if(!$this->debug) :
+			
 		echo "\n<script type='text/javascript'>\n";
 
 		// Load each breakpoint
@@ -89,7 +102,6 @@ class DoubleClick {
 		$first = true;
 		foreach($this->breakpoints as $b) :
 
-			
 			if(!$first) echo "else ";
 
 			echo "if( " . $b->get_js_logic() . " ) { \n";
@@ -104,25 +116,29 @@ class DoubleClick {
 		endforeach;
 
 		echo "\n</script>\n";
-		endif;
 
+		endif;
 	}
 
 	/**
+	 * Place a DFP ad.
 	 * 
 	 * @param string $identifier A DFP
-	 * @param mixed $breakpoint (string/array)
+	 * @param string|array $dimensions the dimensions the ad could be.
+	 * @param string|array $breakpoint breakpoints to target.
+	 * @param array $targeting additional targeting options.
 	 * @param $return Boolean. If this is true it will return a string instead.
 	 */
-	public function place_ad($identifier,$dimensions,$breakpoints = null) {
-
-		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints);
+	public function place_ad($identifier,$dimensions,$breakpoints = null,$targeting = null) {
+		
+		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints,$targeting);
 
 	}
 
-	public function get_ad_placement($identifier,$dimensions,$breakpoints = null) {
+	public function get_ad_placement($identifier,$dimensions,$breakpoints = null, $targeting = null) {
 
-				// Paramater validation:
+		// $dimensions validation
+
 		if( is_string($dimensions) ) {
 			$dimensions = array($dimensions);
 			$dim = "";
@@ -134,11 +150,34 @@ class DoubleClick {
 			}
 		}
 
+		// $breakpoints validation
+
 		if( is_string($breakpoints) ) {
 			$breakpoints = array($breakpoints);
 		}
 
-		$adObject = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints);
+		// $targeting validation
+
+		if( is_null($targeting) ) {
+			$targeting = array();
+		}
+
+		if( !isset( $targeting['page'] ) ) {
+
+			if(is_home())
+				$targeting['page'] = 'homepage';
+			if(is_single())
+				$targeting['page'] = 'story';
+			if(is_archive())
+				$targeting['page'] = 'archive';
+			if(is_page())
+				$targeting['page'] = 'page';
+			else
+				$targeting['page'] = 'other';
+
+		}
+
+		$adObject = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints,$targeting);
 		$this->adSlots[] = $adObject;
 
 		// Print the ad tag.
@@ -153,7 +192,7 @@ class DoubleClick {
 			$classes .= " dfw-all";
 		endif;
 
-		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
+		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim' data-targeting='$targets'></div>";
 
 		$size = explode('x',$dimensions[0]);
 		$w = $size[0];
@@ -245,6 +284,13 @@ class DoubleClickAdSlot {
 	public $breakpoints = null;
 
 	/**
+	 * Array of targeting options.
+	 * 
+	 * @var Array.
+	 */
+	public $targeting = null;
+
+	/**
 	 * The associated DoubleClick Object
 	 * 
 	 * @var DoubleClick
@@ -257,7 +303,7 @@ class DoubleClickAdSlot {
 	 */
 	private $displayedFor = array();
 
-	public function __construct($identifer,$adCode,$size,$breakpoints = null) {
+	public function __construct($identifer,$adCode,$size,$breakpoints = null,$targeting = null) {
 
 		$this->identifier = $identifer;
 		
@@ -285,6 +331,8 @@ class DoubleClickAdSlot {
 
 		}
 
+		$this->targeting = $targeting;
+
 	}
 
 	public function breakpointIdentifier() {
@@ -298,7 +346,6 @@ class DoubleClickAdSlot {
 			$s .= $b;	
 		}
 		return $s;
-
 
 	}
 
@@ -328,6 +375,14 @@ class DoubleClickBreakpoint {
 	 */
 	public $maxWidth;
 
+	/**
+	 * Was this breakpoint added by a theme or
+	 * through an option?
+	 * 
+	 * @var boolean
+	 */
+	public $option;
+
 
 	public function __construct($identifier,$args = null) {
 		
@@ -336,6 +391,10 @@ class DoubleClickBreakpoint {
 
 		if(isset($args['maxWidth']))
 			$this->maxWidth = $args['maxWidth'];
+
+		if(isset($args['_option']) && $args['_option'] ) {
+			$this->option = true;
+		}
 
 		$this->identifier = $identifier;
 
@@ -363,3 +422,16 @@ class DoubleClickBreakpoint {
 	}
 
 }
+
+
+/**
+ * The dfp front end widget.
+ * 
+ */
+include plugin_dir_path(__FILE__) . '/dfw-widget.php';
+
+/**
+ * Front end options for the widget.
+ *
+ */
+include plugin_dir_path(__FILE__) . '/dfw-options.php';
