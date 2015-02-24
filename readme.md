@@ -61,7 +61,11 @@ __Note__: Targeting strings are limited to 40 characters long by DFP. Targeting 
 
 __Screenshot__: This screenshot shows how to configure **URLIs** targeting for urls containing `books/` or `dvds/` or `movies/` under `Inventory > Custom Targeting`.
 
+![Targeting](http://i.imgur.com/pNGHKmx.png)
+
 __Screenshot__: This screenshot targeting criteria is set on a line item to only display on pages containing `books/` or `dvds/` in the url.
+
+![Targeting](http://i.imgur.com/254pAJw.png)
 
 * * *
 
