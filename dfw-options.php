@@ -123,6 +123,8 @@ function dfw_breakpoints_input() {
 		}
 	}
 
+	$breakpoints = unserialize( get_option('dfw_breakpoints') );
+
 	$i = 0;
 
 	while( $i < 5 ) {
@@ -138,41 +140,43 @@ function dfw_breakpoints_save($value,$option) {
 
 	$breakpoints = array();
 
-	if(isset($value[0])) {
+	if(isset($value[0]) && $value[0]) {
 		$breakpoints[] = array(
 			'identifier' => $value[0],
 			'min-width' => $value[1],
 			'max-width' => $value[2]
 			);
 	}
-	if(isset($value[3])) {
+	if(isset($value[3]) && $value[3]) {
 		$breakpoints[] = array(
 			'identifier' => $value[3],
 			'min-width' => $value[4],
 			'max-width' => $value[5]
 			);
 	}
-	if(isset($value[6])) {
+	if(isset($value[6]) && $value[6]) {
 		$breakpoints[] = array(
 			'identifier' => $value[6],
 			'min-width' => $value[7],
 			'max-width' => $value[8]
 			);
 	}
-	if(isset($value[9])) {
+	if(isset($value[9]) && $value[9]) {
 		$breakpoints[] = array(
 			'identifier' => $value[9],
 			'min-width' => $value[10],
 			'max-width' => $value[11]
 			);
 	}
-	if(isset($value[12])) {
+	if(isset($value[12]) && $value[12]) {
 		$breakpoints[] = array(
 			'identifier' => $value[13],
 			'min-width' => $value[14],
 			'max-width' => $value[15]
 			);
 	}
+
+	error_log(sizeof($breakpoints));
 
 	return serialize($breakpoints);
 

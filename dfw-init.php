@@ -62,19 +62,18 @@ class DoubleClick {
 		add_action('wp_print_footer_scripts', array($this, 'footer_script'));
 
 		$breakpoints = unserialize( get_option('dfw_breakpoints') );
-		error_log(print_r($breakpoints,true));
-		if(sizeof($breakpoints)>0) :
 
-			foreach($breakpoints as $b) {
-				$args = array(
-					'minWidth' => $b->minWidth,
-					'maxWidth' => $b->maxWidth,
-					'_option'	=> true	// this breakpoint is set in WordPress options.
-					);
-				$this->register_breakpoint($b->identifier,$args);
-			}
-		endif;
-	
+		foreach($breakpoints as $b) {
+			$args = array(
+				'minWidth' => $b['min-width'],
+				'maxWidth' => $b['max-width'],
+				'_option'	=> true	// this breakpoint is set in WordPress options.
+				);
+			$this->register_breakpoint($b['identifier'],$args);
+		}
+
+		error_log(print_r($breakpoints,true));
+
 	}
 
 	/**
