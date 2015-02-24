@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 	DoubleClick for WordPress
-Description: 	The simplest way to serve DoubleClick ads in WordPress.
+Description: 	A simple way to serve DoubleClick ads in WordPress.
 Author: 		Will Haynes for INN
 Author URI: 	http://github.com/inn
 */
@@ -91,6 +91,16 @@ class DoubleClick {
 
 	} 
 
+	/**
+	 * If the network code is set by the theme, return that.
+	 * Else, try to return the front end option.
+	 * 
+	 * @return String network code.
+	 */
+	private function networkCode() {
+		return isset($this->networkCode) ? $this->networkCode : get_option('dfw_network_code','xxxxxx');
+	}
+
 	public function footer_script() {
 
 		if(!$this->debug) :
@@ -106,7 +116,7 @@ class DoubleClick {
 
 			echo "if( " . $b->get_js_logic() . " ) { \n";
 				echo "\tjQuery('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
-        	    	echo "\t\tdfpID: '". $this->networkCode ."',\n";
+        	    	echo "\t\tdfpID: '". $this->networkCode() ."',\n";
         	    	echo "\t\trefreshExisting: false\n";
         		echo "\t});\n";
 			echo "} ";
