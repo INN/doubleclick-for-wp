@@ -3,7 +3,6 @@
 // Get our global varaible.
 global $DoubleClick;
 
-
 /**
  * Adds DoubleClick_Widget widget.
  */
@@ -72,24 +71,33 @@ class DoubleClick_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
+		global $DoubleClick;
+
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : "";
 		$width = ! empty( $instance['width'] ) ? $instance['width'] : '300';
 		$height = ! empty( $instance['height'] ) ? $instance['height'] : '250';
 
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'identifier' ); ?>"><?php _e( 'Identifier:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'identifier' ); ?>" name="<?php echo $this->get_field_name( 'identifier' ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
+			<label for="<?php echo $this->get_field_id( 'identifier' ); ?>"><?php _e( 'Identifier:' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'identifier' ); ?>" name="<?php echo $this->get_field_name( 'identifier' ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
 		</p>	
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e( 'Width:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'width' ); ?>" name="<?php echo $this->get_field_name( 'width' ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
+			<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e( 'Width:' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'width' ); ?>" name="<?php echo $this->get_field_name( 'width' ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e( 'Height:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
+			<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e( 'Height:' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
 		</p>
+
+		<p>Show for:</p>
+
+		<?php foreach($DoubleClick->breakpoints as $b) : ?>
+			<input type="checkbox" name="breakpoints[]" value="<?php $b->identifier; ?>"><?php $b->identifier; ?></input>
+		<?php endforeach; ?>
+
 		<?php 
 	}
 
@@ -115,3 +123,10 @@ class DoubleClick_Widget extends WP_Widget {
 	}
 
 }
+
+function dfw_register_widget() {
+	error_log('registersing');
+	register_widget( 'DoubleClick_Widget' );
+}
+
+add_action( 'widgets_init', 'dfw_register_widget', 100 );
