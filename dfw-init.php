@@ -72,8 +72,6 @@ class DoubleClick {
 			$this->register_breakpoint($b['identifier'],$args);
 		}
 
-		error_log(print_r($breakpoints,true));
-
 	}
 
 	/**

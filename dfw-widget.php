@@ -14,8 +14,8 @@ class DoubleClick_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'doubleclick_widget', // Base ID
-			__( 'Double Click Ad', 'text_domain' ), // Name
-			array( 'description' => __( 'Serve ads from DFP.', 'text_domain' ), ) // Args
+			__( 'DoubleClick Ad', 'dfw' ), // Name
+			array( 'description' => __( 'Serve ads from DFP.', 'dfw' ), ) // Args
 		);
 	}
 
@@ -83,7 +83,6 @@ class DoubleClick_Widget extends WP_Widget {
 
 		<?php 
 			$selectedBreakpoints = $instance['breakpoints']; 
-			print_r($selectedBreakpoints);
 		?>
 
 		<?php if( sizeof($DoubleClick->breakpoints) > 0 ) : ?>
@@ -131,8 +130,6 @@ class DoubleClick_Widget extends WP_Widget {
 		$instance['width'] = ( ! empty( $new_instance['width'] ) ) ? strip_tags( $new_instance['width'] ) : '300';
 		$instance['height'] = ( ! empty( $new_instance['height'] ) ) ? strip_tags( $new_instance['height'] ) : '250';
 		$instance['breakpoints'] = $new_instance['breakpoints'];
-
-		error_log("errors: " . print_r($instance,true));
 
 		return $instance;
 	}
