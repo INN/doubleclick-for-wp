@@ -42,11 +42,11 @@ If you'd like more control over where inventory is served, these should be defin
 
  - __inURL__: Target a piece of the page path. 
 
-	> eg. targeting the string `news/` would match [example.com/**dvds/**](http://example.com/news/), [example.com/**dvds/**page1](http://example.com/news/page1) and [example.com/**dvds/**page2](http://example.com/news/page2)
+	> eg. targeting the string `news/` would match [example.com**/dvds**/](http://example.com/news/), [example.com**/dvds**/page1](http://example.com/news/page1) and [example.com**/dvds**/page2](http://example.com/news/page2)
 
  - __URLIs__: Target the entire page path.
 
-	> eg. targeting the string `news/` will **only** match [example.com/**books/**](http://example.com/news/) and not [example.com/**books/page1**](http://example.com/news/page1).
+	> eg. targeting the string `/news` will **only** match [example.com**/books**](http://example.com/news/) and not [example.com**/books/page1**](http://example.com/news/page1). (Note: Any trailing '/' is removed.)
 
  - __Domain__: Target based on the domain.
 
