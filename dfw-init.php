@@ -63,7 +63,7 @@ class DoubleClick {
 
 		$breakpoints = unserialize( get_option('dfw_breakpoints') );
 
-		if( !isempty($breakpoints) ):
+		if( !empty($breakpoints) ):
 			foreach($breakpoints as $b) {
 				$args = array(
 					'minWidth' => $b['min-width'],
