@@ -63,14 +63,16 @@ class DoubleClick {
 
 		$breakpoints = unserialize( get_option('dfw_breakpoints') );
 
-		foreach($breakpoints as $b) {
-			$args = array(
-				'minWidth' => $b['min-width'],
-				'maxWidth' => $b['max-width'],
-				'_option'	=> true	// this breakpoint is set in WordPress options.
-				);
-			$this->register_breakpoint($b['identifier'],$args);
-		}
+		if( !isempty($breakpoints) ):
+			foreach($breakpoints as $b) {
+				$args = array(
+					'minWidth' => $b['min-width'],
+					'maxWidth' => $b['max-width'],
+					'_option'	=> true	// this breakpoint is set in WordPress options.
+					);
+				$this->register_breakpoint($b['identifier'],$args);
+			}
+		endif;
 
 	}
 
