@@ -11,6 +11,7 @@ Author URI: 	http://github.com/inn
  * 
  */
 $DoubleClick = new DoubleClick();
+$DoubleClick->debug = false;
 
 function dfw_add_action() {
 
@@ -107,6 +108,7 @@ class DoubleClick {
 
 		if(!$this->debug) :
 			
+		// print_r($this->breakpoints);
 		echo "\n<script type='text/javascript'>\n";
 
 		// Load each breakpoint
@@ -115,11 +117,11 @@ class DoubleClick {
 		foreach($this->breakpoints as $b) :
 
 			if(!$first) echo "else ";
-
 			echo "if( " . $b->get_js_logic() . " ) { \n";
 				echo "\tjQuery('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
         	    	echo "\t\tdfpID: '". $this->networkCode() ."',\n";
-        	    	echo "\t\trefreshExisting: false\n";
+        	    	echo "\t\trefreshExisting: false,\n";
+        	    	echo "\t\tsetTargeting: " . json_encode($this->targeting());
         		echo "\t});\n";
 			echo "} ";
 
@@ -132,6 +134,71 @@ class DoubleClick {
 		endif;
 	}
 
+	private function targeting() {
+		
+		/** @see http://codex.wordpress.org/Conditional_Tags */
+
+		$targeting = array();
+
+		$targeting['Page'] = array();
+
+		// Homepage
+		if( is_home() )
+			$targeting['Page'][] = 'home';
+
+		if( is_front_page() )
+			$targeting['Page'][] = 'front-page';
+
+		// Admin
+		if( is_admin() )
+			$targeting['Page'][] = 'admin';
+
+		if( is_admin_bar_showing()  )
+			$targeting['Page'][] = 'admin-bar-showing';
+
+		// Templates
+		if( is_single() )
+			$targeting['Page'][] = 'single';
+
+		if( is_post_type_archive() )
+			$targeting['Page'][] = 'archive';
+
+		if( is_author() )
+			$targeting['Page'][] = 'author';
+
+		if( is_date() )
+			$targeting['Page'][] = 'date';
+
+		if( is_search() )
+			$targeting['Page'][] = 'search';	
+
+
+		if( is_single() ) {
+
+			$cats = get_the_category();
+			$targeting['Category'] = array();
+
+			if ($cats) {
+				foreach($cats as $c) 
+					$targeting['Category'][] = $c->slug;
+			}
+		}
+
+		if( is_single() ) {
+
+			$tags = get_the_tags();
+
+			if ($tags) {
+				$targeting['Tag'] = array();
+				foreach($tags as $t) 
+					$targeting['Tag'][] = $t->slug;
+			}
+
+		}
+
+		// return the array of targeting criteria.
+		return $targeting;
+	}
 	/**
 	 * Place a DFP ad.
 	 * 
@@ -141,14 +208,15 @@ class DoubleClick {
 	 * @param array $targeting additional targeting options.
 	 * @param $return Boolean. If this is true it will return a string instead.
 	 */
-	public function place_ad($identifier,$dimensions,$breakpoints = null,$targeting = null) {
+	public function place_ad($identifier,$dimensions,$breakpoints = null) {
 		
-		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints,$targeting);
+		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints);
 
 	}
 
-	public function get_ad_placement($identifier,$dimensions,$breakpoints = null, $targeting = null) {
+	public function get_ad_placement($identifier,$dimensions,$breakpoints = null) {
 
+		global $post;
 		// $dimensions validation
 
 		if( is_string($dimensions) ) {
@@ -174,26 +242,10 @@ class DoubleClick {
 			$targeting = array();
 		}
 
-		if( !isset( $targeting['page'] ) ) {
-
-			if(is_home())
-				$targeting['page'] = 'homepage';
-			if(is_single())
-				$targeting['page'] = 'story';
-			if(is_archive())
-				$targeting['page'] = 'archive';
-			if(is_page())
-				$targeting['page'] = 'page';
-			else
-				$targeting['page'] = 'other';
-
-		}
-
 		$adObject = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints,$targeting);
 		$this->adSlots[] = $adObject;
 
 		// Print the ad tag.
-
 		$classes = "dfw-unit";
 
 		if($breakpoints):
@@ -205,7 +257,6 @@ class DoubleClick {
 		endif;
 
 		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim' data-targeting='$targets'></div>";
-
 		$size = explode('x',$dimensions[0]);
 		$w = $size[0];
 		$h = $size[1];
@@ -257,6 +308,7 @@ class DoubleClick {
 				$ad .= "</br>";
 			
 			$ad .= "</div>";
+			return $ad;
 		}
 
 		return $ad;

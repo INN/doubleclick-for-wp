@@ -15,18 +15,18 @@ __Table of Contents__
  - [__Theme Developers__](#theme-developers)
 	- [__Define Breakpoints__](#define-breakpoints) _(Define breakpoings in `functions.php`)_
 	- [__Place Ads__](#place-ads) _(Place ads directly in template files)_
- - [__License__](#license)
+ - [__Colophon__](#colophon)
 
 * * *
 
-## Site Administrators
+## 1. Site Administrators
 
 
-#### Define Settings
+#### 1.1 Define Settings
 
 Under `Settings > DoubleClick for WordPress` update the fields with your **network code** from DFP, and a place to define **breakpoints** to serve ads to.
 
-#### Widgets
+#### 1.2 Widgets
 
 Add widgets to sidebars and configure their settings. __Values:__
 
@@ -34,47 +34,63 @@ Add widgets to sidebars and configure their settings. __Values:__
  - __Width/Height__: Size ad to request (and display) to users.
  - __Show for breakpoints__: If you have breakpoints set up, you can show ads for only specific breakpoints. You should always avoid showing ad units that are not shown at a breakpoint.
 
-#### Targeting
+#### 1.3 Targeting
 
-Four targeting criteria are automatically sent to DFP. 
+Several targeting criteria are automatically defined and sent to DFP. 
 
 If you'd like more control over where inventory is served, these should be defined in your DFP acccount under [__Inventory/Custom Targeting__](https://support.google.com/dfp_sb/answer/2983838?hl=en).
 
- - __inURL__: Target a piece of the page path. 
+###### URL Targeting
 
-	> eg. targeting the string `news/` would match [example.com**/dvds**/](http://example.com/news/), [example.com**/dvds**/page1](http://example.com/news/page1) and [example.com**/dvds**/page2](http://example.com/news/page2)
+_Targeting criteria set by the URL of the page_.
 
- - __URLIs__: Target the entire page path.
+ - `inURL` → Target a piece of the page path. 
 
-	> eg. targeting the string `/news` will **only** match [example.com**/books**](http://example.com/news/) and not [example.com**/books/page1**](http://example.com/news/page1). (Note: Any trailing '/' is removed.)
+	> __eg__. targeting the string '__/dvds__' would match [example.com**/dvds**/](http://example.com/dvds/), [example.com**/dvds**/page1](http://example.com/dvds/page1) and [example.com**/dvds**/page2](http://example.com/dvds/page2)
 
- - __Domain__: Target based on the domain.
+ - `URLIs` → Target the entire page path.
+
+	> __eg__. targeting the string '__/books__' will **only** match [example.com**/books**](http://example.com/books/) and not [example.com**/books/page1**](http://example.com/books/page1). (Note: Any trailing '/' is removed.)
+
+ - `Domain` → Target based on the domain.
 
 	> eg. run different advertising on [staging.example.com](http://staging.example.com) and [example.com](http://example.com).
 
- - __Query__: Target a ?query var.
+ - `Query` → Target a ?query var.
 
 	> eg. target the url [example.com/?**movie=12**](http://example.com/news/) with the 
 targeting string `p:12`
 
+###### WordPress Targeting
+
+Targeting criteria set by WordPress.
+
+ - `Page` → Target the [type of page](http://codex.wordpress.org/Conditional_Tags).
+
+ 	> Takes the values of 'home', 'front-page', 'admin', 'admin-bar-showing', 'single', 'archive', 'author', 'date' or 'search'. 
+
+ - `Category` → On single pages, target based on WordPress category. The value(s) passed are the WordPress slug for the category.
+
+ - `Tag` → On single pages, target based on WordPress tags. The value(s) passed are the WordPress slug for the tag.
+
 __Note__: Targeting strings are limited to 40 characters long by DFP. Targeting URLIs or domains longer than that will result in error.
 
-__Screenshot__: This screenshot shows how to configure **URLIs** targeting for urls containing `books/` or `dvds/` or `movies/` under `Inventory > Custom Targeting`.
+__e.g.__: Setting targeting criteria in DFP. This screenshot shows how to configure **URLIs** targeting for urls containing `/books` or `/dvds` or `/movies` under `Inventory > Custom Targeting`.
 
-![Targeting](http://i.imgur.com/pNGHKmx.png)
+![Targeting](http://i.imgur.com/GayrWbL.png)
 
-__Screenshot__: This screenshot targeting criteria is set on a line item to only display on pages containing `books/` or `dvds/` in the url.
+__e.g.__: Using targeting criteria. This screenshot targeting criteria is set on a line item to only display on pages containing `/books` or `/dvds` in the url.
 
-![Targeting](http://i.imgur.com/254pAJw.png)
+![Imgur](http://i.imgur.com/TDwUFH8.png)
 
 * * *
 
-## Theme Developers
+## 2. Theme Developers
 
 A `global $DoubleClick` variable is defined on plugin init, making it possible to define breakpoints
 and place ads directly within your theme.
 
-### Define Breakpoints
+#### 2.1 Define Breakpoints
 
 You can make it easier for users to target breakpoints by defining them in `functions.php`
 
@@ -106,7 +122,7 @@ Define a new breakpoint. This will output javascript to only load the ad if the 
 ###### $args
 `Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
 
-### Place Ads
+#### 2.2 Place Ads
 
 If you'd like to hard code ad placement into a theme, you can use the built in 
 `$DoubleClick->place_ad()` function to print the DOM to include an ad.
@@ -137,6 +153,14 @@ Prints DOM to display an ad at the given breakpoint.
 
 `Array` An array of breakpoints (listed by identifier) to display this ad for.
 
-## License
+* * *
 
-GPLv2
+## 3. Colophon
+
+#### 3.1 Credits
+
+Built by [__Will Haynes__](https://github.com/willhaynes) ([@willhaynes](https://twitter.com/willhaynes)) for the [Institute for Nonprofit News](https://github.com/inn).
+
+#### 3.2 License
+
+Released under [__GPLv2__](http://www.gnu.org/licenses/gpl-2.0.html).
