@@ -2,9 +2,11 @@
 
 Serve DoubleClick ads natively in WordPress. Built to make serving responsive ads easy.
 
+Built by the [Institute for Nonprofit News](http://inn.org/), DoubleClick for WordPress works with [Project Largo](http://largoproject.org/) or any standalone WordPress blog.
+
 * * * 
 
-## What is this thing?
+## 1. What is this thing?
 
 This WordPress plugin gives site administrators an easy way to serve DFP inventory on their WordPress site.
 
@@ -12,29 +14,28 @@ Implementing is simple. Configure your network code and input your identifiers. 
 
 * * * 
 
-## How do I use it?
+## 2. How do I use it?
 
 For the most basic integration, only two steps are necessary.
 
-##### __1. Define Settings__ — 
+#### __2.1. Define Settings__ — 
 
-Under Settings > DoubleClick for WordPress update the field with your network code from DFP, and a place to define breakpoints to serve ads to.
+Under _Settings > DoubleClick for WordPress_ update the field with your network code from DFP, and a place to define breakpoints to serve ads to.
 
 ![Screenshot](img/network-code.png)
 
-##### __2. Install a Widgets__ - 
+#### __2.2 Install a Widgets__ — 
 
 Add a new widget to an existing sidebar.
 
-
 ![Screenshot](img/widget.png)
 
- * The __identifier__ field is passed back to DFP with the ad serving request. If an ad unit with the same identifier is defined in your network's inventory, line items that target that ad unit will be shown in the spot. If the identifier is not defined, run of network inventory will still be loaded.
+ * The __identifier__ field is passed back to DFP with the ad server request. If an ad unit with the same identifier is defined in your network's inventory, line items that target that ad unit will be shown in the spot. If the identifier is not defined, run of network inventory will still be loaded.
 
  * The __width__ and __height__ fields define what size creative to load in pixels. Flex ad units are currently not yet supported.
 
 * * * 
 
-## Is that it?
+## 3. Is that it?
 
-Nope! Advanced users can configure targeting and breakpoint options.
+Nope! Next [configure targeting](targeting/) and advanced users may look at the [developer api](developer-api/).
