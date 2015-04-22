@@ -55,7 +55,7 @@ class DoubleClick {
 		$this->networkCode = $networkCode;
 
 		// Script enqueue is static because we only ever want to print it once.
-		if(!$this->enqueued) {
+		if(!$this::$enqueued) {
 			add_action('wp_enqueue_scripts', array(get_called_class(), 'enqueue_scripts'));
 			$this->enqueued = true;
 		}
@@ -236,13 +236,7 @@ class DoubleClick {
 			$breakpoints = array($breakpoints);
 		}
 
-		// $targeting validation
-
-		if( is_null($targeting) ) {
-			$targeting = array();
-		}
-
-		$adObject = new DoubleClickAdSlot($identifer,$adCode,$size,$breakpoints,$targeting);
+		$adObject = new DoubleClickAdSlot($identifier,null,$dim,$breakpoints);
 		$this->adSlots[] = $adObject;
 
 		// Print the ad tag.
@@ -256,7 +250,7 @@ class DoubleClick {
 			$classes .= " dfw-all";
 		endif;
 
-		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim' data-targeting='$targets'></div>";
+		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
 		$size = explode('x',$dimensions[0]);
 		$w = $size[0];
 		$h = $size[1];
