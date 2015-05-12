@@ -33,20 +33,33 @@ class DoubleClick_Widget extends WP_Widget {
 		
 		echo $args['before_widget'];
 
-    	$width = ! empty( $instance['width'] ) ? $instance['width'] : '300';
-		$height = ! empty( $instance['height'] ) ? $instance['height'] : '250';
+		// prepare identifier parameter.
     	$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : 'ident';
-    	$size = $width . "x" . $height;
+    	
+    	// prepare size parameter.
+    	$sizes = $instance['sizes'];
+    	foreach($sizes as $b=>$s) {
+    		if( empty($sizes[$b]) ) {
+    			unset($sizes[$b]);
+    		} 
+    	}
 
-    	$breakpoints = $instance['breakpoints'];
+    	// prepare args parameter.
+    	$args = null;
+    	if($instance['lazyLoad']) {
+    		$args = array( 'lazyLoad' => true );
+    	}
 
-    	$DoubleClick->place_ad($identifier,$size,$breakpoints);
-
+    	// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
 		}
 
+		// and finally, place the ad.
+		$DoubleClick->place_ad($identifier,$sizes,$args);
+
 		echo $args['after_widget'];
+
 	}
 
 	/**
@@ -61,53 +74,60 @@ class DoubleClick_Widget extends WP_Widget {
 		global $DoubleClick;
 
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : "";
-		$width = ! empty( $instance['width'] ) ? $instance['width'] : '300';
-		$height = ! empty( $instance['height'] ) ? $instance['height'] : '250';
-
+		
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'identifier' ); ?>"><?php _e( 'Identifier:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'identifier' ); ?>" name="<?php echo $this->get_field_name( 'identifier' ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
 		</p>	
 
-		<p>
-			<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e( 'Width:' ); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id( 'width' ); ?>" name="<?php echo $this->get_field_name( 'width' ); ?>" type="text" value="<?php echo esc_attr( $width ); ?>">
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e( 'Height:' ); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" type="text" value="<?php echo esc_attr( $height ); ?>">
-		</p>
+		<?php if( sizeof($DoubleClick->breakpoints) > 0 ) : $i = 0; ?>
 
-		<p><strong>Show for breakpoints:</strong></p>
-
-		<?php 
-			$selectedBreakpoints = $instance['breakpoints']; 
-		?>
-
-		<?php if( sizeof($DoubleClick->breakpoints) > 0 ) : ?>
-
-			<p style="margin:15px 0 15px 5px;">
+			<p><strong>Size for breakpoints:</strong></p>
 
 			<?php foreach($DoubleClick->breakpoints as $b) : ?>
-				<input 
-					class="checkbox" 
-					style="margin-right:8px;" 
-					type="checkbox" 
-					name="<?php echo $this->get_field_name( 'breakpoints' ); ?>[]" 
-					value="<?php echo $b->identifier; ?>" 
-					<?php if( in_array($b->identifier, $selectedBreakpoints ) ) echo "checked"; ?>
-					/>
-				<label><?php echo $b->identifier; ?></label><br/>
+				<p>
+					<label><?php echo $b->identifier; ?> <em>(<?php echo $b->minWidth; ?>px+)</em></label><br/>
+					<input 
+						class="widefat" 
+						type="text" 
+						name="<?php echo $this->get_field_name( 'sizes' ); ?>[<?php echo $b->identifier ?>]" 
+						value="<?php echo $instance['sizes'][$b->identifier]; ?>" 
+						>
+				</p>
+
 			<?php endforeach; ?>
 
-			</p>
+			<p><hr/></p>
+			
 
 		<?php else : ?>
 
-			<p style='margin-top:-14px;'><em>No breakpoints defined.</em></p>
+			<p>
+			<label><strong>Size: </strong></label><br/>
+				<input 
+					class="widefat" 
+					type="text" 
+					name="<?php echo $this->get_field_name( 'size' ); ?>" 
+					value="<?php echo $instance['size']; ?>" 
+					>
+			</p>
 
 		<?php endif; ?>
+
+		<p><strong>Lazy Load?</strong></p>
+		<p>
+			<input 
+				class="checkbox" 
+				type="checkbox" 
+				name="<?php echo $this->get_field_name( 'lazyLoad' ); ?>"
+				value="1"
+				<?php if( $instance['lazyLoad'] ) echo "checked"; ?>
+				><label>Only load ad once it comes into view on screen.</label><br/>
+		</p>
+		<hr/><br>
+
+
 
 		<?php 
 	}
@@ -127,9 +147,10 @@ class DoubleClick_Widget extends WP_Widget {
 		$instance = array();
 
 		$instance['identifier'] = ( ! empty( $new_instance['identifier'] ) ) ? strip_tags( $new_instance['identifier'] ) : '';
-		$instance['width'] = ( ! empty( $new_instance['width'] ) ) ? strip_tags( $new_instance['width'] ) : '300';
-		$instance['height'] = ( ! empty( $new_instance['height'] ) ) ? strip_tags( $new_instance['height'] ) : '250';
+		$instance['lazyLoad'] = ( ! empty( $new_instance['lazyLoad'] ) ) ? $new_instance['lazyLoad'] : 0 ;
 		$instance['breakpoints'] = $new_instance['breakpoints'];
+		$instance['sizes'] = $new_instance['sizes'];
+		$instance['size'] = $new_instance['size'];
 
 		return $instance;
 	}

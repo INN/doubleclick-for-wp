@@ -77,3 +77,60 @@ __$breakpoints__
 `Array` (optional) An array of breakpoints (listed by identifier) to display this ad for.
 
 * * *
+
+# Class Members
+
+Global and function stubs for plugin classes.
+
+```
+class DoubleClick {
+
+	public $networkCode;
+	public $debug = false;
+	public $breakpoints = array();
+	public $adSlots = array();
+	private static $enqueued = false;
+	private static $mapping = array();
+
+	public function __construct($networkCode = null)
+	public function register_breakpoint($identifier,$args = null)
+	public static function enqueue_scripts() 
+	private function networkCode()
+	public function footer_script()
+	private function targeting()
+	public function place_ad($identifier,$dimensions,$breakpoints = null)
+	public function get_ad_placement($identifier,$dimensions,$breakpoints = null)
+
+}
+```
+
+```
+class DoubleClickAdSlot {
+
+	public $adCode;
+	public $size;
+	public $identifier;
+	public $breakpoints = null;
+	public $targeting = null;
+	public $DoubleClickObject;
+
+	public function __construct($identifer,$adCode,$size,$breakpoints = null,$targeting = null) 
+	public function breakpointIdentifier()
+
+}
+```
+
+```
+class DoubleClickBreakpoint {
+
+	public $identifier = '';
+	public $minWidth;
+	public $maxWidth;
+	public $option;
+
+	public function __construct($identifier,$args = null)
+	public function js_logic()
+	public function get_js_logic()
+
+}
+```
