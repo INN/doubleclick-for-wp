@@ -7,12 +7,19 @@ Author URI: 	http://github.com/inn
 */
 
 /**
- * Global instances for doubleclick object.
+ * Global instances for DoubleClick object.
  * 
  */
 $DoubleClick = new DoubleClick();
 $DoubleClick->debug = false;
 
+
+/**
+ * A wrapper for wp_loaded
+ * 
+ * This means that if the plugin is not installed,
+ * the setup function will not run and throw an error.
+ */
 function dfw_add_action() {
 
 	/**
@@ -27,15 +34,37 @@ function dfw_add_action() {
 add_action('wp_loaded', 'dfw_add_action');
 
 
+
 class DoubleClick {
 
+	/**
+	 * Network code from DFP.
+	 * 
+	 * @var int
+	 */
 	public $networkCode;
 
+	/**
+	 * If true, plugin prints debug units instead of 
+	 * making a call to dfp.
+	 * 
+	 * @var boolean
+	 */
 	public $debug = false;
 
+	/**
+	 * Array of defined breakpoints
+	 * 
+	 * @var Array
+	 */
 	public $breakpoints = array();
+
+	/**
+	 * Array of placed ads.
+	 * 
+	 * @var Array
+	 */
 	public $adSlots = array();
-	public $definedAdSlots = array();
 
 	/**
 	 * Whether we have hooked enqueue of the script
@@ -44,6 +73,21 @@ class DoubleClick {
 	 * @var boolean
 	 */
 	private static $enqueued = false;
+
+	/**
+	 * Size mappings for ad units.
+	 * 
+	 * @var Array
+	 */
+	private static $mapping = array();
+
+	/**
+	 * The number of ads on a page. Also appended to 
+	 * ad identifiers to create unique strings.
+	 * 
+	 * @var int
+	 */
+	public static $count = 0;
 
 	/**
 	 * Create a new DoubleClick object
@@ -56,7 +100,7 @@ class DoubleClick {
 
 		// Script enqueue is static because we only ever want to print it once.
 		if(!$this::$enqueued) {
-			add_action('wp_enqueue_scripts', array(get_called_class(), 'enqueue_scripts'));
+			add_action('wp_footer', array($this, 'enqueue_scripts'));
 			$this->enqueued = true;
 		}
 
@@ -88,10 +132,32 @@ class DoubleClick {
 
 	}
 
-	public static function enqueue_scripts() {
+	public function enqueue_scripts() {
 
-		wp_enqueue_script( 'jquery.dfp.js', plugins_url( 'js/jquery.dfp.min.js', __FILE__ ) , array('jquery'), '1.1.5', true );
+		wp_register_script( 'jquery.dfp.min.js', plugins_url( 'js/jquery.dfp.min.js', __FILE__ ) , array('jquery'), '1.1.5', true );
+		wp_register_script( 'jquery.dfw.js', plugins_url( 'js/jquery.dfw.js', __FILE__ ) , array('jquery'), '1.1.5', true );
 
+		// Localize the script with other data
+		// from the plugin.
+
+		$mappings = array();
+
+		foreach($this->adSlots as $ad) {
+			if($ad->hasMapping()) {
+				$mappings["mapping{$ad->id}"] = $ad->mapping();
+			}
+		}
+
+		$data = array(
+			'networkCode' => $this->networkCode,
+			'mappings' => $mappings,
+			'targeting' => $this->targeting()
+			);
+
+		wp_localize_script( 'jquery.dfw.js', 'dfw', $data );
+
+		wp_enqueue_script( 'jquery.dfp.min.js' );
+		wp_enqueue_script( 'jquery.dfw.js' );
 	} 
 
 	/**
@@ -106,29 +172,27 @@ class DoubleClick {
 
 	public function footer_script() {
 
+		$this->debug = false;
 		if(!$this->debug) :
 			
-		// print_r($this->breakpoints);
 		echo "\n<script type='text/javascript'>\n";
 
-		// Load each breakpoint
+		$mappings = array();
 
-		$first = true;
-		foreach($this->breakpoints as $b) :
+		foreach($this->adSlots as $ad) {
+			if($ad->hasMapping()) {
+				$mappings["mapping{$ad->id}"] = $ad->mapping();
+			}
+		}
 
-			if(!$first) echo "else ";
-			echo "if( " . $b->get_js_logic() . " ) { \n";
-				echo "\tjQuery('.dfw-{$b->identifier}').add('.dfw-all').dfp({ \n";
-        	    	echo "\t\tdfpID: '". $this->networkCode() ."',\n";
-        	    	echo "\t\trefreshExisting: false,\n";
-        	    	echo "\t\tsetTargeting: " . json_encode($this->targeting());
-        		echo "\t});\n";
-			echo "} ";
-
-			$first = false;
-
-		endforeach;
-
+		echo "\tjQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({ \n";
+        	echo "\t\tdfpID: '". $this->networkCode() ."',\n";
+        	// echo "\t\trefreshExisting: false,\n";
+        	echo "\t\tcollapseEmptyDivs:false,\n";
+        	echo "\t\tsetTargeting: " . json_encode($this->targeting()) . ",\n";
+        	echo "\t\tsizeMapping: " . json_encode($mappings);
+        echo "\t});\n";
+		
 		echo "\n</script>\n";
 
 		endif;
@@ -208,101 +272,48 @@ class DoubleClick {
 	 * @param array $targeting additional targeting options.
 	 * @param $return Boolean. If this is true it will return a string instead.
 	 */
-	public function place_ad($identifier,$dimensions,$breakpoints = null) {
+	public function place_ad($identifier,$sizes,$args = null) {
 		
-		echo $this->get_ad_placement($identifier,$dimensions,$breakpoints);
+		echo $this->get_ad_placement($identifier,$sizes,$args);
 
 	}
 
-	public function get_ad_placement($identifier,$dimensions,$breakpoints = null) {
+	public function get_ad_placement($identifier,$sizes,$args = null) {
 
 		global $post;
-		// $dimensions validation
 
-		if( is_string($dimensions) ) {
-			$dimensions = array($dimensions);
-			$dim = "";
-			foreach($dimensions as $i=>$d) {
-				if( $i ) {
-					$dim .= ",";
-				}
-				$dim .= $d;
-			}
-		}
+    	if( $args === null ) {
+    		$args = array();
+    	}
 
-		// $breakpoints validation
+    	$defaults = array(
+        	"lazyLoad" => false
+    	);
 
-		if( is_string($breakpoints) ) {
-			$breakpoints = array($breakpoints);
-		}
+		$args = array_replace_recursive($defaults, $args);
 
-		$adObject = new DoubleClickAdSlot($identifier,null,$dim,$breakpoints);
+		$adObject = new DoubleClickAdSlot($identifier,$sizes);
 		$this->adSlots[] = $adObject;
 
 		// Print the ad tag.
 		$classes = "dfw-unit";
 
-		if($breakpoints):
-			foreach($breakpoints as $i=>$b) {
-				$classes .= " dfw-" . $b;
-			}
-		else:
-			$classes .= " dfw-all";
-		endif;
+		if($args['lazyLoad']) {
+			$classes .= " dfw-lazy-load";
+		}
 
-		$ad = "<div class='$classes' data-adunit='$identifier' data-dimensions='$dim'></div>";
-		$size = explode('x',$dimensions[0]);
-		$w = $size[0];
-		$h = $size[1];
+		$id = $adObject->id;
 
-		// Print a fake debugging ad unit.
-		
-		if($this->debug) {
+		if( $adObject->hasMapping() ) {
 			$ad = "<div 
-					style='
-						background: 	rgba(0,0,0,.1);
-						font-family: 	monospace;
-						padding:		10px;
-						width:			{$w}px;
-						height:			{$h}px;
-						text-align:		left;
-						font-size:		12px;
-						box-sizing:		border-box;'
 					class='$classes' 
-					>";
-				
-				// Print the identifier
-				$ad .= "<b style='border-bottom:1px solid rgba(0,0,0,.2);display:inline-block;margin-bottom:6px;'>$identifier</b></br>";
-	
-				// Print the size.
-				$sizes = "";
-	
-				foreach($dimensions as $i=>$d) {
-					if( $i ) $sizes .= ", ";
-					$sizes .= $d;
-				}
-	
-				if(sizeof($dimensions)<=1) {
-					$ad .= "<b>size</b> ";
-				} else {
-					$ad .= "<b>sizes</b> ";
-				}
-	
-				$ad .= "$sizes</br>";
-	
-				// Print the breakpoints.
-	
-				if(sizeof($breakpoints)<=1 && $breakpoints) {
-					$ad .= "<b>breakpoint</b> ";
-				} else {
-					$ad .= "<b>breakpoints</b> ";
-				}
-	
-				$ad .= $breakpoints ? $adObject->breakpointIdentifier() : "all";
-				$ad .= "</br>";
-			
-			$ad .= "</div>";
-			return $ad;
+					data-adunit='$identifier' 
+					data-size-mapping='mapping{$id}'></div>";
+		} else {
+			$ad = "<div 
+					class='$classes' 
+					data-adunit='$identifier' 
+					data-dimensions='$sizes'></div>";
 		}
 
 		return $ad;
@@ -311,6 +322,7 @@ class DoubleClick {
 
 }
 
+
 class DoubleClickAdSlot {
 
 	/** 
@@ -318,92 +330,104 @@ class DoubleClickAdSlot {
 	 * 
 	 * @var String.
 	 */
-	public $adCode;
+	public $identifer;
 
 	/**
-	 * Array of sizes.
+	 * Either a string of sizes, or a size mapping.
 	 * 
-	 * @var Array.
+	 * @var Array|String
 	 */
-	public $size;
+	public $sizes;
 
 	/**
-	 * Unique identifier for this ad slot.
+	 * Each ad gets a unique number to identify it.
 	 * 
-	 * @var String.
+	 * @var int
 	 */
-	public $identifier;
-
-	/**
-	 * Array of associated breakpoints.
-	 * 
-	 * @var Array.
-	 */
-	public $breakpoints = null;
-
-	/**
-	 * Array of targeting options.
-	 * 
-	 * @var Array.
-	 */
-	public $targeting = null;
-
-	/**
-	 * The associated DoubleClick Object
-	 * 
-	 * @var DoubleClick
-	 */
-	public $DoubleClickObject;
+	public $id;
 
 	/**
 	 * 
 	 * 
+	 * @param String $identifier
+	 * @param Mixed $size
 	 */
-	private $displayedFor = array();
+	public function __construct($identifer,$size) {
 
-	public function __construct($identifer,$adCode,$size,$breakpoints = null,$targeting = null) {
+		global $DoubleClick;
 
+		// doubleclick escapes '/' with '//' for some odd reason.
+		// currently we don't try to fix this, but could with this line:
+		// $this->identifier = str_replace('/','//',$identifier);
 		$this->identifier = $identifer;
 		
-		// $this->adCode = str_replace('/','//',$adCode);
-		$this->adCode = $adCode;
+		$this->sizes = $size;
 
-		if( is_string( $size ) ) {
-
-			$this->size = array($size);
-
-		} else if( is_array( $size ) ) {
-
-			$this->size = $size;
-
-		}
-
-		if( is_string( $breakpoints ) ) {
-
-			$this->breakpoints = array( $breakpoints );
-
-		} else if( is_array( $breakpoints ) ) {
-
-			sort($breakpoints);
-			$this->breakpoints = $breakpoints;
-
-		}
-
-		$this->targeting = $targeting;
+		$this->id = ++ DoubleClick::$count;
 
 	}
 
 	public function breakpointIdentifier() {
 		
-		$s = "";
+		return null;
 
-		foreach($this->breakpoints as $i=>$b) {
-			if( $i ) {
-				$s .= "+";
-			}
-			$s .= $b;	
+	}
+
+	/**
+	 * If this ad unit has a size mapping.
+	 * 
+	 */
+	public function hasMapping() {
+
+		if( is_string( $this->sizes ) ) {
+			return false;
+		} else {
+			return true;
 		}
-		return $s;
+
+	}
+
+	public function mapping() {
+
+		global $DoubleClick;
+
+		// Return false if there is no mapping
+		if( !$this->hasMapping() )
+			return false;
+		
+		foreach($this->sizes as $breakpointIdentifier=>$size) {
+			
+			$breakpoint = $DoubleClick->breakpoints[$breakpointIdentifier];
+
+			//print_r($breakpoint);
+
+			// The minimum browser width/height for this sizemapping.
+			$browserHeight = 1;
+			$browserWidth = $breakpoint->minWidth;
+
+			$sizeStrings = explode(",",$size);	// eg. 300x250,336x300
+			$sizeArray = array();
+
+			foreach($sizeStrings as $s) {
+				if( !empty($s) ) :
+					$arr = explode("x",$s);		// eg. 300x250
+					$w = (int)$arr[0];
+					$h = (int)$arr[1];
+					$sizeArray[] = array($w,$h);
+				else :
+					// $sizeArray[] = array();
+				endif;
+			}
+
+			$mapping[] = array(
+				'browser' => array($browserWidth,$browserHeight),
+				'ad_sizes' => $sizeArray
+				);
+			
+
+		}
+
+		return $mapping;
 
 	}
 
