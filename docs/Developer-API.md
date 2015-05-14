@@ -12,7 +12,11 @@ __Quick Function Links:__
 
 ## 1. Define Breakpoints
 
+##### $DoubleClick->register_breakpoint($identifer,$args)
+
 You can make it easier for users to target breakpoints by defining them in `functions.php`
+
+##### Example:
 
 ```php
 function ad_setup() {
@@ -32,105 +36,61 @@ function ad_setup() {
 add_action('dfw_setup','ad_setup');
 ```
 
-##### $DoubleClick->register_breakpoint($identifer,$args)
-    
-Define a new breakpoint. This will output javascript to only load the ad if the target screen is between the min and max width.
+##### Paramaters:
 
 __$identifer__
 
 `String` A unique identifier for this breakpoint
 
 __$args__
+
 `Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
 
 * * * 
 
 ## 2. Place Ads
 
-If you would like to hard code ad placement into a theme, you can use the built in
-`$DoubleClick->place_ad()` function to print the DOM to include an ad.
+### $DoubleClick->place_ad($identifer,$sizes,$args)
 
-_(First ensure a network code is defined in `functions.php`, or an ad may not be loaded)_
+Prints DOM to display an ad at the given breakpoint.
+
+##### Example:
 
 ```php
-// Places a 728x90 leaderboard ad for all breakpoints but mobile.
-$DoubleClick->place_ad('site-leaderboard','728x90',array('desktop','xl','tablet'));
 
-// Places an ad for all breakpoints.
-$DoubleClick->place_ad('site-rect','300x250');
+global $DoubleClick;
+
+// simple call:
+$DoubleClick->place_ad('my-identifer','300x250');
+
+// more options:
+$sizes = array(
+		'phone' => '300x50'		// show a medium rectangle for phone and up.
+		'tablet' => '728x90'	// show a leaderboard for tablet and up.
+		'desktop' => ''			// show no ad for desktop and up.
+	);
+$args = array(
+		'lazyLoad' => false 	// if set to true, the ad will load only once its within view on screen.
+	);
+
+$DoubleClick->place_ad('my-identifier',$sizes,$args);
 ```
 
-#### $DoubleClick->place_ad($identifer,$size,$breakpoints)
-    
-Prints DOM to display an ad at the given breakpoint.
+
+##### Paramaters:
 
 __$identifer__
 
 `String` The DFP identifier for an ad unit (DFP does not require you to create an identifier. If this does not match a value defined in DFP, a network-wide ad will still be requested).
 
-__$size__
+__$sizes__
 
-`String` A string corresponding to the size ad to load. Format should be width 'x' height.
+`Array|String` The size for the ad. Either a string for all breakpoints, or an array of sizes for each breakpoint.
 
-__$breakpoints__
+__$args__
 
-`Array` (optional) An array of breakpoints (listed by identifier) to display this ad for.
+`Array` (optional) An array of additional arguments. Values:
+
+ - __lazyLoad__: (true/false) setting this to true and the ad will be loaded only once it's within view on the page. Default is false.
 
 * * *
-
-# Class Members
-
-Global and function stubs for plugin classes.
-
-```
-class DoubleClick {
-
-	public $networkCode;
-	public $debug = false;
-	public $breakpoints = array();
-	public $adSlots = array();
-	private static $enqueued = false;
-	private static $mapping = array();
-
-	public function __construct($networkCode = null)
-	public function register_breakpoint($identifier,$args = null)
-	public static function enqueue_scripts() 
-	private function networkCode()
-	public function footer_script()
-	private function targeting()
-	public function place_ad($identifier,$dimensions,$breakpoints = null)
-	public function get_ad_placement($identifier,$dimensions,$breakpoints = null)
-
-}
-```
-
-```
-class DoubleClickAdSlot {
-
-	public $adCode;
-	public $size;
-	public $identifier;
-	public $breakpoints = null;
-	public $targeting = null;
-	public $DoubleClickObject;
-
-	public function __construct($identifer,$adCode,$size,$breakpoints = null,$targeting = null) 
-	public function breakpointIdentifier()
-
-}
-```
-
-```
-class DoubleClickBreakpoint {
-
-	public $identifier = '';
-	public $minWidth;
-	public $maxWidth;
-	public $option;
-
-	public function __construct($identifier,$args = null)
-	public function js_logic()
-	public function get_js_logic()
-
-}
-```
