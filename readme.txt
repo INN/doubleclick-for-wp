@@ -1,6 +1,5 @@
 === Plugin Name ===
 Contributors: willhaynes24
-Donate link: http://example.com/
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
 Tested up to: 4.3
