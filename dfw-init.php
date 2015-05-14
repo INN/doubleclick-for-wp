@@ -2,6 +2,7 @@
 /*
 Plugin Name: 	DoubleClick for WordPress
 Description: 	A simple way to serve DoubleClick ads in WordPress.
+Version: 		0.1
 Author: 		Will Haynes for INN
 Author URI: 	http://github.com/inn
 */
@@ -11,7 +12,6 @@ Author URI: 	http://github.com/inn
  * 
  */
 $DoubleClick = new DoubleClick();
-$DoubleClick->debug = false;
 
 
 /**
@@ -172,7 +172,6 @@ class DoubleClick {
 
 	public function footer_script() {
 
-		$this->debug = false;
 		if(!$this->debug) :
 			
 		echo "\n<script type='text/javascript'>\n";
