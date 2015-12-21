@@ -25,7 +25,7 @@ function ad_setup() {
 
 	// Optionally define the network code directly in functions.php.
 	// $DoubleClick->networkCode = "xxxxxxx";
-		
+
 	/* Define Breakpoints */
 	$DoubleClick->register_breakpoint('phone', array('minWidth'=> 0,'maxWidth'=>720));
 	$DoubleClick->register_breakpoint('tablet', array('minWidth'=>760,'maxWidth'=>1040));
@@ -46,7 +46,7 @@ __$args__
 
 `Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
 
-* * * 
+* * *
 
 ## 2. Place Ads
 
@@ -94,3 +94,12 @@ __$args__
  - __lazyLoad__: (true/false) setting this to true and the ad will be loaded only once it's within view on the page. Default is false.
 
 * * *
+
+## 3. Troubleshooting
+
+On any page with DoubleClick ads enabled (namely with DoubleClick js enqueued), load the included developer console to confirm data about advertisement delivery for each placement.
+
+#### Append the URL with the parameter:
+```
+?google_force_console
+```
