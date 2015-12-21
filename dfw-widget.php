@@ -53,7 +53,7 @@ class DoubleClick_Widget extends WP_Widget {
 
     	// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
-			echo $dfw_args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $dfw_args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
 		}
 
 		// and finally, place the ad.
