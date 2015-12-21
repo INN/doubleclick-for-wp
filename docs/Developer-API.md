@@ -97,7 +97,7 @@ __$args__
 
 ## 3. Troubleshooting
 
-On any page with DoubleCLick ads enabled (JavaScript enqueued), you can load the developer console to confirm information about advertisement delivery for each placement.
+On any page with DoubleClick ads enabled (namely with DoubleClick js enqueued), load the included developer console to confirm data about advertisement delivery for each placement.
 
 #### Append the URL with the parameter:
 ```
