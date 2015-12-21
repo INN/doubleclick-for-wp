@@ -44,19 +44,20 @@ class DoubleClick_Widget extends WP_Widget {
     		} 
     	}
 
-    	// prepare args parameter.
-    	$args = null;
+    	// bugfix: replace $args with $dfw_args to prevent widget interference
+    	// prepare dfw_args parameter.
+    	$dfw_args = null;
     	if($instance['lazyLoad']) {
-    		$args = array( 'lazyLoad' => true );
+    		$dfw_args = array( 'lazyLoad' => true );
     	}
 
     	// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+			echo $dfw_args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $dfw_args['after_title'];
 		}
 
 		// and finally, place the ad.
-		$DoubleClick->place_ad($identifier,$sizes,$args);
+		$DoubleClick->place_ad( $identifier, $sizes, $dfw_args );
 
 		echo $args['after_widget'];
 
@@ -158,7 +159,6 @@ class DoubleClick_Widget extends WP_Widget {
 }
 
 function dfw_register_widget() {
-
 	register_widget( 'DoubleClick_Widget' );
 }
 
