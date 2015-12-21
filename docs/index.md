@@ -30,7 +30,7 @@ Under _Settings > DoubleClick for WordPress_ update the field with your network 
 
 Advertisements are placed in two ways.
 
-1. Via Reusable Widget
+##### 1. Via Reusable Widget
 
 ![Screenshot](img/widget.png)
 
@@ -38,11 +38,11 @@ Advertisements are placed in two ways.
 
  * Based on breakpoints defined in plugin settings or theme, an __Inventory Size__ can be defined for each breakpoint set either in the plugin settings or via theme function.
    * For an ad the same __Inventory Size__ at every breakpoint, use that size in each breakpoint (i.e. `300x250`).
-   * For an ad with multiple Inventory Sizes (and corresponding creatives), define the appropriate Inventory Size for each breakpoint (i.e. `320x50` for a mobile breakpoint, `728x90` for tablet and desktop breakpoints).
+   * For an ad with multiple __Inventory Sizes__ (and corresponding creatives), define the appropriate Inventory Size for each breakpoint (i.e. `320x50` for a mobile breakpoint, `728x90` for tablet and desktop breakpoints).
 
 * * *
 
-2. Via Theme Function
+##### 2. Via Theme Function
 
 See [Developer API](Developer-API.md) documentation.
 
