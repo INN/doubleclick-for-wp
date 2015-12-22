@@ -8,7 +8,7 @@
 function dfw_plugin_menu() {
 	add_options_page(
 		'DoubleClick for WordPress', 	// $page_title title of the page.
-		'DoubleClick for WordPress', 	// $menu_title the text to be used for the menu.
+		'DoubleClick', 	                // $menu_title the text to be used for the menu.
 		'manage_options', 				// $capability required capability for display.
 		'doubleclick-for-wordpress', 	// $menu_slug unique slug for menu.
 		'dfw_option_page_html' 			// $function callback.
@@ -52,11 +52,19 @@ function dfw_register_options() {
 		'doubleclick-for-wordpress'
 	); // ($id, $title, $callback, $page)
 
-		// Add a section for network option
+	// Add a section for network option
 	add_settings_section(
 		'dfw_breakpoint_options',
 		'Breakpoints',
 		'dfw_breakpoints_section_intro',
+		'doubleclick-for-wordpress'
+	); // ($id, $title, $callback, $page)
+
+	// Add a section for network option
+	add_settings_section(
+		'dfw_documentation_options',
+		'Documentation',
+		'dfw_documentation_section_intro',
 		'doubleclick-for-wordpress'
 	); // ($id, $title, $callback, $page)
 
@@ -85,18 +93,23 @@ function dfw_register_options() {
 add_action('admin_init', 'dfw_register_options');
 
 function dfw_settings_section_intro() {
-	echo "Enter your Network Code from DFP";
+	echo "Enter a DoubleClick for Publisher's Network Code ( <a href='https://developers.google.com/doubleclick-publishers/docs/start#signup' target='_blank'>?</a> )";
 }
 
 function dfw_breakpoints_section_intro() {
-	echo "Enter your breakpoints below";
+	echo "Enter breakpoints below<br />";
+	echo "<em>Example: phone: 0 to 480, tablet 480 to 768, desktop 768 to 9999.</em>";
+}
+
+function dfw_documentation_section_intro() {
+	echo '<a href="https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/index.md">Available on GitHub</a>';
 }
 
 function dfw_network_code_input() {
 	global $DoubleClick;
 
 	if ( isset($DoubleClick->networkCode) ) {
-		echo '<input value="' . $DoubleClick->networkCode . ' (set by theme)" type="text" class="regular-text" disabled/>'; // "The network code is already defined";
+		echo '<input value="' . $DoubleClick->networkCode . ' (set in theme)" type="text" class="regular-text" disabled/>';
 	} else {
 		echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . get_option('dfw_network_code') . '" class="regular-text" />';
 	}
@@ -109,7 +122,7 @@ function dfw_breakpoints_input() {
 		if ( !$b->option ) {
 			echo '<input value="' . $b->identifier . '" type="text" class="medium-text" disabled />';
 			echo '<label> min-width</label><input value="' . $b->minWidth . '" type="number" class="small-text" disabled />';
-			echo '<label> max-width</label><input value="' . $b->maxWidth . '" type="number" class="small-text" disabled /> (set by theme)<br/>';
+			echo '<label> max-width</label><input value="' . $b->maxWidth . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
 		}
 	}
 
