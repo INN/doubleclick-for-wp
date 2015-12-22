@@ -123,9 +123,22 @@ class DoubleClick {
 	}
 
 	public function enqueue_scripts() {
+		$suffix = (WP_DEBUG)? '' : '.min';
 
-		wp_register_script( 'jquery.dfp.min.js', plugins_url( 'js/jquery.dfp.min.js', __FILE__ ) , array('jquery'), '1.1.5', true );
-		wp_register_script( 'jquery.dfw.js', plugins_url( 'js/jquery.dfw.js', __FILE__ ) , array('jquery'), '1.1.5', true );
+		wp_register_script(
+			'jquery.dfp.js',
+			plugins_url( 'js/vendor/jquery.dfp.js/jquery.dfp' . $suffix . '.js', __FILE__ ),
+			array('jquery'),
+			DFP_VERSION,
+			true
+		);
+		wp_register_script(
+			'jquery.dfw.js',
+			plugins_url( 'js/jquery.dfw.js', __FILE__ ),
+			array('jquery.dfp.js'),
+			DFP_VERSION,
+			true
+		);
 
 		// Localize the script with other data
 		// from the plugin.
@@ -143,8 +156,6 @@ class DoubleClick {
 		);
 
 		wp_localize_script( 'jquery.dfw.js', 'dfw', $data );
-
-		wp_enqueue_script( 'jquery.dfp.min.js' );
 		wp_enqueue_script( 'jquery.dfw.js' );
 	}
 

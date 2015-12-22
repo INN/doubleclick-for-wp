@@ -1,0 +1,33 @@
+{
+  "name": "dfp",
+  "version": "0.0.2",
+  "homepage": "https://github.com/INN/DoubleClick-for-WordPress",
+  "authors": [
+    "ryan@inn.org",
+    "david@inn.org"
+  ],
+  "description": "WordPress plugin for serving DFP ads.",
+  "main": "dfw.php",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "WordPress",
+    "DFP",
+    "Google",
+    "Advertising"
+  ],
+  "license": "GNU GPL v2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "js/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery.dfp.js": "~2.4.1"
+  }
+}
