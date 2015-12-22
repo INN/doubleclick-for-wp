@@ -2,24 +2,23 @@
 
 /**
  * Global instances for DoubleClick object.
- * 
  */
 $DoubleClick = new DoubleClick();
 
 
 /**
  * A wrapper for wp_loaded
- * 
+ *
  * This means that if the plugin is not installed,
  * the setup function will not run and throw an error.
  */
 function dfw_add_action() {
 
 	/**
-	 * Use this action to setup 
+	 * Use this action to setup
 	 * breakpoints and network tracking code
 	 * in your theme's functions.php.
-	 * 
+	 *
 	 * @since v0.1
 	 */
 	do_action('dfw_setup');
@@ -32,29 +31,29 @@ class DoubleClick {
 
 	/**
 	 * Network code from DFP.
-	 * 
+	 *
 	 * @var int
 	 */
 	public $networkCode;
 
 	/**
-	 * If true, plugin prints debug units instead of 
+	 * If true, plugin prints debug units instead of
 	 * making a call to dfp.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	public $debug = false;
 
 	/**
 	 * Array of defined breakpoints
-	 * 
+	 *
 	 * @var Array
 	 */
 	public $breakpoints = array();
 
 	/**
 	 * Array of placed ads.
-	 * 
+	 *
 	 * @var Array
 	 */
 	public $adSlots = array();
@@ -62,29 +61,29 @@ class DoubleClick {
 	/**
 	 * Whether we have hooked enqueue of the script
 	 * to wp head.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private static $enqueued = false;
 
 	/**
 	 * Size mappings for ad units.
-	 * 
+	 *
 	 * @var Array
 	 */
 	private static $mapping = array();
 
 	/**
-	 * The number of ads on a page. Also appended to 
+	 * The number of ads on a page. Also appended to
 	 * ad identifiers to create unique strings.
-	 * 
+	 *
 	 * @var int
 	 */
 	public static $count = 0;
 
 	/**
 	 * Create a new DoubleClick object
-	 * 
+	 *
 	 * @param string $networkCode The code for your dfp instance.
 	 */
 	public function __construct($networkCode = null) {
@@ -99,7 +98,7 @@ class DoubleClick {
 
 		add_action('wp_print_footer_scripts', array($this, 'footer_script'));
 
-		$breakpoints = unserialize( get_option('dfw_breakpoints') );
+		$breakpoints = maybe_unserialize( get_option('dfw_breakpoints') );
 
 		if( !empty($breakpoints) ):
 			foreach($breakpoints as $b) {
