@@ -1,8 +1,5 @@
 <?php
 
-// Get our global varaible.
-global $DoubleClick;
-
 /**
  * Adds DoubleClick_Widget widget.
  */

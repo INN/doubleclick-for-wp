@@ -1,8 +1,5 @@
 <?php
 
-
-global $DoubleClick;
-
 /**
  * Register option page.
  *
