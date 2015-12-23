@@ -6,6 +6,7 @@
 * __Order__ - Found under __Delivery__, an Order contains line items.
 * __Line Item__ - Found under __Delivery__, Line Items are attached to Orders and contain multiple Creatives.
 * __Creatives__ - Creatives are images or animated banners attached to __Line Items__. They are a fixed pixel measure (i.e. the Mobile Leaderboard ad unit size is 320x50). Multiple identical creatives might be needed of a single advert to accomplish responsive sizing.
+
 ##### Site-speficic
 * __Ad Units__ - Found under Inventory, Ad Units target multiple creative sizes.
 * __Placements__ - Found under Inventory, Placements may target Ad Units.
