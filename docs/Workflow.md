@@ -1,5 +1,5 @@
 
-## Workflow for Publishing Advertisements with DoubleClick for Publishers
+## Workflow for Publishing Advertisements
 
 ### Terms
 ##### Specific to Advertisements
