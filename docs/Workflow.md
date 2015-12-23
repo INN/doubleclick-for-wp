@@ -8,7 +8,7 @@
 * __Creatives__ - Creatives are images or animated banners attached to __Line Items__. They are a fixed pixel measure (i.e. the Mobile Leaderboard ad unit size is 320x50). Multiple resolutions of a single advertisement might be needed for responsive sizing. Multiple Creatives may be attached to one Line Item to accomplish this.
 
 ##### Specific to Websites
-* __Ad Units__ - Found under __Inventory__, Ad Units target multiple creative sizes.
+* __Ad Units__ - Found under __Inventory__, Ad Units target multiple Creative sizes.
 * __Placements__ - Found under __Inventory__, Placements may target Ad Units.
 
 ### 1. Create an Order (i.e. Terrific Taco Truck)
