@@ -26,7 +26,7 @@ Attach creatives to the Line Item.
 
 The Ad Unit should support all creative sizes on a Line Item. Ex: 320x50 and 728x90.
 
-### 5. Create Placements
+### 5. Create Placements (i.e. Global_Header_Banner or Article_Rail1)
 
 Placements are unique locations on your website. As you create and edit placements, point them at appropriate ad units.
 
