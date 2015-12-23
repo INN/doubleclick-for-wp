@@ -15,17 +15,17 @@
 
 Orders should be used to organize ads by group or company.
 
-### 2. Create a Line Item (i.e. December Taco Bonanza)
+### 2. Create a Line Item, Point to Ad Unit (i.e. December Taco Bonanza)
 
 A Line Item is effectively the unit for an advertisement. Targeting on Line Items points them to specific Ad Units.
 
-### 3. Attach One or More Creatives (i.e. TacoDecember_Mobile, TacoDecember_Desktop, TacoDecember_Desktop_Alt)
+### 3. Attach Creative(s) to Line Items (i.e. TacoDecember_Mobile, TacoDecember_Desktop, TacoDecember_Desktop_Alt)
 
-Attach creatives to the Line Item.
+Attach Creatives to the Line Item. Creatives allow for upload of multiple pixel densities to allow for retina advertising (if your whole page is vector and clean, a blurry ad breaks this quality and reflects poorly on both you and advertiser).
 
-### 4. Create an Ad Unit if one doesn't already exist (i.e. Global_Header_Leaderboard or Article_Rail1_Box)
+### 4. Create an Ad Unit (i.e. Global_Header_Leaderboard or Article_Rail1_Box)
 
-The Ad Unit should support all creative sizes on a Line Item. Ex: 320x50 and 728x90. Targeting on Line Items points them to specific Ad Units. Targeting on Placements points them to Ad Units.
+Ad units support all the potential creative sizes for the ad. For example, a Leaderboard has a 320x50 for mobile and 728x90 for desktop. Targeting on Line Items points them at specific Ad Units. Targeting on Placements includes Ad Units.
 
 ### 5. Create Placements (i.e. Global_Header_Banner or Article_Rail1)
 
