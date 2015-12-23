@@ -17,15 +17,15 @@ Orders should be used to organize ads by group or company.
 
 ### 2. Create a Line Item (i.e. December Taco Bonanza)
 
-A Line Item is effectively the unit for an advertisement.
+A Line Item is effectively the unit for an advertisement. Targeting on Line Items points them to specific Ad Units.
 
 ### 3. Attach One or More Creatives (i.e. TacoDecember_Mobile, TacoDecember_Desktop, TacoDecember_Desktop_Alt)
 
 Attach creatives to the Line Item.
 
-### 4. Create an Ad Unit if one doesn't already exist (i.e. Leaderboard)
+### 4. Create an Ad Unit if one doesn't already exist (i.e. Global_Header_Leaderboard or Article_Rail1_Box)
 
-The Ad Unit should support all creative sizes on a Line Item. Ex: 320x50 and 728x90.
+The Ad Unit should support all creative sizes on a Line Item. Ex: 320x50 and 728x90. Targeting on Line Items points them to specific Ad Units. Targeting on Placements points them to Ad Units.
 
 ### 5. Create Placements (i.e. Global_Header_Banner or Article_Rail1)
 
