@@ -122,6 +122,11 @@ class DoubleClick {
 		$this->breakpoints[$identifier] = new DoubleClickBreakpoint($identifier,$args);
 	}
 
+	/**
+	 * Register scripts
+	 *
+	 * @global WP_DEBUG used to determine whether or not 
+	 */
 	public function enqueue_scripts() {
 		$suffix = (WP_DEBUG)? '' : '.min';
 
@@ -157,6 +162,14 @@ class DoubleClick {
 
 		wp_localize_script( 'jquery.dfw.js', 'dfw', $data );
 		wp_enqueue_script( 'jquery.dfw.js' );
+
+		wp_enqueue_style(
+			'dfp',
+			plugins_url( 'css/dfp.css', __FILE__ ),
+			array(),
+			DFP_VERSION,
+			'all'
+		);
 	}
 
 	/**
