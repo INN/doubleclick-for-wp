@@ -48,4 +48,4 @@ See [Developer API](Developer-API.md) documentation.
 
 ## 3. Is that it?
 
-Nope! Next [configure targeting](targeting/) and advanced users may look at the [developer api](developer-api/).
+Nope! Next [configure targeting](targeting.md) and advanced users may look at the [developer api](developer-api/).
