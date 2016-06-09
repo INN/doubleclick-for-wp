@@ -1,5 +1,6 @@
 === DoubleClick for WordPress ===
-Contributors: willhaynes24
+Contributors: inn_nerds, willhaynes24
+Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
 Tested up to: 4.3
