@@ -378,6 +378,8 @@ class DoubleClickAdSlot {
 		if( !$this->hasMapping() )
 			return false;
 
+		$mapping = array();
+
 		foreach($this->sizes as $breakpointIdentifier=>$size) {
 			$breakpoint = $DoubleClick->breakpoints[$breakpointIdentifier];
 
