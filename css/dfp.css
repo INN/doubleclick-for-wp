@@ -4,3 +4,14 @@
 .widget_doubleclick_widget {
   text-align: center;
 }
+.dfw-unit.display-block:before {
+  speak: auto;
+  text-transform: upper;
+  content: "Advertisment";
+  color: #999;
+  margin-bottom: 6px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: #aaa;
+}
