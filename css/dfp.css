@@ -7,8 +7,7 @@
 .dfw-unit.display-block:before {
   speak: auto;
   text-transform: upper;
-  content: "Advertisment";
-  margin-bottom: 6px;
+  content: "Advertisement";
   display: block;
   text-align: center;
   font-size: 14px;
