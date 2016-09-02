@@ -6,7 +6,7 @@
 }
 .dfw-unit.display-block:before {
   speak: auto;
-  text-transform: upper;
+  text-transform: uppercase;
   content: "Advertisement";
   display: block;
   text-align: center;
