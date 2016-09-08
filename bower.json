@@ -1,10 +1,9 @@
 {
   "name": "dfp",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "homepage": "https://github.com/INN/DoubleClick-for-WordPress",
   "authors": [
-    "ryan@inn.org",
-    "david@inn.org"
+    "nerds@inn.org"
   ],
   "description": "WordPress plugin for serving DFP ads.",
   "main": "dfw.php",
