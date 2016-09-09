@@ -38,6 +38,7 @@ For more advanced documentation for developers and advanced users see [the offic
 	- centering ads within the ad widgets.
 	- creating a `:before` pseudoelement with the text 'Advertisement', to follow DfP recommended practices
 - Better documentation
+- Fix for case where the widget element's closing tag was not output
 - Numerous small bugfixes
 
 = 0.1 =
