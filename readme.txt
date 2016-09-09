@@ -3,8 +3,8 @@ Contributors: inn_nerds, willhaynes24
 Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
-Tested up to: 4.3
-Stable tag: 0.2
+Tested up to: 4.6
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ For more advanced documentation for developers and advanced users see [the offic
 
 == Changelog ==
 
-= 0.2  =
+= 0.2.1 =
 
 - Widget now includes a default stylesheet:
 	- setting `.display-none` to `display: none;` to support `jQuery.dfp.js`' utility styles
@@ -40,6 +40,7 @@ For more advanced documentation for developers and advanced users see [the offic
 - Documentation improvements
 - Fix for case where the widget element's closing tag was not output
 - Numerous small bugfixes
+- Tested up to WordPress 4.6
 
 = 0.1 =
 
