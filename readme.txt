@@ -33,11 +33,11 @@ For more advanced documentation for developers and advanced users see [the offic
 
 = 0.2  =
 
-- Widget new includes default styles:
-	- setting `.display-none` to `display: none;` to support `dfp.js`' utility styles
-	- centering ads within the ad widgets.
-	- creating a `:before` pseudoelement with the text 'Advertisement', to follow DfP recommended practices
-- Better documentation
+- Widget now includes a default stylesheet:
+	- setting `.display-none` to `display: none;` to support `jQuery.dfp.js`' utility styles
+	- centering ad units within the ad widgets.
+	- creating a `:before` pseudoelement with the text 'Advertisement', to follow DoubleClick recommended practices on labeling ads
+- Documentation improvements
 - Fix for case where the widget element's closing tag was not output
 - Numerous small bugfixes
 
