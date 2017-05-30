@@ -380,7 +380,11 @@ class DoubleClickAdSlot {
 
 		$mapping = array();
 
-		foreach($this->sizes as $breakpointIdentifier=>$size) {
+		if ( empty( $this->sizes ) ) {
+			return $mapping;
+		}
+
+		foreach( $this->sizes as $breakpointIdentifier => $size ) {
 			$breakpoint = $DoubleClick->breakpoints[$breakpointIdentifier];
 
 			// The minimum browser width/height for this sizemapping.
@@ -390,15 +394,15 @@ class DoubleClickAdSlot {
 			$sizeStrings = explode(",",$size);	// eg. 300x250,336x300
 			$sizeArray = array();
 
-			foreach($sizeStrings as $s) {
-				if( !empty($s) ) :
+			foreach( $sizeStrings as $s ) {
+				if ( !empty( $s ) ) {
 					$arr = explode("x",$s);		// eg. 300x250
-					$w = (int)$arr[0];
-					$h = (int)$arr[1];
+					$w = (int) $arr[0];
+					$h = (int) $arr[1];
 					$sizeArray[] = array($w,$h);
-				else :
+				} else {
 					// $sizeArray[] = array();
-				endif;
+				}
 			}
 
 			$mapping[] = array(
