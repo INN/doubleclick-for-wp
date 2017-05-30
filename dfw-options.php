@@ -24,7 +24,7 @@ add_action( 'admin_menu', 'dfw_plugin_menu' );
 function dfw_option_page_html() {
 	// Nice try.
 	if ( !current_user_can( 'manage_options' ) )
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		wp_die( __( 'You do not have sufficient permissions to access this page.', 'dfw' ) );
 
 	echo '<div class="wrap">';
 	echo '<h2>DoubleClick for WordPress Options</h2>';
