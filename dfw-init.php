@@ -395,7 +395,7 @@ class DoubleClickAdSlot {
 			$sizeArray = array();
 
 			foreach( $sizeStrings as $s ) {
-				if ( !empty( $s ) ) {
+				if ( ! empty( $s ) ) {
 					$arr = explode("x",$s);		// eg. 300x250
 					$w = (int) $arr[0];
 					$h = (int) $arr[1];
