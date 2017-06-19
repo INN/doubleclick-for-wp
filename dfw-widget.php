@@ -28,17 +28,23 @@ class DoubleClick_Widget extends WP_Widget {
 
 		global $DoubleClick;
 
-		echo $args['before_widget'];
-
 		// prepare identifier parameter.
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : 'ident';
 
 		// prepare size parameter.
 		$sizes = $instance['sizes'];
-		foreach($sizes as $b=>$s) {
-			if ( empty($sizes[$b]) ) {
-				unset($sizes[$b]);
+		if ( ! empty( $sizes ) ) {
+			foreach ( $sizes as $b => $s ) {
+				if ( empty( $sizes[$b] ) ) {
+					unset( $sizes[$b] );
+				}
 			}
+		} else {
+			printf(
+				'<!-- %1$s -->',
+				__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' )
+			);
+			return;
 		}
 
 		// bugfix: replace $args with $dfw_args to prevent widget interference
@@ -47,6 +53,9 @@ class DoubleClick_Widget extends WP_Widget {
 		if ( $instance['lazyLoad'] ) {
 			$dfw_args = array( 'lazyLoad' => true );
 		}
+
+		// begin actual widget output
+		echo $args['before_widget'];
 
 		// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
