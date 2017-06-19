@@ -91,9 +91,9 @@ class DoubleClick {
 		$this->networkCode = $networkCode;
 
 		// Script enqueue is static because we only ever want to print it once.
-		if(!$this::$enqueued) {
-			add_action('wp_footer', array($this, 'enqueue_scripts'));
-			$this->enqueued = true;
+		if( ! $this::$enqueued ) {
+			add_action( 'wp_footer', array( $this, 'enqueue_scripts' ) );
+			$this::$enqueued = true;
 		}
 
 		add_action('wp_print_footer_scripts', array($this, 'footer_script'));
