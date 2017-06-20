@@ -3,49 +3,49 @@
  * Extends jquery.dfw.min.js with some event listeners specific to us.
  */
 (function() {
-  var $ = jQuery;
+	var $ = jQuery;
 
-  // On window scroll check if there are any new ads to load.
-  var lazyLoad = function() {
-    // all the lazy load ads on the page.
-    var lazyLoaders = $('.dfw-lazy-load:not(.dfw-loaded)'),
-        // jQuery object to hold ads that actually need loading.
-        toLoad = $([]),
-        // window scrolltop.
-        st = $(document).scrollTop(),
-        // window height.
-        wh = $(window).height();
+	// On window scroll check if there are any new ads to load.
+	var lazyLoad = function() {
+		// all the lazy load ads on the page.
+		var lazyLoaders = $( '.dfw-lazy-load:not(.dfw-loaded)' ),
+		// jQuery object to hold ads that actually need loading.
+		toLoad = $( [] ),
+		// window scrolltop.
+		st = $( document ).scrollTop(),
+		// window height.
+		wh = $( window ).height();
 
-    // determind with lazyLoaders needs toLoad.
-    lazyLoaders.each(function () {
-      var top = $(this).offset().top;
+		// determind with lazyLoaders needs toLoad.
+		lazyLoaders.each(function () {
+			var top = $( this ).offset().top;
 
-      // how much futher down the page to load
-      // the ad (so it's at least loading before it's on screen).
-      var buffer = 200;
-      if (top < st + wh + buffer) {
-        toLoad = toLoad.add($(this));
-      }
-    });
+			// how much futher down the page to load
+			// the ad (so it's at least loading before it's on screen).
+			var buffer = 200;
+			if (top < st + wh + buffer) {
+				toLoad = toLoad.add( $( this ) );
+			}
+		});
 
-    // if we have some ads, then load 'em!
-    if (toLoad.length > 0) {
-      $(toLoad).dfp({
-        "dfpID": dfw.networkCode,
-        "collapseEmptyDivs": false,
-        "sizeMapping": dfw.mappings,
-        "setTargeting": dfw.targeting
-      }).addClass('dfw-loaded');
-    }
-  };
+		// if we have some ads, then load 'em!
+		if (toLoad.length > 0) {
+			$( toLoad ).dfp({
+				"dfpID": dfw.networkCode,
+				"collapseEmptyDivs": false,
+				"sizeMapping": dfw.mappings,
+				"setTargeting": dfw.targeting
+			}).addClass( 'dfw-loaded' );
+		}
+	};
 
-  $(document).ready(function(){
-    // Watch for scroll events, and determine whether any ads
-    // need lazy loading. Wait a few seconds for images and text to render
-    // and units to reach their "true" depth on the page.
-    $(window).on('scroll', lazyLoad);
+	$( document ).ready(function(){
+		// Watch for scroll events, and determine whether any ads
+		// need lazy loading. Wait a few seconds for images and text to render
+		// and units to reach their "true" depth on the page.
+		$( window ).on( 'scroll', lazyLoad );
 
-    // Run lazyLoad once on DOM ready to load any ads in view
-    lazyLoad();
-  });
+		// Run lazyLoad once on DOM ready to load any ads in view
+		lazyLoad();
+	});
 })();

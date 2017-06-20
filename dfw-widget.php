@@ -12,7 +12,7 @@ class DoubleClick_Widget extends WP_Widget {
 		parent::__construct(
 			'doubleclick_widget', // Base ID
 			__( 'DoubleClick Ad', 'dfw' ), // Name
-			array( 'description' => __( 'Serve ads from DFP.', 'dfw' ), ) // Args
+			array( 'description' => __( 'Serve ads from DFP.', 'dfw' ) ) // Args
 		);
 	}
 
@@ -35,8 +35,8 @@ class DoubleClick_Widget extends WP_Widget {
 		$sizes = $instance['sizes'];
 		if ( ! empty( $sizes ) ) {
 			foreach ( $sizes as $b => $s ) {
-				if ( empty( $sizes[$b] ) ) {
-					unset( $sizes[$b] );
+				if ( empty( $sizes[ $b ] ) ) {
+					unset( $sizes[ $b ] );
 				}
 			}
 		} else {
@@ -59,7 +59,7 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 
 		// and finally, place the ad.
@@ -79,25 +79,25 @@ class DoubleClick_Widget extends WP_Widget {
 
 		global $DoubleClick;
 
-		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : "";
+		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : '';
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'identifier' ); ?>"><?php _e( 'Identifier:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'identifier' ); ?>" name="<?php echo $this->get_field_name( 'identifier' ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
 		</p>
 
-		<?php if( sizeof($DoubleClick->breakpoints) > 0 ) : $i = 0; ?>
+		<?php if ( sizeof( $DoubleClick->breakpoints ) > 0 ) : $i = 0; ?>
 
 			<p><strong>Size for breakpoints:</strong></p>
 
-			<?php foreach($DoubleClick->breakpoints as $b) : ?>
+			<?php foreach ( $DoubleClick->breakpoints as $b ) : ?>
 				<p>
 					<label><?php echo $b->identifier; ?> <em>(<?php echo $b->minWidth; ?>px+)</em></label><br/>
 					<input
 						class="widefat"
 						type="text"
 						name="<?php echo $this->get_field_name( 'sizes' ); ?>[<?php echo $b->identifier ?>]"
-						value="<?php echo $instance['sizes'][$b->identifier]; ?>"
+						value="<?php echo $instance['sizes'][ $b->identifier ]; ?>"
 						>
 				</p>
 
@@ -126,7 +126,7 @@ class DoubleClick_Widget extends WP_Widget {
 				type="checkbox"
 				name="<?php echo $this->get_field_name( 'lazyLoad' ); ?>"
 				value="1"
-				<?php if( $instance['lazyLoad'] ) echo "checked"; ?>
+				<?php if ( $instance['lazyLoad'] ) { echo 'checked';} ?>
 				><label>Only load ad once it comes into view on screen.</label><br/>
 		</p>
 		<hr/><br>
@@ -159,4 +159,4 @@ function dfw_register_widget() {
 	register_widget( 'DoubleClick_Widget' );
 }
 
-add_action( 'widgets_init', 'dfw_register_widget');
+add_action( 'widgets_init', 'dfw_register_widget' );

@@ -9,4 +9,4 @@ Author URI:  https://github.com/INN/DoubleClick-for-WordPress/blob/master/dfw.ph
 
 define( 'DFP_VERSION', '0.2.0' );
 
-include('dfw-init.php');
+include( 'dfw-init.php' );
