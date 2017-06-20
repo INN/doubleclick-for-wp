@@ -23,8 +23,9 @@ add_action( 'admin_menu', 'dfw_plugin_menu' );
  */
 function dfw_option_page_html() {
 	// Nice try.
-	if ( !current_user_can( 'manage_options' ) )
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( __( 'You do not have sufficient permissions to access this page.', 'dfw' ) );
+	}
 
 	echo '<div class="wrap">';
 	echo '<h2>DoubleClick for WordPress Options</h2>';
@@ -90,15 +91,15 @@ function dfw_register_options() {
 	register_setting( 'doubleclick-for-wordpress', 'dfw_breakpoints', 'dfw_breakpoints_save' );
 
 }
-add_action('admin_init', 'dfw_register_options');
+add_action( 'admin_init', 'dfw_register_options' );
 
 function dfw_settings_section_intro() {
 	echo "Enter a DoubleClick for Publisher's Network Code ( <a href='https://developers.google.com/doubleclick-publishers/docs/start#signup' target='_blank'>?</a> )";
 }
 
 function dfw_breakpoints_section_intro() {
-	echo "Enter breakpoints below<br />";
-	echo "<em>Example: phone: 0 to 480, tablet 480 to 768, desktop 768 to 9999.</em>";
+	echo 'Enter breakpoints below<br />';
+	echo '<em>Example: phone: 0 to 480, tablet 480 to 768, desktop 768 to 9999.</em>';
 }
 
 function dfw_documentation_section_intro() {
@@ -108,10 +109,10 @@ function dfw_documentation_section_intro() {
 function dfw_network_code_input() {
 	global $DoubleClick;
 
-	if ( isset($DoubleClick->networkCode) ) {
+	if ( isset( $DoubleClick->networkCode ) ) {
 		echo '<input value="' . $DoubleClick->networkCode . ' (set in theme)" type="text" class="regular-text" disabled/>';
 	} else {
-		echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . get_option('dfw_network_code') . '" class="regular-text" />';
+		echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . get_option( 'dfw_network_code' ) . '" class="regular-text" />';
 	}
 }
 
@@ -119,20 +120,20 @@ function dfw_breakpoints_input() {
 	global $DoubleClick;
 
 	foreach ( $DoubleClick->breakpoints as $b ) {
-		if ( !$b->option ) {
+		if ( ! $b->option ) {
 			echo '<input value="' . $b->identifier . '" type="text" class="medium-text" disabled />';
 			echo '<label> min-width</label><input value="' . $b->minWidth . '" type="number" class="small-text" disabled />';
 			echo '<label> max-width</label><input value="' . $b->maxWidth . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
 		}
 	}
 
-	$breakpoints = maybe_unserialize( get_option('dfw_breakpoints') );
+	$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 	$i = 0;
 	while ( $i < 5 ) {
-		$identifier = ( isset( $breakpoints[$i]['identifier'] ) )? $breakpoints[$i]['identifier'] : '';
-		$min_width = ( isset( $breakpoints[$i]['min-width'] ) )? $breakpoints[$i]['min-width'] : '';
-		$max_width = ( isset( $breakpoints[$i]['max-width'] ) )? $breakpoints[$i]['max-width'] : ''; ?>
+		$identifier = ( isset( $breakpoints[ $i ]['identifier'] ) )? $breakpoints[ $i ]['identifier'] : '';
+		$min_width = ( isset( $breakpoints[ $i ]['min-width'] ) )? $breakpoints[ $i ]['min-width'] : '';
+		$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : ''; ?>
 		<input value="<?php echo $identifier; ?>"
 				placeholder="Name"
 				name="dfw_breakpoints[]"
@@ -158,16 +159,16 @@ function dfw_breakpoints_input() {
 
 }
 
-function dfw_breakpoints_save($value) {
+function dfw_breakpoints_save( $value ) {
 	$breakpoints = array();
 	$groups = array_chunk( $value, 3 );
 
-	foreach ($groups as $group) {
+	foreach ( $groups as $group ) {
 		if ( isset( $group[0] ) && $group[0] ) {
 			$breakpoints[] = array(
 				'identifier' => $group[0],
 				'min-width' => $group[1],
-				'max-width' => $group[2]
+				'max-width' => $group[2],
 			);
 		}
 	}
