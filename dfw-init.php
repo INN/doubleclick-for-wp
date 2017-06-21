@@ -270,7 +270,7 @@ class DoubleClick {
 		}
 
 		// return the array of targeting criteria.
-		return $targeting;
+		return apply_filters( 'dfw_targeting_criteria', $targeting );
 	}
 
 	/**
