@@ -3,7 +3,7 @@
 /**
  * Global instances for DoubleClick object.
  */
-$DoubleClick = new DoubleClick();
+$doubleclick = new DoubleClick();
 
 
 /**
@@ -25,8 +25,9 @@ function dfw_add_action() {
 }
 add_action( 'wp_loaded', 'dfw_add_action' );
 
-
-
+/**
+ * The main plugin class.
+ */
 class DoubleClick {
 
 	/**
@@ -34,7 +35,7 @@ class DoubleClick {
 	 *
 	 * @var int
 	 */
-	public $networkCode;
+	public $network_code;
 
 	/**
 	 * If true, plugin prints debug units instead of
@@ -56,7 +57,7 @@ class DoubleClick {
 	 *
 	 * @var Array
 	 */
-	public $adSlots = array();
+	public $ad_slots = array();
 
 	/**
 	 * Whether we have hooked enqueue of the script
@@ -84,11 +85,11 @@ class DoubleClick {
 	/**
 	 * Create a new DoubleClick object
 	 *
-	 * @param string $networkCode The code for your dfp instance.
+	 * @param string $network_code The code for your dfp instance.
 	 */
-	public function __construct( $networkCode = null ) {
+	public function __construct( $network_code = null ) {
 
-		$this->networkCode = $networkCode;
+		$this->network_code = $network_code;
 
 		// Script enqueue is static because we only ever want to print it once.
 		if ( ! $this::$enqueued ) {
@@ -101,13 +102,13 @@ class DoubleClick {
 		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 		if ( ! empty( $breakpoints ) ) :
-			foreach ( $breakpoints as $b ) {
+			foreach ( $breakpoints as $breakpoint ) {
 				$args = array(
-					'minWidth' => $b['min-width'],
-					'maxWidth' => $b['max-width'],
+					'min_width' => $breakpoint['min-width'],
+					'max_width' => $breakpoint['max-width'],
 					'_option'	=> true,// this breakpoint is set in WordPress options.
 					);
-				$this->register_breakpoint( $b['identifier'],$args );
+				$this->register_breakpoint( $breakpoint['identifier'], $args );
 			}
 		endif;
 
@@ -116,10 +117,11 @@ class DoubleClick {
 	/**
 	 * Register Breakpoint
 	 *
-	 * @param DoubleClickBreakpoint
+	 * @param string       $identifier the breakpoint to register.
+	 * @param string|array $args additional args.
 	 */
 	public function register_breakpoint( $identifier, $args = null ) {
-		$this->breakpoints[ $identifier ] = new DoubleClickBreakpoint( $identifier,$args );
+		$this->breakpoints[ $identifier ] = new DoubleClickBreakpoint( $identifier, $args );
 	}
 
 	/**
@@ -148,14 +150,14 @@ class DoubleClick {
 		// Localize the script with other data
 		// from the plugin.
 		$mappings = array();
-		foreach ( $this->adSlots as $ad ) {
-			if ( $ad->hasMapping() ) {
+		foreach ( $this->ad_slots as $ad ) {
+			if ( $ad->has_mapping() ) {
 				$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
 			}
 		}
 
 		$data = array(
-			'networkCode' => $this->networkCode,
+			'network_code' => $this->network_code,
 			'mappings' => $mappings,
 			'targeting' => $this->targeting(),
 		);
@@ -178,24 +180,24 @@ class DoubleClick {
 	 *
 	 * @return String network code.
 	 */
-	private function networkCode() {
-		return isset( $this->networkCode ) ? $this->networkCode : get_option( 'dfw_network_code','xxxxxx' );
+	private function network_code() {
+		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
 	}
 
 	public function footer_script() {
 		if ( ! $this->debug ) {
 			$mappings = array();
-			foreach ( $this->adSlots as $ad ) {
-				if ( $ad->hasMapping() ) {
+			foreach ( $this->ad_slots as $ad ) {
+				if ( $ad->has_mapping() ) {
 					$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
 				}
 			} ?>
 			<script type="text/javascript">
 				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: '<?php echo $this->networkCode(); ?>',
+					dfpID: '<?php echo esc_js( $this->network_code() ); ?>',
 					collapseEmptyDivs: false,
-					setTargeting: <?php echo json_encode( $this->targeting() ); ?>,
-					sizeMapping: <?php echo json_encode( $mappings ); ?>
+					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
+					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
 				});
 			</script>
 		<?php }
@@ -270,23 +272,39 @@ class DoubleClick {
 		// return the array of targeting criteria.
 		return $targeting;
 	}
+
 	/**
 	 * Place a DFP ad.
 	 *
-	 * @param string $identifier A DFP
-	 * @param string|array $dimensions the dimensions the ad could be.
-	 * @param string|array $breakpoint breakpoints to target.
-	 * @param array $targeting additional targeting options.
-	 * @param $return Boolean. If this is true it will return a string instead.
+	 * @param string       $identifier A DFP identifier.
+	 * @param string|array $sizes the dimensions the ad could be.
+	 * @param string|array $args additional args.
 	 */
 	public function place_ad( $identifier, $sizes, $args = null ) {
-		echo $this->get_ad_placement( $identifier, $sizes, $args );
+		echo wp_kses(
+			$this->get_ad_placement( $identifier, $sizes, $args ),
+			array(
+				'div' => array(
+					'class' => array(),
+					'data-adunit' => array(),
+					'data-size-mapping' => array(),
+					'data-dimensions' => array(),
+				),
+			)
+		);
 	}
 
+	/**
+	 * Build the ad code.
+	 *
+	 * @param string       $identifier A DFP identifier.
+	 * @param string|array $sizes the dimensions the ad could be.
+	 * @param string|array $args additional args.
+	 */
 	public function get_ad_placement( $identifier, $sizes, $args = null ) {
 		global $post;
 
-		if ( $args === null ) {
+		if ( null === $args ) {
 			$args = array();
 		}
 
@@ -294,10 +312,10 @@ class DoubleClick {
 			'lazyLoad' => false,
 		);
 
-		$args = array_replace_recursive( $defaults, $args );
+		$args = wp_parse_args( $args, $defaults );
 
-		$adObject = new DoubleClickAdSlot( $identifier,$sizes );
-		$this->adSlots[] = $adObject;
+		$ad_object = new DoubleClickAdSlot( $identifier, $sizes );
+		$this->ad_slots[] = $ad_object;
 
 		// Print the ad tag.
 		$classes = 'dfw-unit';
@@ -306,9 +324,9 @@ class DoubleClick {
 			$classes .= ' dfw-lazy-load';
 		}
 
-		$id = $adObject->id;
+		$id = $ad_object->id;
 
-		if ( $adObject->hasMapping() ) {
+		if ( $ad_object->has_mapping() ) {
 			$ad = "<div
 				class='$classes'
 					data-adunit='$identifier'
@@ -354,7 +372,7 @@ class DoubleClickAdSlot {
 	 */
 	public function __construct( $identifer, $size ) {
 
-		global $DoubleClick;
+		global $doubleclick;
 
 		// doubleclick escapes '/' with '//' for some odd reason.
 		// currently we don't try to fix this, but could with this line:
@@ -364,7 +382,7 @@ class DoubleClickAdSlot {
 		$this->id = ++ DoubleClick::$count;
 	}
 
-	public function breakpointIdentifier() {
+	public function breakpoint_identifier() {
 		return null;
 	}
 
@@ -372,7 +390,7 @@ class DoubleClickAdSlot {
 	 * If this ad unit has a size mapping.
 	 *
 	 */
-	public function hasMapping() {
+	public function has_mapping() {
 		if ( is_string( $this->sizes ) ) {
 			return false;
 		} else {
@@ -381,10 +399,10 @@ class DoubleClickAdSlot {
 	}
 
 	public function mapping() {
-		global $DoubleClick;
+		global $doubleclick;
 
 		// Return false if there is no mapping
-		if ( ! $this->hasMapping() ) {
+		if ( ! $this->has_mapping() ) {
 			return false;
 		}
 
@@ -394,30 +412,28 @@ class DoubleClickAdSlot {
 			return $mapping;
 		}
 
-		foreach ( $this->sizes as $breakpointIdentifier => $size ) {
-			$breakpoint = $DoubleClick->breakpoints[ $breakpointIdentifier ];
+		foreach ( $this->sizes as $breakpoint_identifier => $size ) {
+			$breakpoint = $doubleclick->breakpoints[ $breakpoint_identifier ];
 
 			// The minimum browser width/height for this sizemapping.
-			$browserHeight = 1;
-			$browserWidth = (int) $breakpoint->minWidth;
+			$browser_height = 1;
+			$browser_width = (int) $breakpoint->min_width;
 
-			$sizeStrings = explode( ',',$size );	// eg. 300x250,336x300
-			$sizeArray = array();
+			$size_strings = explode( ',', $size );	// eg. 300x250,336x300
+			$size_array = array();
 
-			foreach ( $sizeStrings as $s ) {
-				if ( ! empty( $s ) ) {
-					$arr = explode( 'x',$s );		// eg. 300x250
-					$w = (int) $arr[0];
-					$h = (int) $arr[1];
-					$sizeArray[] = array( $w,$h );
-				} else {
-					// $sizeArray[] = array();
+			foreach ( $size_strings as $size ) {
+				if ( ! empty( $size ) ) {
+					$arr = explode( 'x', $size );		// eg. 300x250
+					$width = (int) $arr[0];
+					$height = (int) $arr[1];
+					$size_array[] = array( $width, $height );
 				}
 			}
 
 			$mapping[] = array(
-				'browser' => array( $browserWidth,$browserHeight ),
-				'ad_sizes' => $sizeArray,
+				'browser' => array( $browser_width, $browser_height ),
+				'ad_sizes' => $size_array,
 			);
 		}
 
@@ -439,14 +455,14 @@ class DoubleClickBreakpoint {
 	 *
 	 * @var integer
 	 */
-	public $minWidth;
+	public $min_width;
 
 	/**
 	 * Maximum width for the breakpoint
 	 *
 	 * @var integer
 	 */
-	public $maxWidth;
+	public $max_width;
 
 	/**
 	 * Was this breakpoint added by a theme or
@@ -457,12 +473,12 @@ class DoubleClickBreakpoint {
 	public $option;
 
 	public function __construct( $identifier, $args = null ) {
-		if ( isset( $args['minWidth'] ) ) {
-			$this->minWidth = $args['minWidth'];
+		if ( isset( $args['min_width'] ) ) {
+			$this->min_width = $args['min_width'];
 		}
 
-		if ( isset( $args['maxWidth'] ) ) {
-			$this->maxWidth = $args['maxWidth'];
+		if ( isset( $args['max_width'] ) ) {
+			$this->max_width = $args['max_width'];
 		}
 
 		if ( isset( $args['_option'] ) && $args['_option'] ) {
@@ -474,10 +490,9 @@ class DoubleClickBreakpoint {
 
 	/**
 	 * Prints a javascript boolean statement for this breakpoint
-	 *
 	 */
 	public function js_logic() {
-		echo $this->get_js_logic();
+		echo esc_js( $this->get_js_logic() );
 	}
 
 	/**
@@ -486,7 +501,7 @@ class DoubleClickBreakpoint {
 	 * @return String boolean logic for breakpoint.
 	 */
 	public function get_js_logic() {
-		return "($this->minWidth <= document.documentElement.clientWidth && document.documentElement.clientWidth < $this->maxWidth)";
+		return "($this->min_width <= document.documentElement.clientWidth && document.documentElement.clientWidth < $this->max_width)";
 	}
 
 }
