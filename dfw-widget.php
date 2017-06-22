@@ -26,7 +26,7 @@ class DoubleClick_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		global $DoubleClick;
+		global $doubleclick;
 
 		// prepare identifier parameter.
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : 'ident';
@@ -34,15 +34,15 @@ class DoubleClick_Widget extends WP_Widget {
 		// prepare size parameter.
 		$sizes = $instance['sizes'];
 		if ( ! empty( $sizes ) ) {
-			foreach ( $sizes as $b => $s ) {
-				if ( empty( $sizes[ $b ] ) ) {
-					unset( $sizes[ $b ] );
+			foreach ( $sizes as $breakpoint => $size ) {
+				if ( empty( $sizes[ $breakpoint ] ) ) {
+					unset( $sizes[ $breakpoint ] );
 				}
 			}
 		} else {
 			printf(
 				'<!-- %1$s -->',
-				__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' )
+				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' )
 			);
 			return;
 		}
@@ -55,17 +55,17 @@ class DoubleClick_Widget extends WP_Widget {
 		}
 
 		// begin actual widget output
-		echo $args['before_widget'];
+		echo wp_kses_post( $args['before_widget'] );
 
 		// print (optional) title.
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+			echo wp_kses_post( $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'] );
 		}
 
 		// and finally, place the ad.
-		$DoubleClick->place_ad( $identifier, $sizes, $dfw_args );
+		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
 
-		echo $args['after_widget'];
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 	/**
@@ -77,27 +77,27 @@ class DoubleClick_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		global $DoubleClick;
+		global $doubleclick;
 
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'identifier' ); ?>"><?php _e( 'Identifier:' ); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id( 'identifier' ); ?>" name="<?php echo $this->get_field_name( 'identifier' ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'identifier' ) ); ?>"><?php esc_html_e( 'Identifier:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'identifier' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'identifier' ) ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
 		</p>
 
-		<?php if ( sizeof( $DoubleClick->breakpoints ) > 0 ) : $i = 0; ?>
+		<?php if ( count( $doubleclick->breakpoints ) > 0 ) : $i = 0; ?>
 
 			<p><strong>Size for breakpoints:</strong></p>
 
-			<?php foreach ( $DoubleClick->breakpoints as $b ) : ?>
+			<?php foreach ( $doubleclick->breakpoints as $breakpoint ) : ?>
 				<p>
-					<label><?php echo $b->identifier; ?> <em>(<?php echo $b->minWidth; ?>px+)</em></label><br/>
+					<label><?php echo esc_html( $breakpoint->identifier ); ?> <em>(<?php echo esc_html( $breakpoint->min_width ); ?>px+)</em></label><br/>
 					<input
 						class="widefat"
 						type="text"
-						name="<?php echo $this->get_field_name( 'sizes' ); ?>[<?php echo $b->identifier ?>]"
-						value="<?php echo $instance['sizes'][ $b->identifier ]; ?>"
+						name="<?php echo esc_attr( $this->get_field_name( 'sizes' ) ); ?>[<?php echo esc_attr( $breakpoint->identifier ); ?>]"
+						value="<?php echo esc_attr( $instance['sizes'][ $breakpoint->identifier ] ); ?>"
 						>
 				</p>
 
@@ -112,8 +112,8 @@ class DoubleClick_Widget extends WP_Widget {
 				<input
 					class="widefat"
 					type="text"
-					name="<?php echo $this->get_field_name( 'size' ); ?>"
-					value="<?php echo $instance['size']; ?>"
+					name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>"
+					value="<?php echo esc_attr( $instance['size'] ); ?>"
 					>
 			</p>
 
@@ -124,7 +124,7 @@ class DoubleClick_Widget extends WP_Widget {
 			<input
 				class="checkbox"
 				type="checkbox"
-				name="<?php echo $this->get_field_name( 'lazyLoad' ); ?>"
+				name="<?php echo esc_attr( $this->get_field_name( 'lazyLoad' ) ); ?>"
 				value="1"
 				<?php if ( $instance['lazyLoad'] ) { echo 'checked';} ?>
 				><label>Only load ad once it comes into view on screen.</label><br/>
