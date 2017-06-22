@@ -26,7 +26,7 @@ class DCWP_Options {
 	 * @var    string
 	 * @since  0.2.1
 	 */
-	protected $key = 'doubleclick_for_wordpress_doubleclick';
+	protected $key = 'doubleclick_for_wordpress';
 
 	/**
 	 * Options page metabox ID.
@@ -34,7 +34,7 @@ class DCWP_Options {
 	 * @var    string
 	 * @since  0.2.1
 	 */
-	protected $metabox_id = 'doubleclick_for_wordpress_doubleclick_metabox';
+	protected $metabox_id = 'doubleclick_for_wordpress_metabox';
 
 	/**
 	 * Options Page title.
@@ -63,7 +63,7 @@ class DCWP_Options {
 		$this->hooks();
 
 		// Set our title.
-		$this->title = esc_attr__( 'DoubleClick for WordPress Doubleclick', 'doubleclick-for-wordpress' );
+		$this->title = esc_attr__( 'DoubleClick', 'doubleclick-for-wordpress' );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class DCWP_Options {
 		// Hook in our actions to the admin.
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
-
+		add_action( 'admin_init', array( $this, 'register_options' ) );
 	}
 
 	/**
@@ -94,7 +94,8 @@ class DCWP_Options {
 	 * @since  0.2.1
 	 */
 	public function add_options_page() {
-		$this->options_page = add_menu_page(
+		$this->options_page = add_submenu_page(
+			'options-general.php',
 			$this->title,
 			$this->title,
 			'manage_options',
@@ -113,7 +114,148 @@ class DCWP_Options {
 		?>
 		<div class="wrap options-page <?php echo esc_attr( $this->key ); ?>">
 			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+			<form method="post" action="options.php">
+				<?php settings_fields( 'doubleclick-for-wordpress' ); ?>
+				<?php do_settings_sections( 'doubleclick-for-wordpress' ); ?>
+				<?php submit_button(); ?>
+			</form>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Registers options for the plugin.
+	 *
+	 * @since v0.1
+	 */
+	public function register_options() {
+		// Add a section for network option
+		add_settings_section(
+			'network_options',
+			'Network Settings',
+			array( $this, 'settings_section_intro' ),
+			'doubleclick-for-wordpress'
+		);
+
+		// Add a section for network option
+		add_settings_section(
+			'breakpoint_options',
+			'Breakpoints',
+			array( $this, 'breakpoints_section_intro' ),
+			'doubleclick-for-wordpress'
+		);
+
+		// Add a section for network option
+		add_settings_section(
+			'documentation_options',
+			'Documentation',
+			array( $this, 'documentation_section_intro' ),
+			'doubleclick-for-wordpress'
+		);
+
+		// Network Code
+		add_settings_field(
+			'network_code',
+			'DoubleClick Network Code',
+			array( $this, 'network_code_input' ),
+			'doubleclick-for-wordpress',
+			'network_options'
+		);
+
+		// Breakpoints
+		add_settings_field(
+			'breakpoints',
+			'Breakpoints',
+			array( $this, 'breakpoints_input' ),
+			'doubleclick-for-wordpress',
+			'breakpoint_options'
+		);
+
+		register_setting( 'doubleclick-for-wordpress', 'network_code' );
+		register_setting( 'doubleclick-for-wordpress', 'breakpoints', 'breakpoints_save' );
+
+	}
+
+	public function settings_section_intro() {
+		echo "Enter a DoubleClick for Publisher's Network Code ( <a href='https://developers.google.com/doubleclick-publishers/docs/start#signup' target='_blank'>?</a> )";
+	}
+
+	public function breakpoints_section_intro() {
+		echo 'Enter breakpoints below<br />';
+		echo '<em>Example: phone: 0 to 480, tablet 480 to 768, desktop 768 to 9999.</em>';
+	}
+
+	public function documentation_section_intro() {
+		echo '<a href="https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/index.md">Available on GitHub</a>';
+	}
+
+	public function network_code_input() {
+		global $doubleclick;
+
+		if ( isset( $doubleclick->network_code ) ) {
+			echo '<input value="' . esc_attr( $doubleclick->network_code ) . ' (set in theme)" type="text" class="regular-text" disabled/>';
+		} else {
+			echo '<input name="network_code" id="network_code" type="text" value="' . esc_attr( get_option( 'network_code' ) ) . '" class="regular-text" />';
+		}
+	}
+
+	public function breakpoints_input() {
+		global $doubleclick;
+
+		foreach ( $doubleclick->breakpoints as $breakpoint ) {
+			if ( ! $breakpoint->option ) {
+				echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
+				echo '<label> min-width</label><input value="' . esc_attr( $breakpoint->min_width ) . '" type="number" class="small-text" disabled />';
+				echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
+			}
+		}
+
+		$breakpoints = maybe_unserialize( get_option( 'breakpoints' ) );
+
+		$i = 0;
+		while ( $i < 5 ) {
+			$identifier = ( isset( $breakpoints[ $i ]['identifier'] ) )? $breakpoints[ $i ]['identifier'] : '';
+			$min_width = ( isset( $breakpoints[ $i ]['min-width'] ) )? $breakpoints[ $i ]['min-width'] : '';
+			$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : ''; ?>
+			<input value="<?php echo esc_attr( $identifier ); ?>"
+					placeholder="Name"
+					name="breakpoints[]"
+					type="text"
+					class="medium-text" />
+			<label> min-width
+				<input
+					value="<?php echo esc_attr( $min_width ); ?>" placeholder="0"
+					name="breakpoints[]"
+					type="number"
+					class="small-text" />
+			</label>
+			<label> max-width
+				<input
+					value="<?php echo esc_attr( $max_width ); ?>"
+					placeholder="9999"
+					name="breakpoints[]"
+					type="number"
+					class="small-text" />
+			</label><br/><?php
+			$i++;
+		}
+
+	}
+
+	public function breakpoints_save( $value ) {
+		$breakpoints = array();
+		$groups = array_chunk( $value, 3 );
+
+		foreach ( $groups as $group ) {
+			if ( isset( $group[0] ) && $group[0] ) {
+				$breakpoints[] = array(
+					'identifier' => $group[0],
+					'min-width' => $group[1],
+					'max-width' => $group[2],
+				);
+			}
+		}
+
+		return $breakpoints;
 	}
 }
