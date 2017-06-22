@@ -1,0 +1,19 @@
+{
+  "generator-plugin-wp": {
+    "name": "DoubleClick for WordPress",
+    "homepage": "https://labs.inn.org",
+    "description": "Serve DoubleClick ads natively in WordPress. Built to make serving and targeting responsive ads easy.",
+    "version": "0.2.1",
+    "author": "innlabs, willhaynes24",
+    "authoremail": "labs@inn.org",
+    "authorurl": "https://labs.inn.org",
+    "license": "GPLv2",
+    "slug": "doubleclick-for-wordpress",
+    "classname": "DoubleClick_For_WordPress",
+    "mainclassname": "DoubleClick_For_WordPress",
+    "classprefix": "DCFWP_",
+    "prefix": "doubleclick_for_wordpress",
+    "year": 2017,
+    "currentVersionWP": "4.7.2"
+  }
+}

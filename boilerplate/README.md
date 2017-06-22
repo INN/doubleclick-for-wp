@@ -1,16 +1,16 @@
-=== DoubleClick for WordPress ===
-Contributors: inn_nerds, willhaynes24
-Donate link: https://inn.org/donate
-Tags: ads, doubleclick, publishers, news
-Requires at least: 4.0.0
-Tested up to: 4.8
-Stable tag: 0.2.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+# DoubleClick for WordPress #
+**Contributors:**      innlabs, willhaynes24  
+**Donate link:**       https://labs.inn.org  
+**Tags:**              ads, doubleclick, publishers, news
+**Requires at least:** 4.0
+**Tested up to:**      4.8
+**Stable tag:**        0.2.1
+**License:**           GPLv2
+**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
 Serve DoubleClick ads natively in WordPress. Built to make serving and targeting responsive ads easy.
 
-== Description ==
+## Description ##
 
 This WordPress plugin gives site administrators an easy way to serve DFP inventory on their WordPress site.
 
@@ -18,8 +18,7 @@ Implementing is simple. Configure your network code and input your identifiers. 
 
 For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/index.md).
 
-
-== Installation ==
+## Installation ##
 
 1. Upload the plugin directory to your `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
@@ -28,11 +27,20 @@ For more advanced documentation for developers and advanced users see [the offic
 
 For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/tree/master/docs/index.md).
 
+### Manual Installation ###
 
-== Changelog ==
+1. Upload the entire `/doubleclick-for-wordpress` directory to the `/wp-content/plugins/` directory.
+2. Activate DoubleClick for WordPress through the 'Plugins' menu in WordPress.
 
-= 0.2.1 =
+## Frequently Asked Questions ##
 
+
+## Screenshots ##
+
+
+## Changelog ##
+
+### 0.2.1 ###
 - Widget now includes a default stylesheet:
 	- setting `.display-none` to `display: none;` to support `jQuery.dfp.js`' utility styles
 	- centering ad units within the ad widgets.
@@ -42,8 +50,13 @@ For more advanced documentation for developers and advanced users see [the offic
 - Numerous small bugfixes
 - Tested up to WordPress 4.6
 
-= 0.1 =
+### 0.1 ###
 
 - Initial beta release.
 - Add support for displaying different sizes of ad unit based on the size of the viewport
 
+
+## Upgrade Notice ##
+
+### 0.2.1 ###
+First Release
