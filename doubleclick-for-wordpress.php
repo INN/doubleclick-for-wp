@@ -37,27 +37,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
-/**
- * Autoloads files with classes when needed.
- *
- * @since  0.2.1
- * @param  string $class_name Name of the class being requested.
- */
-function doubleclick_for_wordpress_autoload_classes( $class_name ) {
-
-	// If our class doesn't have our prefix, don't load it.
-	if ( 0 !== strpos( $class_name, 'DCFWP_' ) ) {
-		return;
-	}
-
-	// Set up our filename.
-	$filename = strtolower( str_replace( '_', '-', substr( $class_name, strlen( 'DCFWP_' ) ) ) );
-
-	// Include our file.
-	DoubleClick_For_WordPress::include_file( 'includes/class-' . $filename );
-}
-spl_autoload_register( 'doubleclick_for_wordpress_autoload_classes' );
+ // Include additional php files here.
+ require 'includes/class-options.php';
 
 /**
  * Main initiation class.
@@ -115,6 +96,14 @@ final class DoubleClick_For_WordPress {
 	protected static $single_instance = null;
 
 	/**
+	 * Instance of DCWP_Options
+	 *
+	 * @since0.2.1
+	 * @var DCWP_Options
+	 */
+	protected $options;
+
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since   0.2.1
@@ -145,8 +134,8 @@ final class DoubleClick_For_WordPress {
 	 * @since  0.2.1
 	 */
 	public function plugin_classes() {
-		// $this->plugin_class = new DCFWP_Plugin_Class( $this );
 
+		$this->options = new DCWP_Options( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -303,54 +292,11 @@ final class DoubleClick_For_WordPress {
 			case 'basename':
 			case 'url':
 			case 'path':
+			case 'doubleclick':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
-	}
-
-	/**
-	 * Include a file from the includes directory.
-	 *
-	 * @since  0.2.1
-	 *
-	 * @param  string $filename Name of the file to be included.
-	 * @return boolean          Result of include call.
-	 */
-	public static function include_file( $filename ) {
-		$file = self::dir( $filename . '.php' );
-		if ( file_exists( $file ) ) {
-			return include_once( $file );
-		}
-		return false;
-	}
-
-	/**
-	 * This plugin's directory.
-	 *
-	 * @since  0.2.1
-	 *
-	 * @param  string $path (optional) appended path.
-	 * @return string       Directory and path.
-	 */
-	public static function dir( $path = '' ) {
-		static $dir;
-		$dir = $dir ? $dir : trailingslashit( dirname( __FILE__ ) );
-		return $dir . $path;
-	}
-
-	/**
-	 * This plugin's url.
-	 *
-	 * @since  0.2.1
-	 *
-	 * @param  string $path (optional) appended path.
-	 * @return string       URL and path.
-	 */
-	public static function url( $path = '' ) {
-		static $url;
-		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
-		return $url . $path;
 	}
 }
 
