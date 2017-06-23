@@ -39,6 +39,7 @@
 
  // Include additional php files here.
  require 'includes/class-options.php';
+ require 'includes/class-widget.php';
 
 /**
  * Main initiation class.
@@ -136,6 +137,7 @@ final class DoubleClick_For_WordPress {
 	public function plugin_classes() {
 
 		$this->options = new DCWP_Options( $this );
+		$this->widget = new DCWP_Widget( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
