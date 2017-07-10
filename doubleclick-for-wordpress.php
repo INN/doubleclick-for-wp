@@ -192,10 +192,13 @@ final class DoubleClick_For_WordPress {
 		}
 
 		// Load translated strings for plugin.
-		load_plugin_textdomain( 'doubleclick-for-wordpress', false, dirname( $this->basename ) . '/languages/' );
+		load_plugin_textdomain( 'dfw', false, dirname( $this->basename ) . '/languages/' );
 
 		// Initialize plugin classes.
 		$this->plugin_classes();
+
+		// Add a settings link to the plugins page.
+		add_filter( 'plugin_action_links_' . $this->basename, array( 'DCWP_Options', 'add_settings_link' ) );
 	}
 
 	/**
