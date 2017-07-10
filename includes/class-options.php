@@ -245,11 +245,35 @@ class DCWP_Options {
 	}
 
 	public function breakpoints_save( $value ) {
+		global $dfw_options_errors;
+		$dfw_options_errors = new WP_Error;
+
 		$breakpoints = array();
 		$groups = array_chunk( $value, 3 );
 
 		foreach ( $groups as $group ) {
 			if ( isset( $group[0] ) && $group[0] ) {
+
+				// Make sure the min is, in fact, smaller than the max.
+				if ( $group[1] > $group[2] ) {
+					$dfw_options_errors->add( 'compare', __( 'The max value must be greater than the min.', 'dfw' ) );
+				}
+
+				// Compare with previous item in the array and make sure breakpoints don't overlap.
+				if ( $last = end( $breakpoints ) ) {
+					if ( $group[2] <= $last['max-width'] ) {
+						$dfw_options_errors->add( 'overlap', __( 'Breakpoints cannot overlap.', 'dfw' ) );
+					}
+				}
+
+				if ( is_wp_error( $dfw_options_errors ) && 1 < count( $dfw_options_errors->get_error_messages() ) ) {
+					foreach ( $dfw_options_errors->get_error_messages() as $error ) {
+						echo $error;
+					}
+					continue; // don't add this one to the array to save.
+				}
+
+				// OK we're good, add it to the array to save.
 				$breakpoints[] = array(
 					'identifier' => $group[0],
 					'min-width' => $group[1],
