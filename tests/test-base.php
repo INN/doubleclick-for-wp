@@ -13,7 +13,7 @@ class DoubleClick_For_WordPress_Test extends WP_UnitTestCase {
 	 * @since  0.2.1
 	 */
 	function test_class_exists() {
-		$this->assertTrue( class_exists( 'DoubleClick_For_WordPress') );
+		$this->assertTrue( class_exists( 'DoubleClick_For_WordPress' ) );
 	}
 
 	/**
@@ -22,7 +22,7 @@ class DoubleClick_For_WordPress_Test extends WP_UnitTestCase {
 	 * @since  0.2.1
 	 */
 	function test_get_instance() {
-		$this->assertInstanceOf(  'DoubleClick_For_WordPress', doubleclick_for_wordpress() );
+		$this->assertInstanceOf( 'DoubleClick_For_WordPress', doubleclick_for_wordpress() );
 	}
 
 	/**
