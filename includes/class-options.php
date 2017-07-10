@@ -172,7 +172,7 @@ class DCWP_Options {
 		);
 
 		register_setting( 'doubleclick-for-wordpress', 'network_code' );
-		register_setting( 'doubleclick-for-wordpress', 'breakpoints', 'breakpoints_save' );
+		register_setting( 'doubleclick-for-wordpress', 'breakpoints', array( $this, 'breakpoints_save' ) );
 
 	}
 
