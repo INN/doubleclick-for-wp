@@ -202,11 +202,13 @@ class DCWP_Options {
 	public function breakpoints_input() {
 		global $doubleclick;
 
-		foreach ( $doubleclick->breakpoints as $breakpoint ) {
-			if ( ! $breakpoint->option ) {
-				echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
-				echo '<label> min-width</label><input value="' . esc_attr( $breakpoint->min_width ) . '" type="number" class="small-text" disabled />';
-				echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
+		if ( isset( $doubleclick->breakpoints ) ) {
+			foreach ( $doubleclick->breakpoints as $breakpoint ) {
+				if ( ! $breakpoint->option ) {
+					echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
+					echo '<label> min-width</label><input value="' . esc_attr( $breakpoint->min_width ) . '" type="number" class="small-text" disabled />';
+					echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
+				}
 			}
 		}
 
