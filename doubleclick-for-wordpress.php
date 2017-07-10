@@ -37,9 +37,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- // Include additional php files here.
- require 'includes/class-options.php';
- require 'includes/class-widget.php';
+	// Include additional php files here.
+	require 'includes/class-options.php';
+	require 'includes/class-widget.php';
 
 /**
  * Main initiation class.

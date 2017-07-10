@@ -13,7 +13,7 @@ class DCWP_Widget_Test extends WP_UnitTestCase {
 	 * @since  0.2.1
 	 */
 	function test_class_exists() {
-		$this->assertTrue( class_exists( 'DCWP_Widget') );
+		$this->assertTrue( class_exists( 'DCWP_Widget' ) );
 	}
 
 	/**
