@@ -39,6 +39,8 @@
 
 	// Include additional php files here.
 	require 'includes/class-functions.php';
+	require 'includes/class-breakpoint.php';
+	require 'includes/class-ad-slot.php';
 	require 'includes/class-options.php';
 	require 'includes/class-widget.php';
 
@@ -114,6 +116,22 @@ final class DoubleClick_For_WordPress {
 	protected $functions;
 
 	/**
+	 * Instance of DCWP_Breakpoint
+	 *
+	 * @since0.2.1
+	 * @var DCWP_Breakpoint
+	 */
+	protected $breakpoint;
+
+	/**
+	 * Instance of DCWP_Ad_Slot
+	 *
+	 * @since0.2.1
+	 * @var DCWP_Ad_Slot
+	 */
+	protected $ad_slot;
+
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since   0.2.1
@@ -148,6 +166,8 @@ final class DoubleClick_For_WordPress {
 		$this->options = new DCWP_Options( $this );
 		$this->widget = new DCWP_Widget( $this );
 		$this->functions = new DCWP_Functions( $this );
+		$this->breakpoint = new DCWP_Breakpoint( $this );
+		$this->ad_slot = new DCWP_Ad_Slot( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -309,6 +329,8 @@ final class DoubleClick_For_WordPress {
 			case 'path':
 			case 'doubleclick':
 			case 'functions':
+			case 'breakpoint':
+			case 'ad_slot':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
