@@ -1,10 +1,11 @@
 <?php
-
 /**
  * Global instances for DoubleClick object.
+ *
+ * @package DoubleClick_For_WordPress
  */
-$doubleclick = new DoubleClick();
 
+$doubleclick = new DoubleClick();
 
 /**
  * A wrapper for wp_loaded
@@ -184,6 +185,9 @@ class DoubleClick {
 		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
 	}
 
+	/**
+	 * Add DFP script to the footer
+	 */
 	public function footer_script() {
 		if ( ! $this->debug ) {
 			$mappings = array();
@@ -209,7 +213,7 @@ class DoubleClick {
 		$targeting = array();
 		$targeting['Page'] = array();
 
-		// Homepage
+		// Homepage.
 		if ( is_home() ) {
 			$targeting['Page'][] = 'home';
 		}
@@ -218,7 +222,7 @@ class DoubleClick {
 			$targeting['Page'][] = 'front-page';
 		}
 
-		// Admin
+		// Admin.
 		if ( is_admin() ) {
 			$targeting['Page'][] = 'admin';
 		}
@@ -227,7 +231,7 @@ class DoubleClick {
 			$targeting['Page'][] = 'admin-bar-showing';
 		}
 
-		// Templates
+		// Templates.
 		if ( is_single() ) {
 			$targeting['Page'][] = 'single';
 		}
@@ -378,9 +382,11 @@ class DoubleClickAdSlot {
 
 		global $doubleclick;
 
-		// doubleclick escapes '/' with '//' for some odd reason.
-		// currently we don't try to fix this, but could with this line:
-		// $this->identifier = str_replace('/','//',$identifier);
+		/**
+		 * doubleclick escapes '/' with '//' for some odd reason.
+		 * currently we don't try to fix this, but could with this line:
+		 * $this->identifier = str_replace('/','//',$identifier);
+		 */
 		$this->identifier = $identifer;
 		$this->sizes = $size;
 		$this->id = ++ DoubleClick::$count;
