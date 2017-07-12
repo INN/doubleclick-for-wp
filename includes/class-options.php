@@ -251,9 +251,8 @@ class DCWP_Options {
 	}
 
 	public function breakpoints_save( $value ) {
-		global $dfw_options_errors;
-		$dfw_options_errors = new WP_Error;
-
+		$message = null;
+		$type = null;
 		$breakpoints = array();
 		$groups = array_chunk( $value, 3 );
 
@@ -262,20 +261,19 @@ class DCWP_Options {
 
 				// Make sure the min is, in fact, smaller than the max.
 				if ( $group[1] > $group[2] ) {
-					$dfw_options_errors->add( 'compare', __( 'The max value must be greater than the min.', 'dfw' ) );
+					$message = __( 'The max value must be greater than the min.', 'dfw' );
+					$type = 'error';
 				}
 
 				// Compare with previous item in the array and make sure breakpoints don't overlap.
 				if ( $last = end( $breakpoints ) ) {
 					if ( $group[2] <= $last['max-width'] ) {
-						$dfw_options_errors->add( 'overlap', __( 'Breakpoints cannot overlap.', 'dfw' ) );
+						$message = __( 'Breakpoints cannot overlap.', 'dfw' );
+						$type = 'error';
 					}
 				}
 
-				if ( is_wp_error( $dfw_options_errors ) && 1 < count( $dfw_options_errors->get_error_messages() ) ) {
-					foreach ( $dfw_options_errors->get_error_messages() as $error ) {
-						echo $error;
-					}
+				if ( $message ) {
 					continue; // don't add this one to the array to save.
 				}
 
@@ -287,6 +285,12 @@ class DCWP_Options {
 				);
 			}
 		}
+
+		if ( ! empty( $breakpoints ) && ! $message ) {
+			$message = __( 'Breakpoints updated.', 'dfw' );
+			$type = 'updated';
+		}
+		add_settings_error( 'breakpoint_save_notice', 'breakpoint_save_notice', $message, $type );
 
 		return $breakpoints;
 	}
