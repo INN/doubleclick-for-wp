@@ -6,7 +6,7 @@
  * @package DoubleClick_For_WordPress
  */
 
-class DCWP_Ad_Slot {
+class DoubleClickAdSlot {
 	/**
 	 * DFP ad code.
 	 *
@@ -33,7 +33,8 @@ class DCWP_Ad_Slot {
 	 *
 	 * @since  0.2.1
 	 *
-	 * @param  DoubleClick_For_WordPress $plugin Main plugin object.
+	 * @param string $identifier the identifier for the ad slot
+	 * @param string $size the size of the placement
 	 */
 	public function __construct( $identifier, $size ) {
 		global $doubleclick;
