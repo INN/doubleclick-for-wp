@@ -201,8 +201,8 @@ class DCWP_Widget extends WP_Widget {
 		$instance['identifier'] = ( ! empty( $new_instance['identifier'] ) ) ? strip_tags( $new_instance['identifier'] ) : '';
 		$instance['lazyLoad'] = ( ! empty( $new_instance['lazyLoad'] ) ) ? $new_instance['lazyLoad'] : 0 ;
 		$instance['breakpoints'] = $new_instance['breakpoints'];
-		$instance['sizes'] = $new_instance['sizes'];
-		$instance['size'] = $new_instance['size'];
+		$instance['sizes'] = str_replace( ' ', '', $new_instance['sizes'] );
+		$instance['size'] = str_replace( ' ', '', $new_instance['size'] );
 
 		// Flush cache.
 		$this->flush_widget_cache();

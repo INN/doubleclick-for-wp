@@ -63,7 +63,7 @@ class DCWP_Options {
 		$this->hooks();
 
 		// Set our title.
-		$this->title = esc_attr__( 'DoubleClick', 'doubleclick-for-wordpress' );
+		$this->title = esc_attr__( 'DoubleClick', 'dfw' );
 	}
 
 	/**
@@ -77,6 +77,14 @@ class DCWP_Options {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		add_action( 'admin_init', array( $this, 'register_options' ) );
+	}
+
+	public function add_settings_link( $links ) {
+		error_log( 'foo' );
+		$mylinks = array(
+			'<a href="options-general.php?page=doubleclick_for_wordpress">' . __( 'Settings', 'dfw' ) . '</a>',
+		);
+		return array_merge( $links, $mylinks );
 	}
 
 	/**
@@ -102,7 +110,6 @@ class DCWP_Options {
 			$this->key,
 			array( $this, 'admin_page_display' )
 		);
-
 	}
 
 	/**

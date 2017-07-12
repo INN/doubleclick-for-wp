@@ -419,7 +419,12 @@ class DoubleClickAdSlot {
 			$browser_height = 1;
 			$browser_width = (int) $breakpoint->min_width;
 
-			$size_strings = explode( ',', $size );	// eg. 300x250,336x300
+			// Remove any extra spaces in the list of sizes.
+			// (needs to be just a comma-separated list of values)
+			$size = str_replace( ' ', '', $size );
+
+			// eg. 300x250,336x300
+			$size_strings = explode( ',', $size );
 			$size_array = array();
 
 			foreach ( $size_strings as $size ) {
