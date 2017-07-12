@@ -6,7 +6,7 @@
  * @package DoubleClick_For_WordPress
  */
 
-class DoubleClickAdSlot {
+class DCWP_AdSlot {
 	/**
 	 * DFP ad code.
 	 *

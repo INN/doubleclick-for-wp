@@ -6,7 +6,7 @@
  * @package DoubleClick_For_WordPress
  */
 
-class DoubleClickBreakpoint {
+class DCWP_Breakpoint {
 	/**
 	 * Slug of the breakpoint
 	 *

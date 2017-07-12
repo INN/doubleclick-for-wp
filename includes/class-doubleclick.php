@@ -1,35 +1,25 @@
 <?php
 /**
- * Global instances for DoubleClick object.
+ * DoubleClick for WordPress Functions.
  *
+ * @since   0.2.1
  * @package DoubleClick_For_WordPress
  */
 
-$doubleclick = new DoubleClick();
-
 /**
- * A wrapper for wp_loaded
+ * DoubleClick for WordPress Functions.
  *
- * This means that if the plugin is not installed,
- * the setup function will not run and throw an error.
+ * @since 0.2.1
  */
-function dfw_add_action() {
-
+class DCWP_DoubleClick {
 	/**
-	 * Use this action to setup
-	 * breakpoints and network tracking code
-	 * in your theme's functions.php.
+	 * Parent plugin class.
 	 *
-	 * @since v0.1
+	 * @since 0.2.1
+	 *
+	 * @var   DoubleClick_For_WordPress
 	 */
-	do_action( 'dfw_setup' );
-}
-add_action( 'wp_loaded', 'dfw_add_action' );
-
-/**
- * The main plugin class.
- */
-class DoubleClick {
+	protected $plugin = null;
 
 	/**
 	 * Network code from DFP.
@@ -88,7 +78,7 @@ class DoubleClick {
 	 *
 	 * @param string $network_code The code for your dfp instance.
 	 */
-	public function __construct( $network_code = null ) {
+	public function __construct( $plugin, $network_code = null ) {
 
 		$this->network_code = $network_code;
 
@@ -122,7 +112,7 @@ class DoubleClick {
 	 * @param string|array $args additional args.
 	 */
 	public function register_breakpoint( $identifier, $args = null ) {
-		$this->breakpoints[ $identifier ] = new DoubleClickBreakpoint( $identifier, $args );
+		$this->breakpoints[ $identifier ] = new DCWP_Breakpoint( $identifier, $args );
 	}
 
 	/**
@@ -322,7 +312,7 @@ class DoubleClick {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$ad_object = new DoubleClickAdSlot( $identifier, $sizes );
+		$ad_object = new DCWP_AdSlot( $identifier, $sizes );
 		$this->ad_slots[] = $ad_object;
 
 		// Print the ad tag.
@@ -349,185 +339,3 @@ class DoubleClick {
 		return $ad;
 	}
 }
-
-
-class DoubleClickAdSlot {
-
-	/**
-	 * DFP ad code.
-	 *
-	 * @var String.
-	 */
-	public $identifer;
-
-	/**
-	 * Either a string of sizes, or a size mapping.
-	 *
-	 * @var Array|String
-	 */
-	public $sizes;
-
-	/**
-	 * Each ad gets a unique number to identify it.
-	 *
-	 * @var int
-	 */
-	public $id;
-
-	/**
-	 * @param String $identifier
-	 * @param Mixed $size
-	 */
-	public function __construct( $identifer, $size ) {
-
-		global $doubleclick;
-
-		/**
-		 * doubleclick escapes '/' with '//' for some odd reason.
-		 * currently we don't try to fix this, but could with this line:
-		 * $this->identifier = str_replace('/','//',$identifier);
-		 */
-		$this->identifier = $identifer;
-		$this->sizes = $size;
-		$this->id = ++ DoubleClick::$count;
-	}
-
-	public function breakpoint_identifier() {
-		return null;
-	}
-
-	/**
-	 * If this ad unit has a size mapping.
-	 *
-	 */
-	public function has_mapping() {
-		if ( is_string( $this->sizes ) ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	public function mapping() {
-		global $doubleclick;
-
-		// Return false if there is no mapping
-		if ( ! $this->has_mapping() ) {
-			return false;
-		}
-
-		$mapping = array();
-
-		if ( empty( $this->sizes ) ) {
-			return $mapping;
-		}
-
-		foreach ( $this->sizes as $breakpoint_identifier => $size ) {
-			$breakpoint = $doubleclick->breakpoints[ $breakpoint_identifier ];
-
-			// The minimum browser width/height for this sizemapping.
-			$browser_height = 1;
-			$browser_width = (int) $breakpoint->min_width;
-
-			// Remove any extra spaces in the list of sizes.
-			// (needs to be just a comma-separated list of values)
-			$size = str_replace( ' ', '', $size );
-
-			// eg. 300x250,336x300
-			$size_strings = explode( ',', $size );
-			$size_array = array();
-
-			foreach ( $size_strings as $size ) {
-				if ( ! empty( $size ) ) {
-					$arr = explode( 'x', $size );		// eg. 300x250
-					$width = (int) $arr[0];
-					$height = (int) $arr[1];
-					$size_array[] = array( $width, $height );
-				}
-			}
-
-			$mapping[] = array(
-				'browser' => array( $browser_width, $browser_height ),
-				'ad_sizes' => $size_array,
-			);
-		}
-
-		return $mapping;
-	}
-}
-
-class DoubleClickBreakpoint {
-
-	/**
-	 * Slug of the breakpoint
-	 *
-	 * @var string
-	 */
-	public $identifier = '';
-
-	/**
-	 * Minimum width for the breakpoint
-	 *
-	 * @var integer
-	 */
-	public $min_width;
-
-	/**
-	 * Maximum width for the breakpoint
-	 *
-	 * @var integer
-	 */
-	public $max_width;
-
-	/**
-	 * Was this breakpoint added by a theme or
-	 * through an option?
-	 *
-	 * @var boolean
-	 */
-	public $option;
-
-	public function __construct( $identifier, $args = null ) {
-		if ( isset( $args['min_width'] ) ) {
-			$this->min_width = $args['min_width'];
-		}
-
-		if ( isset( $args['max_width'] ) ) {
-			$this->max_width = $args['max_width'];
-		}
-
-		if ( isset( $args['_option'] ) && $args['_option'] ) {
-			$this->option = true;
-		}
-
-		$this->identifier = $identifier;
-	}
-
-	/**
-	 * Prints a javascript boolean statement for this breakpoint
-	 */
-	public function js_logic() {
-		echo esc_js( $this->get_js_logic() );
-	}
-
-	/**
-	 * Returns a string with the boolean logic for the breakpoint.
-	 *
-	 * @return String boolean logic for breakpoint.
-	 */
-	public function get_js_logic() {
-		return "($this->min_width <= document.documentElement.clientWidth && document.documentElement.clientWidth < $this->max_width)";
-	}
-
-}
-
-
-/**
- * The dfp front end widget.
- */
-include plugin_dir_path( __FILE__ ) . '/dfw-widget.php';
-
-/**
- * Front end options for the widget.
- */
-include plugin_dir_path( __FILE__ ) . '/dfw-options.php';

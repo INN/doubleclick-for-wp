@@ -131,9 +131,10 @@ final class DoubleClick_For_WordPress {
 	 * @since  0.2.1
 	 */
 	public function plugin_classes() {
-
+		global $doubleclick;
 		$this->options = new DCWP_Options( $this );
 		$this->widget = new DCWP_Widget( $this );
+		$doubleclick = new DCWP_DoubleClick( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -181,7 +182,6 @@ final class DoubleClick_For_WordPress {
 	 * @since  0.2.1
 	 */
 	public function init() {
-
 		// Bail early if requirements aren't met.
 		if ( ! $this->check_requirements() ) {
 			return;
@@ -232,11 +232,11 @@ final class DoubleClick_For_WordPress {
 	 */
 	public function load_files() {
 		$includes = array(
-			'includes/class-functions.php',
 			'includes/class-breakpoint.php',
 			'includes/class-ad-slot.php',
 			'includes/class-options.php',
 			'includes/class-widget.php',
+			'includes/class-doubleclick.php',
 		);
 
 		foreach ( $includes as $include ) {
