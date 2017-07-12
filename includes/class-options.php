@@ -80,7 +80,6 @@ class DCWP_Options {
 	}
 
 	public function add_settings_link( $links ) {
-		error_log( 'foo' );
 		$mylinks = array(
 			'<a href="options-general.php?page=doubleclick_for_wordpress">' . __( 'Settings', 'dfw' ) . '</a>',
 		);
