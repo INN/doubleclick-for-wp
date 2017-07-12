@@ -156,7 +156,6 @@ class DCWP_Widget extends WP_Widget {
 			return;
 		}
 
-		// bugfix: replace $args with $dfw_args to prevent widget interference
 		// prepare dfw_args parameter.
 		$dfw_args = null;
 		if ( $instance['lazyLoad'] ) {
@@ -167,16 +166,16 @@ class DCWP_Widget extends WP_Widget {
 		ob_start();
 
 		// Start widget markup.
-		echo $atts['before_widget']; // WPCS XSS OK.
+		echo wp_kses_post( $atts['before_widget'] );
 
 		// Maybe display widget title.
-		echo ( $atts['title'] ) ? $atts['before_title'] . esc_html( $atts['title'] ) . $atts['after_title'] : '' ; // WPCS XSS OK.
+		echo ( $atts['title'] ) ? $atts['before_title'] . esc_html( $atts['title'] ) . $atts['after_title'] : '' ;
 
 		// and finally, place the ad.
 		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
 
 		// End the widget markup.
-		echo $atts['after_widget']; // WPCS XSS OK.
+		echo wp_kses_post( $atts['after_widget'] );
 
 		// Return the output buffer.
 		return ob_get_clean();

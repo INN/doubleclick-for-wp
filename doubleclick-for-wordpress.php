@@ -37,13 +37,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-	// Include additional php files here.
-	require 'includes/class-functions.php';
-	require 'includes/class-breakpoint.php';
-	require 'includes/class-ad-slot.php';
-	require 'includes/class-options.php';
-	require 'includes/class-widget.php';
-
 /**
  * Main initiation class.
  *
@@ -108,30 +101,6 @@ final class DoubleClick_For_WordPress {
 	protected $options;
 
 	/**
-	 * Instance of DCWP_Functions
-	 *
-	 * @since0.2.1
-	 * @var DCWP_Functions
-	 */
-	protected $functions;
-
-	/**
-	 * Instance of DCWP_Breakpoint
-	 *
-	 * @since0.2.1
-	 * @var DCWP_Breakpoint
-	 */
-	protected $breakpoint;
-
-	/**
-	 * Instance of DCWP_Ad_Slot
-	 *
-	 * @since0.2.1
-	 * @var DCWP_Ad_Slot
-	 */
-	protected $ad_slot;
-
-	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since   0.2.1
@@ -165,9 +134,6 @@ final class DoubleClick_For_WordPress {
 
 		$this->options = new DCWP_Options( $this );
 		$this->widget = new DCWP_Widget( $this );
-		$this->functions = new DCWP_Functions( $this );
-		$this->breakpoint = new DCWP_Breakpoint( $this );
-		$this->ad_slot = new DCWP_Ad_Slot( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -224,6 +190,9 @@ final class DoubleClick_For_WordPress {
 		// Load translated strings for plugin.
 		load_plugin_textdomain( 'dfw', false, dirname( $this->basename ) . '/languages/' );
 
+		// Load the includes.
+		$this->load_files();
+
 		// Initialize plugin classes.
 		$this->plugin_classes();
 
@@ -254,6 +223,27 @@ final class DoubleClick_For_WordPress {
 
 		// Didn't meet the requirements.
 		return false;
+	}
+
+	/**
+	 * Load all of the stuff in the includes folder.
+	 *
+	 * @since  0.3
+	 */
+	public function load_files() {
+		$includes = array(
+			'includes/class-functions.php',
+			'includes/class-breakpoint.php',
+			'includes/class-ad-slot.php',
+			'includes/class-options.php',
+			'includes/class-widget.php',
+		);
+
+		foreach ( $includes as $include ) {
+			if ( 0 === validate_file( $this->path . $include ) ) {
+				require_once( $this->path . $include );
+			}
+		}
 	}
 
 	/**
@@ -328,9 +318,6 @@ final class DoubleClick_For_WordPress {
 			case 'url':
 			case 'path':
 			case 'doubleclick':
-			case 'functions':
-			case 'breakpoint':
-			case 'ad_slot':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
