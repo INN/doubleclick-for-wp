@@ -169,7 +169,7 @@ class DCWP_Widget extends WP_Widget {
 		echo wp_kses_post( $atts['before_widget'] );
 
 		// Maybe display widget title.
-		echo ( $atts['title'] ) ? $atts['before_title'] . esc_html( $atts['title'] ) . $atts['after_title'] : '' ;
+		echo ( $atts['title'] ) ? wp_kses_post( $atts['before_title'] ) . esc_html( $atts['title'] ) . wp_kses_post( $atts['after_title'] ) : '' ;
 
 		// and finally, place the ad.
 		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
