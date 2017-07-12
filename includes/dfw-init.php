@@ -249,7 +249,9 @@ class DoubleClick {
 		}
 
 		if ( is_single() ) {
-			$cats = get_the_category();
+			global $wp_query;
+			$current_page_id = $wp_query->get_queried_object_id();
+			$cats = get_the_category( $current_page_id );
 			$targeting['Category'] = array();
 
 			if ( $cats ) {
@@ -260,7 +262,9 @@ class DoubleClick {
 		}
 
 		if ( is_single() ) {
-			$tags = get_the_tags();
+			global $wp_query;
+			$current_page_id = $wp_query->get_queried_object_id();
+			$tags = get_the_tags( $current_page_id );
 			if ( $tags ) {
 				$targeting['Tag'] = array();
 				foreach ( $tags as $t ) {
