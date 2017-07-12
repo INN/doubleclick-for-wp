@@ -80,7 +80,7 @@ class DCWP_DoubleClick {
 	 */
 	public function __construct( $plugin, $network_code = null ) {
 
-		$this->network_code = $network_code;
+		$this->network_code = $this->network_code();
 
 		// Script enqueue is static because we only ever want to print it once.
 		if ( ! $this::$enqueued ) {
@@ -90,7 +90,7 @@ class DCWP_DoubleClick {
 
 		add_action( 'wp_print_footer_scripts', array( $this, 'footer_script' ) );
 
-		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
+		$breakpoints = maybe_unserialize( get_option( 'breakpoints' ) );
 
 		if ( ! empty( $breakpoints ) ) :
 			foreach ( $breakpoints as $breakpoint ) {
@@ -172,7 +172,7 @@ class DCWP_DoubleClick {
 	 * @return String network code.
 	 */
 	private function network_code() {
-		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
+		return isset( $this->network_code ) ? $this->network_code : get_option( 'network_code','xxxxxx' );
 	}
 
 	/**

@@ -8,7 +8,7 @@
  * Author URI:  https://labs.inn.org
  * Donate link: https://labs.inn.org
  * License:     GPLv2
- * Text Domain: doubleclick-for-wordpress
+ * Text Domain: dfw
  * Domain Path: /languages
  *
  * @link    https://labs.inn.org

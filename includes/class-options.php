@@ -132,7 +132,7 @@ class DCWP_Options {
 	/**
 	 * Registers options for the plugin.
 	 *
-	 * @since v0.1
+	 * @since 0.1
 	 */
 	public function register_options() {
 		// Add a section for network option

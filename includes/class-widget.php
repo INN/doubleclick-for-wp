@@ -219,6 +219,8 @@ class DCWP_Widget extends WP_Widget {
 	public function form( $instance ) {
 		global $doubleclick;
 
+	 var_dump( $doubleclick );
+
 		// Set defaults.
 		$defaults = array(
 			'title' => $this->default_widget_title,
