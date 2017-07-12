@@ -38,6 +38,7 @@
  */
 
 	// Include additional php files here.
+	require 'includes/class-functions.php';
 	require 'includes/class-options.php';
 	require 'includes/class-widget.php';
 
@@ -105,6 +106,14 @@ final class DoubleClick_For_WordPress {
 	protected $options;
 
 	/**
+	 * Instance of DCWP_Functions
+	 *
+	 * @since0.2.1
+	 * @var DCWP_Functions
+	 */
+	protected $functions;
+
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since   0.2.1
@@ -138,6 +147,7 @@ final class DoubleClick_For_WordPress {
 
 		$this->options = new DCWP_Options( $this );
 		$this->widget = new DCWP_Widget( $this );
+		$this->functions = new DCWP_Functions( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -298,6 +308,7 @@ final class DoubleClick_For_WordPress {
 			case 'url':
 			case 'path':
 			case 'doubleclick':
+			case 'functions':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
