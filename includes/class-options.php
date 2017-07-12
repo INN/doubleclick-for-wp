@@ -80,7 +80,6 @@ class DCWP_Options {
 	}
 
 	public function add_settings_link( $links ) {
-		error_log( 'foo' );
 		$mylinks = array(
 			'<a href="options-general.php?page=doubleclick_for_wordpress">' . __( 'Settings', 'dfw' ) . '</a>',
 		);
@@ -179,7 +178,7 @@ class DCWP_Options {
 		);
 
 		register_setting( 'doubleclick-for-wordpress', 'network_code' );
-		register_setting( 'doubleclick-for-wordpress', 'breakpoints', 'breakpoints_save' );
+		register_setting( 'doubleclick-for-wordpress', 'breakpoints', array( $this, 'breakpoints_save' ) );
 
 	}
 
@@ -209,11 +208,13 @@ class DCWP_Options {
 	public function breakpoints_input() {
 		global $doubleclick;
 
-		foreach ( $doubleclick->breakpoints as $breakpoint ) {
-			if ( ! $breakpoint->option ) {
-				echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
-				echo '<label> min-width</label><input value="' . esc_attr( $breakpoint->min_width ) . '" type="number" class="small-text" disabled />';
-				echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
+		if ( isset( $doubleclick->breakpoints ) ) {
+			foreach ( $doubleclick->breakpoints as $breakpoint ) {
+				if ( ! $breakpoint->option ) {
+					echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
+					echo '<label> min-width</label><input value="' . esc_attr( $breakpoint->min_width ) . '" type="number" class="small-text" disabled />';
+					echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
+				}
 			}
 		}
 
@@ -250,11 +251,33 @@ class DCWP_Options {
 	}
 
 	public function breakpoints_save( $value ) {
+		$message = null;
+		$type = null;
 		$breakpoints = array();
 		$groups = array_chunk( $value, 3 );
 
 		foreach ( $groups as $group ) {
 			if ( isset( $group[0] ) && $group[0] ) {
+
+				// Make sure the min is, in fact, smaller than the max.
+				if ( $group[1] > $group[2] ) {
+					$message = __( 'The max value must be greater than the min.', 'dfw' );
+					$type = 'error';
+				}
+
+				// Compare with previous item in the array and make sure breakpoints don't overlap.
+				if ( $last = end( $breakpoints ) ) {
+					if ( $group[2] <= $last['max-width'] ) {
+						$message = __( 'Breakpoints cannot overlap.', 'dfw' );
+						$type = 'error';
+					}
+				}
+
+				if ( $message ) {
+					continue; // don't add this one to the array to save.
+				}
+
+				// OK we're good, add it to the array to save.
 				$breakpoints[] = array(
 					'identifier' => $group[0],
 					'min-width' => $group[1],
@@ -262,6 +285,12 @@ class DCWP_Options {
 				);
 			}
 		}
+
+		if ( ! empty( $breakpoints ) && ! $message ) {
+			$message = __( 'Breakpoints updated.', 'dfw' );
+			$type = 'updated';
+		}
+		add_settings_error( 'breakpoint_save_notice', 'breakpoint_save_notice', $message, $type );
 
 		return $breakpoints;
 	}
