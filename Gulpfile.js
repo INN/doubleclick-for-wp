@@ -16,6 +16,7 @@ const neat = require( 'bourbon-neat' ).includePaths;
 const notify = require( 'gulp-notify' );
 const plumber = require( 'gulp-plumber' );
 const postcss = require( 'gulp-postcss' );
+const pump = require( 'pump' );
 const reload = browserSync.reload;
 const rename = require( 'gulp-rename' );
 const sass = require( 'gulp-sass' );
@@ -36,7 +37,7 @@ const paths = {
 	'php': [ './*.php', './**/*.php' ],
 	'sass': 'assets/css/sass/*.scss',
 	'concat_scripts': 'assets/scripts/concat/*.js',
-	'scripts': [ 'assets/scripts/*.js', 'assets/js/*.js', '!assets/scripts/*.min.js' ],
+	'scripts': [ 'assets/js/*.js', '!assets/scripts/*.min.js' ],
 	'sprites': 'assets/images/sprites/*.png'
 };
 
@@ -238,7 +239,7 @@ gulp.task( 'concat', () =>
 		.pipe( sourcemaps.write() )
 
 		// Save project.js
-		.pipe( gulp.dest( 'assets/scripts' ) )
+		.pipe( gulp.dest( 'assets/js' ) )
 		.pipe( browserSync.stream() )
 );
 
@@ -247,15 +248,16 @@ gulp.task( 'concat', () =>
   *
   * https://www.npmjs.com/package/gulp-uglify
   */
-gulp.task( 'uglify', [ 'concat' ], () =>
-	gulp.src( paths.scripts )
-		.pipe( rename( {'suffix': '.min'} ) )
-		.pipe( plumber( {'errorHandler': handleErrors} ) )
-		.pipe( uglify( {
-			'mangle': false
-		} ) )
-		.pipe( gulp.dest( 'assets/js' ) )
-);
+gulp.task( 'uglify', [ 'concat' ], function (cb) {
+  pump([
+      gulp.src( paths.scripts ),
+			rename( {'suffix': '.min'} ),
+			uglify(),
+      gulp.dest('assets/js')
+    ],
+    cb
+  );
+});
 
 /**
  * Delete the theme's .pot before we create a new one.

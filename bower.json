@@ -6,7 +6,7 @@
     "nerds@inn.org"
   ],
   "description": "WordPress plugin for serving DFP ads.",
-  "main": "dfw.php",
+  "main": "doubleclick-for-wordpress.php",
   "moduleType": [
     "es6"
   ],

@@ -80,7 +80,7 @@ class DCWP_DoubleClick {
 	 */
 	public function __construct( $plugin, $network_code = null ) {
 
-		$this->network_code = $this->network_code();
+		$this->network_code = $network_code;
 
 		// Script enqueue is static because we only ever want to print it once.
 		if ( ! $this::$enqueued ) {
@@ -125,14 +125,14 @@ class DCWP_DoubleClick {
 
 		wp_register_script(
 			'jquery.dfp.js',
-			plugins_url( 'js/vendor/jquery.dfp.js/jquery.dfp' . $suffix . '.js', __FILE__ ),
+			plugins_url( 'assets/js/jquery.dfp' . $suffix . '.js', __FILE__ ),
 			array( 'jquery' ),
 			DFP_VERSION,
 			true
 		);
 		wp_register_script(
 			'jquery.dfw.js',
-			plugins_url( 'js/jquery.dfw.js', __FILE__ ),
+			plugins_url( 'assets/js/jquery.dfw' . $suffix . '.js', __FILE__ ),
 			array( 'jquery.dfp.js' ),
 			DFP_VERSION,
 			true
