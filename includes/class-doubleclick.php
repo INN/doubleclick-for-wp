@@ -125,16 +125,16 @@ class DCWP_DoubleClick {
 
 		wp_register_script(
 			'jquery.dfp.js',
-			plugins_url( 'assets/js/jquery.dfp' . $suffix . '.js', __FILE__ ),
+			plugins_url( 'assets/js/jquery.dfp' . $suffix . '.js', dirname( __FILE__ ) ),
 			array( 'jquery' ),
-			DFP_VERSION,
+			DoubleClick_For_WordPress::VERSION,
 			true
 		);
 		wp_register_script(
 			'jquery.dfw.js',
-			plugins_url( 'assets/js/jquery.dfw' . $suffix . '.js', __FILE__ ),
+			plugins_url( 'assets/js/jquery.dfw' . $suffix . '.js', dirname( __FILE__ ) ),
 			array( 'jquery.dfp.js' ),
-			DFP_VERSION,
+			DoubleClick_For_WordPress::VERSION,
 			true
 		);
 
@@ -158,9 +158,9 @@ class DCWP_DoubleClick {
 
 		wp_enqueue_style(
 			'dfp',
-			plugins_url( 'css/dfp.css', __FILE__ ),
+			plugins_url( 'assets/css/dfp.css', dirname( __FILE__ ) ),
 			array(),
-			DFP_VERSION,
+			DoubleClick_For_WordPress::VERSION,
 			'all'
 		);
 	}

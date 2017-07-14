@@ -50,7 +50,7 @@ final class DoubleClick_For_WordPress {
 	 * @var    string
 	 * @since  0.2.1
 	 */
-	const VERSION = '0.2.1';
+	const VERSION = '0.3.0';
 
 	/**
 	 * URL of plugin directory.
