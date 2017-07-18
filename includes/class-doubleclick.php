@@ -249,8 +249,8 @@ class DCWP_DoubleClick {
 			$targeting['Category'] = array();
 
 			if ( $cats ) {
-				foreach ( $cats as $c ) {
-					$targeting['Category'][] = $c->slug;
+				foreach ( $cats as $cat ) {
+					$targeting['Category'][] = $cat->slug;
 				}
 			}
 		}
@@ -261,8 +261,8 @@ class DCWP_DoubleClick {
 			$tags = get_the_tags( $current_page_id );
 			if ( $tags ) {
 				$targeting['Tag'] = array();
-				foreach ( $tags as $t ) {
-					$targeting['Tag'][] = $t->slug;
+				foreach ( $tags as $tag ) {
+					$targeting['Tag'][] = $tag->slug;
 				}
 			}
 		}
