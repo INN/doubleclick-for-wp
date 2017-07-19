@@ -188,7 +188,7 @@ class DCWP_DoubleClick {
 			} ?>
 			<script type="text/javascript">
 				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: '<?php echo esc_js( $this->network_code() ); ?>',
+					dfpID: '<?php echo wp_json_encode( $this->network_code() ); ?>',
 					collapseEmptyDivs: false,
 					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
 					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
