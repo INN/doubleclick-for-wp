@@ -190,6 +190,9 @@ final class DoubleClick_For_WordPress {
 		// Load translated strings for plugin.
 		load_plugin_textdomain( 'dfw', false, dirname( $this->basename ) . '/languages/' );
 
+		// Run the updates if needed.
+		$this->update_options();
+
 		// Load the includes.
 		$this->load_files();
 
@@ -223,6 +226,24 @@ final class DoubleClick_For_WordPress {
 
 		// Didn't meet the requirements.
 		return false;
+	}
+
+	/**
+	 * Before v0.3 the options were not prefixed.
+	 * Here, we update the option keys if needed.
+	 *
+	 * @since  0.3
+	 */
+	public function update_options() {
+		$prefix = 'dfw_';
+		$options = array( 'network_code', 'breakpoints' );
+		foreach ( $options as $old_option ) {
+			$new_option = $prefix . $old_option;
+			if ( ! get_option( $new_option ) && $old_option_value = get_option( $old_option ) ) {
+				update_option( $new_option, $old_option_value );
+				delete_option( $old_option );
+			}
+		}
 	}
 
 	/**

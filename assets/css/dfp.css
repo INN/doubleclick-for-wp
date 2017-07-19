@@ -1,0 +1,15 @@
+.display-none {
+	display: none;
+}
+.widget_doubleclick_widget {
+	text-align: center;
+}
+.dfw-unit.display-block:before {
+	speak: auto;
+	text-transform: uppercase;
+	content: "Advertisement";
+	display: block;
+	text-align: center;
+	font-size: 14px;
+	color: #aaa;
+}

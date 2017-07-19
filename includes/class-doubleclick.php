@@ -90,7 +90,7 @@ class DCWP_DoubleClick {
 
 		add_action( 'wp_print_footer_scripts', array( $this, 'footer_script' ) );
 
-		$breakpoints = maybe_unserialize( get_option( 'breakpoints' ) );
+		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 		if ( ! empty( $breakpoints ) ) :
 			foreach ( $breakpoints as $breakpoint ) {
@@ -172,7 +172,7 @@ class DCWP_DoubleClick {
 	 * @return String network code.
 	 */
 	private function network_code() {
-		return isset( $this->network_code ) ? $this->network_code : get_option( 'network_code','xxxxxx' );
+		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
 	}
 
 	/**

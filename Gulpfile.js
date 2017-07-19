@@ -31,7 +31,7 @@ const wpPot = require( 'gulp-wp-pot' );
 
 // Set assets paths.
 const paths = {
-	'css': [ './*.css', '!*.min.css' ],
+	'css': [ 'assets/css/*.css', '!*.min.css' ],
 	'icons': 'assets/images/svg-icons/*.svg',
 	'images': [ 'assets/images/*', '!assets/images/*.svg' ],
 	'php': [ './*.php', './**/*.php' ],
@@ -104,7 +104,7 @@ gulp.task( 'postcss', [ 'clean:styles' ], () =>
 		.pipe( sourcemaps.write() )
 
 		// Create style.css.
-		.pipe( gulp.dest( './' ) )
+		.pipe( gulp.dest( 'assets/css' ) )
 		.pipe( browserSync.stream() )
 );
 
@@ -114,13 +114,13 @@ gulp.task( 'postcss', [ 'clean:styles' ], () =>
  * https://www.npmjs.com/package/gulp-cssnano
  */
 gulp.task( 'cssnano', [ 'postcss' ], () =>
-	gulp.src( 'style.css' )
+	gulp.src( 'assets/css/style.css' )
 		.pipe( plumber( {'errorHandler': handleErrors} ) )
 		.pipe( cssnano( {
 			'safe': true // Use safe optimizations.
 		} ) )
 		.pipe( rename( 'style.min.css' ) )
-		.pipe( gulp.dest( './' ) )
+		.pipe( gulp.dest( 'assets/css/' ) )
 		.pipe( browserSync.stream() )
 );
 

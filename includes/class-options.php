@@ -161,7 +161,7 @@ class DCWP_Options {
 
 		// Network Code
 		add_settings_field(
-			'network_code',
+			'dfw_network_code',
 			'DoubleClick Network Code',
 			array( $this, 'network_code_input' ),
 			'doubleclick-for-wordpress',
@@ -170,15 +170,15 @@ class DCWP_Options {
 
 		// Breakpoints
 		add_settings_field(
-			'breakpoints',
+			'dfw_breakpoints',
 			'Breakpoints',
 			array( $this, 'breakpoints_input' ),
 			'doubleclick-for-wordpress',
 			'breakpoint_options'
 		);
 
-		register_setting( 'doubleclick-for-wordpress', 'network_code' );
-		register_setting( 'doubleclick-for-wordpress', 'breakpoints', array( $this, 'breakpoints_save' ) );
+		register_setting( 'doubleclick-for-wordpress', 'dfw_network_code', array( $this, 'network_code_save' ) );
+		register_setting( 'doubleclick-for-wordpress', 'dfw_breakpoints', array( $this, 'breakpoints_save' ) );
 
 	}
 
@@ -201,7 +201,7 @@ class DCWP_Options {
 		if ( isset( $doubleclick->network_code ) ) {
 			echo '<input value="' . esc_attr( $doubleclick->network_code ) . ' (set in theme)" type="text" class="regular-text" disabled/>';
 		} else {
-			echo '<input name="network_code" id="network_code" type="text" value="' . esc_attr( get_option( 'network_code' ) ) . '" class="regular-text" />';
+			echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . esc_attr( get_option( 'dfw_network_code' ) ) . '" class="regular-text" />';
 		}
 	}
 
@@ -218,7 +218,7 @@ class DCWP_Options {
 			}
 		}
 
-		$breakpoints = maybe_unserialize( get_option( 'breakpoints' ) );
+		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 		$i = 0;
 		while ( $i < 5 ) {
@@ -227,13 +227,13 @@ class DCWP_Options {
 			$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : ''; ?>
 			<input value="<?php echo esc_attr( $identifier ); ?>"
 					placeholder="Name"
-					name="breakpoints[]"
+					name="dfw_breakpoints[]"
 					type="text"
 					class="medium-text" />
 			<label> min-width
 				<input
 					value="<?php echo esc_attr( $min_width ); ?>" placeholder="0"
-					name="breakpoints[]"
+					name="dfw_breakpoints[]"
 					type="number"
 					class="small-text" />
 			</label>
@@ -241,7 +241,7 @@ class DCWP_Options {
 				<input
 					value="<?php echo esc_attr( $max_width ); ?>"
 					placeholder="9999"
-					name="breakpoints[]"
+					name="dfw_breakpoints[]"
 					type="number"
 					class="small-text" />
 			</label><br/><?php
@@ -250,10 +250,26 @@ class DCWP_Options {
 
 	}
 
+	public function network_code_save( $value ) {
+		$message = null;
+		$type = null;
+		$dfw_network_code = null;
+
+		if ( ! empty( $value ) ) {
+			$dfw_network_code = $value;
+			$message = __( 'Network code updated.', 'dfw' );
+			$type = 'updated';
+		}
+
+		add_settings_error( 'network_code_save_notice', 'network_code_save_notice', $message, $type );
+
+		return $dfw_network_code;
+	}
+
 	public function breakpoints_save( $value ) {
 		$message = null;
 		$type = null;
-		$breakpoints = array();
+		$dfw_breakpoints = array();
 		$groups = array_chunk( $value, 3 );
 
 		foreach ( $groups as $group ) {
@@ -278,7 +294,7 @@ class DCWP_Options {
 				}
 
 				// OK we're good, add it to the array to save.
-				$breakpoints[] = array(
+				$dfw_breakpoints[] = array(
 					'identifier' => $group[0],
 					'min-width' => $group[1],
 					'max-width' => $group[2],
@@ -286,12 +302,12 @@ class DCWP_Options {
 			}
 		}
 
-		if ( ! empty( $breakpoints ) && ! $message ) {
+		if ( ! empty( $dfw_breakpoints ) && ! $message ) {
 			$message = __( 'Breakpoints updated.', 'dfw' );
 			$type = 'updated';
 		}
 		add_settings_error( 'breakpoint_save_notice', 'breakpoint_save_notice', $message, $type );
 
-		return $breakpoints;
+		return $dfw_breakpoints;
 	}
 }
