@@ -216,6 +216,7 @@ class DCWP_Options {
 					echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
 				}
 			}
+			return;
 		}
 
 		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
