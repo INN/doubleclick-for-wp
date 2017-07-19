@@ -201,6 +201,7 @@ final class DoubleClick_For_WordPress {
 
 		// Add a settings link to the plugins page.
 		add_filter( 'plugin_action_links_' . $this->basename, array( 'DCWP_Options', 'add_settings_link' ) );
+
 	}
 
 	/**

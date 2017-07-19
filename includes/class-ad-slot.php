@@ -45,7 +45,7 @@ class DCWP_AdSlot {
 		 */
 		$this->identifier = $identifer;
 		$this->sizes = $size;
-		$this->id = ++ DoubleClick::$count;
+		$this->id = ++ DCWP_DoubleClick::$count;
 	}
 
 	public function breakpoint_identifier() {

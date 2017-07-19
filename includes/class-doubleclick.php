@@ -78,9 +78,9 @@ class DCWP_DoubleClick {
 	 *
 	 * @param string $network_code The code for your dfp instance.
 	 */
-	public function __construct( $plugin, $network_code = null ) {
+	public function __construct( $plugin ) {
 
-		$this->network_code = $network_code;
+		$this->network_code = $this->network_code();
 
 		// Script enqueue is static because we only ever want to print it once.
 		if ( ! $this::$enqueued ) {
@@ -90,19 +90,22 @@ class DCWP_DoubleClick {
 
 		add_action( 'wp_print_footer_scripts', array( $this, 'footer_script' ) );
 
-		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
+		$breakpoints = apply_filters( 'dfw_breakpoints', maybe_unserialize( get_option( 'dfw_breakpoints' ) ) );
 
-		if ( ! empty( $breakpoints ) ) :
+		if ( ! empty( $breakpoints ) ) {
 			foreach ( $breakpoints as $breakpoint ) {
+				// if this is not set explicitly, it's coming from the dfw_breakpoints option.
+				if ( ! isset( $breakpoint['option'] ) ) {
+					$breakpoint['option'] = true;
+				}
 				$args = array(
 					'min_width' => $breakpoint['min-width'],
 					'max_width' => $breakpoint['max-width'],
-					'_option'	=> true,// this breakpoint is set in WordPress options.
-					);
+					'_option'	=> $breakpoint['option'],
+				);
 				$this->register_breakpoint( $breakpoint['identifier'], $args );
 			}
-		endif;
-
+		}
 	}
 
 	/**
@@ -172,7 +175,8 @@ class DCWP_DoubleClick {
 	 * @return String network code.
 	 */
 	private function network_code() {
-		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
+		$network_code = isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
+		return apply_filters( 'dfw_network_code', $network_code );
 	}
 
 	/**
