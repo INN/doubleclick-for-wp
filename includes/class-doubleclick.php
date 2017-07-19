@@ -77,6 +77,7 @@ class DCWP_DoubleClick {
 	 * Create a new DoubleClick object
 	 *
 	 * @param string $network_code The code for your dfp instance.
+	 * @TODO update parameters
 	 */
 	public function __construct( $plugin ) {
 
