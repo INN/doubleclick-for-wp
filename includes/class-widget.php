@@ -72,9 +72,6 @@ class DCWP_Widget extends WP_Widget {
 
 		// Clear cache on save.
 		add_action( 'switch_theme', array( $this, 'flush_widget_cache' ) );
-
-		// Add a shortcode for our widget.
-		add_shortcode( self::$shortcode, array( __CLASS__, 'get_widget' ) );
 	}
 
 	/**
@@ -99,47 +96,9 @@ class DCWP_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		// Set widget attributes.
-		$atts = array(
-			'before_widget' => $args['before_widget'],
-			'after_widget'  => $args['after_widget'],
-			'before_title'  => $args['before_title'],
-			'after_title'   => $args['after_title'],
-			'title'         => $instance['title'],
-			'text'          => $instance['text'],
-		);
-
-		// Display the widget.
-		echo self::get_widget( $atts ); // WPCS XSS OK.
-	}
-
-	/**
-	 * Return the widget/shortcode output
-	 *
-	 * @since  0.2.1
-	 *
-	 * @param  array $atts Array of widget/shortcode attributes/args.
-	 * @return string      Widget output
-	 */
-	public static function get_widget( $atts ) {
-
 		global $doubleclick;
-
-		$defaults = array(
-			'before_widget' => '',
-			'after_widget'  => '',
-			'before_title'  => '',
-			'after_title'   => '',
-			'title'         => '',
-			'text'          => '',
-		);
-
-		// Parse defaults and create a shortcode.
-		$atts = shortcode_atts( $defaults, (array) $atts, self::$shortcode );
-
 		// prepare identifier parameter.
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : 'ident';
-
 		// prepare size parameter.
 		$sizes = $instance['sizes'];
 		if ( ! empty( $sizes ) ) {
@@ -155,30 +114,21 @@ class DCWP_Widget extends WP_Widget {
 			);
 			return;
 		}
-
+		// bugfix: replace $args with $dfw_args to prevent widget interference
 		// prepare dfw_args parameter.
 		$dfw_args = null;
 		if ( $instance['lazyLoad'] ) {
 			$dfw_args = array( 'lazyLoad' => true );
 		}
-
-		// Start an output buffer.
-		ob_start();
-
-		// Start widget markup.
-		echo wp_kses_post( $atts['before_widget'] );
-
-		// Maybe display widget title.
-		echo ( $atts['title'] ) ? wp_kses_post( $atts['before_title'] ) . esc_html( $atts['title'] ) . wp_kses_post( $atts['after_title'] ) : '' ;
-
+		// begin actual widget output.
+		echo wp_kses_post( $args['before_widget'] );
+		// print (optional) title.
+		if ( ! empty( $instance['title'] ) ) {
+			echo wp_kses_post( $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'] );
+		}
 		// and finally, place the ad.
 		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
-
-		// End the widget markup.
-		echo wp_kses_post( $atts['after_widget'] );
-
-		// Return the output buffer.
-		return ob_get_clean();
+		echo wp_kses_post( $args['after_widget'] );
 
 	}
 
