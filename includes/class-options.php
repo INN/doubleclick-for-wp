@@ -143,7 +143,7 @@ class DCWP_Options {
 			'doubleclick-for-wordpress'
 		);
 
-		// Add a section for network option
+		// Add a section for network option.
 		add_settings_section(
 			'breakpoint_options',
 			'Breakpoints',
@@ -151,7 +151,7 @@ class DCWP_Options {
 			'doubleclick-for-wordpress'
 		);
 
-		// Add a section for network option
+		// Add a section for network option.
 		add_settings_section(
 			'documentation_options',
 			'Documentation',
@@ -159,7 +159,7 @@ class DCWP_Options {
 			'doubleclick-for-wordpress'
 		);
 
-		// Network Code
+		// Network Code.
 		add_settings_field(
 			'dfw_network_code',
 			'DoubleClick Network Code',

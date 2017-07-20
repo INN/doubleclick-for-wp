@@ -6,6 +6,12 @@
  * @package DoubleClick_For_WordPress
  */
 
+/**
+ * DoubleClick for WordPress Breakpoint class.
+ *
+ * @since   0.2.1
+ * @package DoubleClick_For_WordPress
+ */
 class DCWP_Breakpoint {
 	/**
 	 * Slug of the breakpoint
@@ -36,6 +42,12 @@ class DCWP_Breakpoint {
 	 */
 	public $option;
 
+	/**
+	 * @TODO need a docbloc
+	 *
+	 * @param $identifier
+	 * @param $args
+	 */
 	public function __construct( $identifier, $args = null ) {
 		if ( isset( $args['min_width'] ) ) {
 			$this->min_width = $args['min_width'];

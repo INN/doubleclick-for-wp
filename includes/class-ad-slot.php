@@ -6,6 +6,12 @@
  * @package DoubleClick_For_WordPress
  */
 
+/**
+ * DoubleClick for WordPress Ad Slot class
+ *
+ * @since   0.2.1
+ * @package DoubleClick_For_WordPress
+ */
 class DCWP_AdSlot {
 	/**
 	 * DFP ad code.
@@ -33,13 +39,13 @@ class DCWP_AdSlot {
 	 *
 	 * @since  0.2.1
 	 *
-	 * @param string $identifier the identifier for the ad slot
-	 * @param string $size the size of the placement
+	 * @param string $identifier the identifier for the ad slot.
+	 * @param string $size the size of the placement.
 	 */
 	public function __construct( $identifier, $size ) {
 		global $doubleclick;
 		/**
-		 * doubleclick escapes '/' with '//' for some odd reason.
+		 * Doubleclick escapes '/' with '//' for some odd reason.
 		 * currently we don't try to fix this, but could with this line:
 		 * $this->identifier = str_replace('/','//',$identifier);
 		 */
@@ -48,13 +54,15 @@ class DCWP_AdSlot {
 		$this->id = ++ DCWP_DoubleClick::$count;
 	}
 
+	/**
+	 * @TODO need a docbloc for this function
+	 */
 	public function breakpoint_identifier() {
 		return null;
 	}
 
 	/**
 	 * If this ad unit has a size mapping.
-	 *
 	 */
 	public function has_mapping() {
 		if ( is_string( $this->sizes ) ) {
@@ -64,10 +72,13 @@ class DCWP_AdSlot {
 		}
 	}
 
+	/**
+	 * @TODO need a docblock for this function
+	 */
 	public function mapping() {
 		global $doubleclick;
 
-		// Return false if there is no mapping
+		// Return false if there is no mapping.
 		if ( ! $this->has_mapping() ) {
 			return false;
 		}
@@ -86,16 +97,16 @@ class DCWP_AdSlot {
 			$browser_width = (int) $breakpoint->min_width;
 
 			// Remove any extra spaces in the list of sizes.
-			// (needs to be just a comma-separated list of values)
+			// (needs to be just a comma-separated list of values).
 			$size = str_replace( ' ', '', $size );
 
-			// eg. 300x250,336x300
+			// eg. 300x250,336x300.
 			$size_strings = explode( ',', $size );
 			$size_array = array();
 
 			foreach ( $size_strings as $size ) {
 				if ( ! empty( $size ) ) {
-					$arr = explode( 'x', $size );		// eg. 300x250
+					$arr = explode( 'x', $size );		// eg. 300x250.
 					$width = (int) $arr[0];
 					$height = (int) $arr[1];
 					$size_array[] = array( $width, $height );
