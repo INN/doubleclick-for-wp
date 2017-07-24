@@ -193,7 +193,7 @@ class DCWP_DoubleClick {
 			} ?>
 			<script type="text/javascript">
 				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: '<?php echo esc_js( $this->network_code() ); ?>',
+					dfpID: <?php echo wp_json_encode( $this->network_code() ); ?>,
 					collapseEmptyDivs: false,
 					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
 					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
@@ -264,7 +264,7 @@ class DCWP_DoubleClick {
 			global $wp_query;
 			$current_page_id = $wp_query->get_queried_object_id();
 			$tags = get_the_tags( $current_page_id );
-			if ( $tags ) {
+			if ( is_array( $tags ) ) {
 				$targeting['Tag'] = array();
 				foreach ( $tags as $tag ) {
 					$targeting['Tag'][] = $tag->slug;

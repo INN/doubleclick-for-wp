@@ -68,7 +68,7 @@ class DCWP_Breakpoint {
 	 * Prints a javascript boolean statement for this breakpoint
 	 */
 	public function js_logic() {
-		echo esc_js( $this->get_js_logic() );
+		echo wp_json_encode( $this->get_js_logic() );
 	}
 
 	/**
