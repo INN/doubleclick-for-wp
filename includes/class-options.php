@@ -197,7 +197,7 @@ class DCWP_Options {
 
 	public function network_code_input() {
 		global $doubleclick;
-		if ( $doubleclick->network_code ) {
+		if ( has_filter( 'dfw_network_code' ) ) {
 			echo '<input value="' . esc_attr( $doubleclick->network_code ) . ' (set in theme)" type="text" class="regular-text" disabled/>';
 		} else {
 			echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . esc_attr( get_option( 'dfw_network_code' ) ) . '" class="regular-text" />';
@@ -215,7 +215,10 @@ class DCWP_Options {
 					echo '<label> max-width</label><input value="' . esc_attr( $breakpoint->max_width ) . '" type="number" class="small-text" disabled /> (set in theme)<br/>';
 				}
 			}
-			return;
+
+			if ( has_filter( 'dfw_breakpoints' ) ) {
+				return;
+			}
 		}
 
 		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
