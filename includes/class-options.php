@@ -197,8 +197,7 @@ class DCWP_Options {
 
 	public function network_code_input() {
 		global $doubleclick;
-
-		if ( isset( $doubleclick->network_code ) ) {
+		if ( $doubleclick->network_code ) {
 			echo '<input value="' . esc_attr( $doubleclick->network_code ) . ' (set in theme)" type="text" class="regular-text" disabled/>';
 		} else {
 			echo '<input name="dfw_network_code" id="dfw_network_code" type="text" value="' . esc_attr( get_option( 'dfw_network_code' ) ) . '" class="regular-text" />';

@@ -176,7 +176,7 @@ class DCWP_DoubleClick {
 	 * @return String network code.
 	 */
 	private function network_code() {
-		$network_code = isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
+		$network_code = isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code' );
 		return apply_filters( 'dfw_network_code', $network_code );
 	}
 
