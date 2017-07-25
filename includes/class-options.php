@@ -280,7 +280,7 @@ class DCWP_Options {
 
 				// Make sure the min is, in fact, smaller than the max.
 				if ( $group[1] > $group[2] ) {
-					$message = __( 'The max value must be greater than the min.', 'dfw' );
+					$message = __( 'Each breakpoint\'s max value must be greater than it\'s min.', 'dfw' );
 					$type = 'error';
 				}
 
