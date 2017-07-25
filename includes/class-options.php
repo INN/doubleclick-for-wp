@@ -208,7 +208,7 @@ class DCWP_Options {
 	public function breakpoints_input() {
 		global $doubleclick;
 
-		if ( isset( $doubleclick->breakpoints ) ) {
+		if ( isset( $doubleclick->breakpoints ) && ! empty( $doubleclick->breakpoints ) ) {
 			foreach ( $doubleclick->breakpoints as $breakpoint ) {
 				if ( ! $breakpoint->option ) {
 					echo '<input value="' . esc_attr( $breakpoint->identifier ) . '" type="text" class="medium-text" disabled />';
