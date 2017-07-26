@@ -153,6 +153,14 @@ class DCWP_Options {
 
 		// Add a section for network option.
 		add_settings_section(
+			'css_options',
+			'Default CSS',
+			array( $this, 'css_section_intro' ),
+			'doubleclick-for-wordpress'
+		);
+
+		// Add a section for documentation link.
+		add_settings_section(
 			'documentation_options',
 			'Documentation',
 			array( $this, 'documentation_section_intro' ),
@@ -177,8 +185,18 @@ class DCWP_Options {
 			'breakpoint_options'
 		);
 
+		// Default CSS
+		add_settings_field(
+			'dfw_css',
+			'Use default CSS?',
+			array( $this, 'css_input' ),
+			'doubleclick-for-wordpress',
+			'css_options'
+		);
+
 		register_setting( 'doubleclick-for-wordpress', 'dfw_network_code', array( $this, 'network_code_save' ) );
 		register_setting( 'doubleclick-for-wordpress', 'dfw_breakpoints', array( $this, 'breakpoints_save' ) );
+		register_setting( 'doubleclick-for-wordpress', 'dfw_css' );
 
 	}
 
@@ -189,6 +207,10 @@ class DCWP_Options {
 	public function breakpoints_section_intro() {
 		echo 'Enter breakpoints below<br />';
 		echo '<em>Example: phone: 0 to 480, tablet 480 to 768, desktop 768 to 9999.</em>';
+	}
+
+	public function css_section_intro() {
+		echo "This plugin has some default CSS to properly label ad units as advertisements and make sure they work with most themes. Check if you would you like to use this default CSS.";
 	}
 
 	public function documentation_section_intro() {
@@ -253,6 +275,11 @@ class DCWP_Options {
 
 	}
 
+	public function css_input() {
+		$checked = ! empty( get_option( 'dfw_css' ) );
+		echo '<input type="checkbox" value="true" name="dfw_css"' . checked( $checked, 1, false  ) . '>';
+	}
+
 	public function network_code_save( $value ) {
 		$message = null;
 		$type = null;
@@ -313,4 +340,5 @@ class DCWP_Options {
 
 		return $dfw_breakpoints;
 	}
+
 }
