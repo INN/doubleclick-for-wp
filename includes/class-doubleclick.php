@@ -160,13 +160,15 @@ class DCWP_DoubleClick {
 		wp_localize_script( 'jquery.dfw.js', 'dfw', $data );
 		wp_enqueue_script( 'jquery.dfw.js' );
 
-		wp_enqueue_style(
-			'dfp',
-			plugins_url( 'assets/css/dfp.css', dirname( __FILE__ ) ),
-			array(),
-			DoubleClick_For_WordPress::VERSION,
-			'all'
-		);
+		if ( ! empty( get_option( 'dfw_css' ) ) ) {
+			wp_enqueue_style(
+				'dfp',
+				plugins_url( 'assets/css/dfp.css', dirname( __FILE__ ) ),
+				array(),
+				DoubleClick_For_WordPress::VERSION,
+				'all'
+			);
+		}
 	}
 
 	/**
@@ -292,6 +294,7 @@ class DCWP_DoubleClick {
 					'data-adunit' => array(),
 					'data-size-mapping' => array(),
 					'data-dimensions' => array(),
+					'data-outofpage' => array(),
 				)
 			)
 		);
@@ -313,6 +316,7 @@ class DCWP_DoubleClick {
 
 		$defaults = array(
 			'lazyLoad' => false,
+			'outofPage' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -329,7 +333,12 @@ class DCWP_DoubleClick {
 
 		$id = $ad_object->id;
 
-		if ( $ad_object->has_mapping() ) {
+		if ( $args['outofPage'] ) {
+			$ad = "<div
+				class='$classes'
+					data-adunit='$identifier'
+					data-outofpage='true'></div>";
+		} else if ( $ad_object->has_mapping() ) {
 			$ad = "<div
 				class='$classes'
 					data-adunit='$identifier'
