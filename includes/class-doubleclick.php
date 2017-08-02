@@ -250,25 +250,34 @@ class DCWP_DoubleClick {
 		if ( is_single() ) {
 			global $wp_query;
 			$current_page_id = $wp_query->get_queried_object_id();
+
 			$cats = get_the_category( $current_page_id );
 			$targeting['Category'] = array();
-
 			if ( $cats ) {
 				foreach ( $cats as $cat ) {
 					$targeting['Category'][] = $cat->slug;
 				}
 			}
-		}
 
-		if ( is_single() ) {
-			global $wp_query;
-			$current_page_id = $wp_query->get_queried_object_id();
 			$tags = get_the_tags( $current_page_id );
 			if ( is_array( $tags ) ) {
 				$targeting['Tag'] = array();
 				foreach ( $tags as $tag ) {
 					$targeting['Tag'][] = $tag->slug;
 				}
+			}
+		}
+
+		if ( is_category() || is_tag() ) {
+			$queried_object = get_queried_object();
+			$term = $queried_object->name;
+			if ( is_category() ) {
+				$targeting['Category'] = array();
+				$targeting['Category'][] = $term;
+			}
+			if ( is_tag() ) {
+				$targeting['Tag'] = array();
+				$targeting['Tag'][] = $term;
 			}
 		}
 
