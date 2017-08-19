@@ -114,12 +114,16 @@ class DCWP_Widget extends WP_Widget {
 			);
 			return;
 		}
-		// bugfix: replace $args with $dfw_args to prevent widget interference
+
 		// prepare dfw_args parameter.
-		$dfw_args = null;
+		$dfw_args = array();
 		if ( $instance['lazyLoad'] ) {
-			$dfw_args = array( 'lazyLoad' => true );
+			$dfw_args['lazyLoad'] = true;
 		}
+		if ( $instance['outofPage'] ) {
+			$dfw_args['outofPage'] = true;
+		}
+
 		// begin actual widget output.
 		echo wp_kses_post( $args['before_widget'] );
 		// print (optional) title.
@@ -149,6 +153,7 @@ class DCWP_Widget extends WP_Widget {
 		// @TODO add sanitization
 		$instance['identifier'] = ( ! empty( $new_instance['identifier'] ) ) ? strip_tags( $new_instance['identifier'] ) : '';
 		$instance['lazyLoad'] = ( ! empty( $new_instance['lazyLoad'] ) ) ? $new_instance['lazyLoad'] : 0 ;
+		$instance['outofPage'] = ( ! empty( $new_instance['outofPage'] ) ) ? $new_instance['outofPage'] : 0 ;
 		$instance['breakpoints'] = $new_instance['breakpoints'];
 		$instance['sizes'] = str_replace( ' ', '', $new_instance['sizes'] );
 		$instance['size'] = str_replace( ' ', '', $new_instance['size'] );
@@ -228,7 +233,21 @@ class DCWP_Widget extends WP_Widget {
 				<?php if ( $instance['lazyLoad'] ) { echo 'checked';} ?>
 				><label>Only load ad once it comes into view on screen.</label><br/>
 		</p>
-		<hr/><br>
+
+		<p><hr/></p>
+
+		<p><strong>Out of Page?</strong></p>
+		<p>
+			<input
+				class="checkbox"
+				type="checkbox"
+				name="<?php echo esc_attr( $this->get_field_name( 'outofPage' ) ); ?>"
+				value="1"
+				<?php if ( $instance['outofPage'] ) { echo 'checked';} ?>
+				><label>Is this an out of page ad unit?<br>(If so, you don't need to specify sizes)</label><br/>
+		</p>
+
+		<p><hr/></p>
 		<?php
 	}
 }
