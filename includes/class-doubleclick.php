@@ -153,20 +153,22 @@ class DCWP_DoubleClick {
 
 		$data = array(
 			'network_code' => $this->network_code,
-			'mappings' => $mappings,
+			'mappings' => apply_filters( 'dfw_mappings', $mappings ),
 			'targeting' => $this->targeting(),
 		);
 
 		wp_localize_script( 'jquery.dfw.js', 'dfw', $data );
 		wp_enqueue_script( 'jquery.dfw.js' );
 
-		wp_enqueue_style(
-			'dfp',
-			plugins_url( 'assets/css/dfp.css', dirname( __FILE__ ) ),
-			array(),
-			DoubleClick_For_WordPress::VERSION,
-			'all'
-		);
+		if ( ! empty( get_option( 'dfw_css' ) ) ) {
+			wp_enqueue_style(
+				'dfp',
+				plugins_url( 'assets/css/dfp.css', dirname( __FILE__ ) ),
+				array(),
+				DoubleClick_For_WordPress::VERSION,
+				'all'
+			);
+		}
 	}
 
 	/**
@@ -190,14 +192,18 @@ class DCWP_DoubleClick {
 				if ( $ad->has_mapping() ) {
 					$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
 				}
-			} ?>
+			}
+			$mappings = apply_filters( 'dfw_mappings', $mappings );
+			?>
 			<script type="text/javascript">
-				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: <?php echo wp_json_encode( $this->network_code() ); ?>,
-					collapseEmptyDivs: false,
-					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
-					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
-				});
+				var dfw_load = function() {
+					jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
+						dfpID: <?php echo wp_json_encode( $this->network_code() ); ?>,
+						collapseEmptyDivs: false,
+						setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
+						sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
+					});
+				};
 			</script>
 		<?php }
 	}
@@ -301,6 +307,7 @@ class DCWP_DoubleClick {
 					'data-adunit' => array(),
 					'data-size-mapping' => array(),
 					'data-dimensions' => array(),
+					'data-outofpage' => array(),
 				)
 			)
 		);
@@ -322,6 +329,7 @@ class DCWP_DoubleClick {
 
 		$defaults = array(
 			'lazyLoad' => false,
+			'outofPage' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -338,7 +346,12 @@ class DCWP_DoubleClick {
 
 		$id = $ad_object->id;
 
-		if ( $ad_object->has_mapping() ) {
+		if ( $args['outofPage'] ) {
+			$ad = "<div
+				class='$classes'
+					data-adunit='$identifier'
+					data-outofpage='true'></div>";
+		} else if ( $ad_object->has_mapping() ) {
 			$ad = "<div
 				class='$classes'
 					data-adunit='$identifier'
