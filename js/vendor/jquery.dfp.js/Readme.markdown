@@ -148,7 +148,7 @@ $('selector').dfp({
     sizeMapping: {
         'my-default': [
         	{browser: [1024, 768], ad_sizes: [980, 185]},
-	        {browser: [ 980, 600], ad_sizes: [[728, 90], [640, 480]]}
+	        {browser: [ 980, 600], ad_sizes: [[728, 90], [640, 480]]},
 	        {browser: [   0,   0], ad_sizes: [88, 31]}
         ],
     }
@@ -211,6 +211,10 @@ Available Options
     <tr>
         <td>disableInitialLoad</td>
         <td>This allows for serving companion ad units when the video on the page auto plays.  You'll need to include this setting with companionAds as true to avoid possible double impressions. (https://support.google.com/dfp_premium/answer/1191131)</td>
+    </tr>
+    <tr>
+        <td>setCentering</td>
+        <td>Enables/disables centering of ads.</td>
     </tr>
     <tr>
         <td>afterEachAdLoaded</td>

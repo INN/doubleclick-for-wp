@@ -1,6 +1,6 @@
 {
   "name": "jquery.dfp",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "main": "jquery.dfp.js",
   "ignore": [
     "img/",
@@ -13,13 +13,13 @@
     "example-bootstrap.js"
   ],
   "homepage": "https://github.com/coop182/jquery.dfp.js",
-  "_release": "2.4.1",
+  "_release": "2.4.2",
   "_resolution": {
     "type": "version",
-    "tag": "2.4.1",
-    "commit": "75d2b1cc513f5a04d93637ca61cf4b3ed605acc1"
+    "tag": "2.4.2",
+    "commit": "d6d6fdfd6d783131d87e3926ae7e2743454a21c6"
   },
-  "_source": "git://github.com/coop182/jquery.dfp.js.git",
-  "_target": "~2.4.1",
+  "_source": "https://github.com/coop182/jquery.dfp.js.git",
+  "_target": "~2.4.2",
   "_originalSource": "jquery.dfp.js"
 }

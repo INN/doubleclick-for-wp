@@ -1,6 +1,6 @@
 {
   "name": "dfp",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "homepage": "https://github.com/INN/DoubleClick-for-WordPress",
   "authors": [
     "nerds@inn.org"
@@ -27,6 +27,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery.dfp.js": "~2.4.1"
+    "jquery.dfp.js": "~2.4.2"
   }
 }
