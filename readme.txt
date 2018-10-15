@@ -1,5 +1,5 @@
 === DoubleClick for WordPress ===
-Contributors: inn_nerds, willhaynes24
+Contributors: innlabs, willhaynes24
 Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
@@ -30,6 +30,12 @@ For more advanced documentation for developers and advanced users see [the offic
 
 
 == Changelog ==
+
+= 0.3 =
+
+- Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
+- Adds Category targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61).
+- Adds GitHub Pull Request template and Contributing guidelines files.
 
 = 0.2.1 =
 

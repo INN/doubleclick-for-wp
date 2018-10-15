@@ -3,7 +3,7 @@
 Plugin Name: DoubleClick for WordPress
 Description: A simple way to serve DoubleClick ads in WordPress.
 Version:     0.2
-Author:      inn_nerds, Will Haynes for INN
+Author:      innlabs, Will Haynes for INN
 Author URI:  https://github.com/INN/DoubleClick-for-WordPress/blob/master/dfw.php
  */
 

@@ -227,8 +227,10 @@ class DoubleClick {
 			$targeting['Page'][] = 'admin-bar-showing';
 		}
 
-		// Templates
-		if ( is_single() ) {
+		/*
+		 * Templates
+		 */
+		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
 			$targeting['Page'][] = 'single';
 		}
 
@@ -248,15 +250,23 @@ class DoubleClick {
 			$targeting['Page'][] = 'search';
 		}
 
-		if ( is_single() ) {
+		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
 			$cats = get_the_category();
 			$targeting['Category'] = array();
 
-			if ( $cats ) {
+			if ( ! empty( $cats ) ) {
 				foreach ( $cats as $c ) {
 					$targeting['Category'][] = $c->slug;
 				}
 			}
+		}
+
+		if ( is_category() ) {
+			$queried_object = get_queried_object();
+			if ( ! isset( $targeting['Category'] ) ) {
+				$targeting['Category'] = array();
+			}
+			$targeting['Category'][] = $queried_object->slug;
 		}
 
 		if ( is_single() ) {
