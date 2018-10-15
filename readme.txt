@@ -33,8 +33,9 @@ For more advanced documentation for developers and advanced users see [the offic
 
 = 0.3 =
 
-- Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
-- Adds Category targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61).
+- Updates to `jquery.dfp.js` version 2.4.2, adding `setCentering` support. [PR #67](https://github.com/INN/doubleclick-for-wp/pull/67) for [issue #66](https://github.com/INN/doubleclick-for-wp/issues/66)
+- Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
+- Adds Category targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61).
 - Adds GitHub Pull Request template and Contributing guidelines files.
 
 = 0.2.1 =
