@@ -230,7 +230,7 @@ class DoubleClick {
 		/*
 		 * Templates
 		 */
-		if ( is_singular() && ( ! is_post_type_archive() && ! is_home() && ! is_front_page() ) ) {
+		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
 			$targeting['Page'][] = 'single';
 		}
 
@@ -250,7 +250,7 @@ class DoubleClick {
 			$targeting['Page'][] = 'search';
 		}
 
-		if ( ! is_home() && ! is_front_page() ) {
+		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
 			$cats = get_the_category();
 			$targeting['Category'] = array();
 
