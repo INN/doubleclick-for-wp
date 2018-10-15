@@ -261,6 +261,14 @@ class DoubleClick {
 			}
 		}
 
+		if ( is_category() ) {
+			$queried_object = get_queried_object();
+			if ( ! isset( $targeting['Category'] ) ) {
+				$targeting['Category'] = array();
+			}
+			$targeting['Category'][] = $c->slug;
+		}
+
 		if ( is_single() ) {
 			$tags = get_the_tags();
 			if ( $tags ) {
