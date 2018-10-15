@@ -33,8 +33,8 @@ For more advanced documentation for developers and advanced users see [the offic
 
 = 0.3 =
 
-- Removes 'single' page targeting from post-type archives and from static front pages. [PR #71](https://github.com/INN/doubleclick-for-wp/pull/71) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
-- Adds Category targeting on category archive. [PR #71](https://github.com/INN/doubleclick-for-wp/pull/71) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61).
+- Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
+- Adds Category targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [#61](https://github.com/INN/doubleclick-for-wp/issues/61).
 - Adds GitHub Pull Request template and Contributing guidelines files.
 
 = 0.2.1 =
