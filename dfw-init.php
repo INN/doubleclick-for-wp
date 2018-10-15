@@ -266,7 +266,7 @@ class DoubleClick {
 			if ( ! isset( $targeting['Category'] ) ) {
 				$targeting['Category'] = array();
 			}
-			$targeting['Category'][] = $c->slug;
+			$targeting['Category'][] = $queried_object->slug;
 		}
 
 		if ( is_single() ) {
