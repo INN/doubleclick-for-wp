@@ -126,7 +126,7 @@ class DoubleClick_Widget extends WP_Widget {
 				type="checkbox"
 				name="<?php echo esc_attr( $this->get_field_name( 'lazyLoad' ) ); ?>"
 				value="1"
-				<?php if ( $instance['lazyLoad'] ) { echo 'checked';} ?>
+				<?php if ( isset( $instance['lazyLoad'] ) && $instance['lazyLoad'] ) { echo 'checked';} ?>
 				><label>Only load ad once it comes into view on screen.</label><br/>
 		</p>
 		<hr/><br>
