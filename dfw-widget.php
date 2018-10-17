@@ -82,7 +82,7 @@ class DoubleClick_Widget extends WP_Widget {
 		$identifier = ! empty( $instance['identifier'] ) ? $instance['identifier'] : '';
 		?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'identifier' ) ); ?>"><?php esc_html_e( 'Identifier:' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'identifier' ) ); ?>"><?php esc_html_e( 'Identifier/Ad code:' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'identifier' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'identifier' ) ); ?>" type="text" value="<?php echo esc_attr( $identifier ); ?>">
 		</p>
 
