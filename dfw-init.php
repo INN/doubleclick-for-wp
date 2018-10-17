@@ -279,6 +279,15 @@ class DoubleClick {
 			}
 		}
 
+		if ( is_tag() ) {
+			$queried_object = get_queried_object();
+			if ( ! isset( $targeting['Tag'] ) ) {
+				$targeting['Tag'] = array();
+			}
+			$targeting['Tag'][] = $queried_object->slug;
+		}
+
+
 		// return the array of targeting criteria.
 		return apply_filters( 'dfw_targeting_criteria', $targeting );
 	}
