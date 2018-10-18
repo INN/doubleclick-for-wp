@@ -7,11 +7,11 @@
  */
 function dfw_plugin_menu() {
 	add_options_page(
-		'DoubleClick for WordPress', 	// $page_title title of the page.
-		'DoubleClick', 	                // $menu_title the text to be used for the menu.
-		'manage_options', 				// $capability required capability for display.
-		'doubleclick-for-wordpress', 	// $menu_slug unique slug for menu.
-		'dfw_option_page_html' 			// $function callback.
+		'DoubleClick for WordPress', // $page_title title of the page.
+		'DoubleClick', 	             // $menu_title the text to be used for the menu.
+		'manage_options',            // $capability required capability for display.
+		'doubleclick-for-wordpress', // $menu_slug unique slug for menu.
+		'dfw_option_page_html'       // $function callback.
 	);
 }
 add_action( 'admin_menu', 'dfw_plugin_menu' );

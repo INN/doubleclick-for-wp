@@ -119,9 +119,21 @@ class DoubleClick {
 	 *
 	 * @param string       $identifier the breakpoint to register.
 	 * @param string|array $args additional args.
+	 * @return Boolean     Whether or not a breakpoing was registered.
 	 */
 	public function register_breakpoint( $identifier, $args = null ) {
-		$this->breakpoints[ $identifier ] = new DoubleClickBreakpoint( $identifier, $args );
+		if ( is_string( $identifier) ) {
+			$this->breakpoints[ $identifier ] = new DoubleClickBreakpoint( $identifier, $args );
+			return true;
+		} else if ( is_array( $identifier ) ) {
+			$this->breakpoints[ $identifier['identifier'] ] = new DoubleClickBreakpoint( $identifier['identifier'], $args );
+			return true;
+		} else {
+			if ( WP_DEBUG ) {
+				error_log( 'DoubleClick->register_breakpoint() is being called with the wrong arguments somewhere.' );
+			}
+			return false;
+		}
 	}
 
 	/**
@@ -502,6 +514,15 @@ class DoubleClickBreakpoint {
 
 		if ( isset( $args['_option'] ) && $args['_option'] ) {
 			$this->option = true;
+		}
+
+
+		// Same, but with different spelling
+		if ( isset( $args['max-width'] ) ) {
+			$this->max_width = $args['max-width'];
+		}
+		if ( isset( $args['min-width'] ) ) {
+			$this->min_width = $args['min-width'];
 		}
 
 		$this->identifier = $identifier;
