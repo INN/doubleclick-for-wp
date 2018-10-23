@@ -127,7 +127,7 @@ class DoubleClick_Widget extends WP_Widget {
 					}
 				?>
 
-				<p><hr/></p>
+				<hr/>
 
 				<?php
 			} else {
