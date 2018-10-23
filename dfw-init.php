@@ -119,7 +119,7 @@ class DoubleClick {
 	 *
 	 * @param string       $identifier the breakpoint to register.
 	 * @param string|array $args additional args.
-	 * @return Boolean     Whether or not a breakpoing was registered.
+	 * @return Boolean     Whether or not a breakpoint was registered.
 	 */
 	public function register_breakpoint( $identifier, $args = null ) {
 		if ( is_string( $identifier) ) {

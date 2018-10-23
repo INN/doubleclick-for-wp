@@ -129,6 +129,15 @@ function dfw_breakpoints_input() {
 
 	$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
+	error_log(var_export( $breakpoints, true));
+
+	/*
+	 * Note here that these are not individually named inputs!
+	 * These are all alike, forming a singular array that dfw_breakpoints_save()
+	 * breaks into an associative array using array_chunk()
+	 *
+	 * @todo: instead of $i being 5, count $breakpoints, then output a foreach of $breakpoints plus ( 5-n, minimum 1 ) additional fields.
+	 */
 	$i = 0;
 	while ( $i < 5 ) {
 		$identifier = ( isset( $breakpoints[ $i ]['identifier'] ) )? $breakpoints[ $i ]['identifier'] : '';
@@ -160,6 +169,7 @@ function dfw_breakpoints_input() {
 }
 
 function dfw_breakpoints_save( $value ) {
+	error_log(var_export( $value , true));
 	$breakpoints = array();
 	$groups = array_chunk( $value, 3 );
 
