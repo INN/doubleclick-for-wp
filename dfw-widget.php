@@ -36,8 +36,8 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// prepare size parameter.
 		if ( isset( $instance['sizes'] ) && ! empty( $instance['sizes'] ) ) {
-			foreach ( $instance['sizes'] as $breakpoint => $size ) {
-				if ( empty( $sizes[ $breakpoint ] ) ) {
+			foreach ( $instance['sizes'] as $breakpoint => $sizes ) {
+				if ( isset( $sizes[ $breakpoint ] ) && empty( $sizes[ $breakpoint ] ) ) {
 					unset( $sizes[ $breakpoint ] );
 				}
 			}
