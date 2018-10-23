@@ -93,7 +93,12 @@ class DoubleClick_Widget extends WP_Widget {
 				$i = 0;
 				?>
 
-				<p><strong>Size for breakpoints:</strong></p>
+				<p>
+					<strong>Configure ad unit sizes to be displayed for each breakpoint</strong>
+					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/index.md#1-via-reusable-widget">
+						<?php echo wp_kses_post( __( '(Help?)', 'dfw' ) ); ?>
+					</a>
+				</p>
 
 				<?php
 					foreach ( $doubleclick->breakpoints as $breakpoint ) {
