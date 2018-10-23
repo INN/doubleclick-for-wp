@@ -103,7 +103,7 @@ function dfw_breakpoints_section_intro() {
 }
 
 function dfw_documentation_section_intro() {
-	echo '<a href="https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/index.md">Available on GitHub</a>';
+	echo '<a href="https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/readme.md">Available on GitHub</a>';
 }
 
 function dfw_network_code_input() {

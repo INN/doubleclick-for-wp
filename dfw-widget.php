@@ -36,8 +36,8 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// prepare size parameter.
 		if ( isset( $instance['sizes'] ) && ! empty( $instance['sizes'] ) ) {
-			foreach ( $instance['sizes'] as $breakpoint => $size ) {
-				if ( empty( $sizes[ $breakpoint ] ) ) {
+			foreach ( $instance['sizes'] as $breakpoint => $sizes ) {
+				if ( isset( $sizes[ $breakpoint ] ) && empty( $sizes[ $breakpoint ] ) ) {
 					unset( $sizes[ $breakpoint ] );
 				}
 			}
@@ -93,10 +93,23 @@ class DoubleClick_Widget extends WP_Widget {
 				$i = 0;
 				?>
 
-				<p><strong>Size for breakpoints:</strong></p>
+				<p>
+					<strong>Configure ad unit sizes to be displayed for each breakpoint</strong>
+					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/index.md#1-via-reusable-widget">
+						<?php echo wp_kses_post( __( '(Help?)', 'dfw' ) ); ?>
+					</a>
+				</p>
 
 				<?php
 					foreach ( $doubleclick->breakpoints as $breakpoint ) {
+						$sizes = '';
+
+						if ( isset( $instance['sizes'] ) )  {
+							if ( isset( $instance['sizes'][ $breakpoint->identifier ] ) ) {
+								$sizes = $instance['sizes'][ $breakpoint->identifier ];
+							}
+						}
+
 						echo '<p>';
 						printf(
 							'<label for="%3$s">%1$s <em>(%2$spx+)</em></label><br/>',
@@ -107,13 +120,13 @@ class DoubleClick_Widget extends WP_Widget {
 						printf(
 							'<input lass="widefat" type="text" id="%1$s" name="%1$s" value="%2$s">',
 							esc_attr( $this->get_field_name( 'sizes' ) ) . '[' . esc_attr( $breakpoint->identifier ) . ']',
-							( isset( $instance['sizes'] ) ) ? esc_attr( $instance['sizes'][ $breakpoint->identifier ] ) : ''
+							$sizes
 						);
 						echo '</p>';
 					}
 				?>
 
-				<p><hr/></p>
+				<hr/>
 
 				<?php
 			} else {
