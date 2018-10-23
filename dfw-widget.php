@@ -107,7 +107,6 @@ class DoubleClick_Widget extends WP_Widget {
 						if ( isset( $instance['sizes'] ) )  {
 							if ( isset( $instance['sizes'][ $breakpoint->identifier ] ) ) {
 								$sizes = $instance['sizes'][ $breakpoint->identifier ];
-						error_log(var_export( $instance, true));
 							}
 						}
 
