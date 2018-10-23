@@ -16,7 +16,7 @@ This WordPress plugin gives site administrators an easy way to serve DFP invento
 
 Implementing is simple. Configure your network code and input your identifiers. No need to copy and paste ad codes or header tags — the plugin generates all of this for you.
 
-For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/index.md).
+For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/readme.md).
 
 
 == Installation ==
@@ -26,7 +26,7 @@ For more advanced documentation for developers and advanced users see [the offic
 3. Define a network code and optional ad breakpoint information in plugin settings.
 4. Add DoubleClick ad widgets to your sidebars.
 
-For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/tree/master/docs/index.md).
+For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/tree/master/docs/readme.md).
 
 
 == Changelog ==
