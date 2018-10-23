@@ -102,6 +102,15 @@ class DoubleClick_Widget extends WP_Widget {
 
 				<?php
 					foreach ( $doubleclick->breakpoints as $breakpoint ) {
+						$sizes = '';
+
+						if ( isset( $instance['sizes'] ) )  {
+							if ( isset( $instance['sizes'][ $breakpoint->identifier ] ) ) {
+								$sizes = $instance['sizes'][ $breakpoint->identifier ];
+						error_log(var_export( $instance, true));
+							}
+						}
+
 						echo '<p>';
 						printf(
 							'<label for="%3$s">%1$s <em>(%2$spx+)</em></label><br/>',
@@ -112,7 +121,7 @@ class DoubleClick_Widget extends WP_Widget {
 						printf(
 							'<input lass="widefat" type="text" id="%1$s" name="%1$s" value="%2$s">',
 							esc_attr( $this->get_field_name( 'sizes' ) ) . '[' . esc_attr( $breakpoint->identifier ) . ']',
-							( isset( $instance['sizes'] ) ) ? esc_attr( $instance['sizes'][ $breakpoint->identifier ] ) : ''
+							$sizes
 						);
 						echo '</p>';
 					}
