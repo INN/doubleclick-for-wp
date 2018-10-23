@@ -37,11 +37,12 @@ For more advanced documentation for developers and advanced users see [the offic
 - Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
 - Adds "Category" targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61).
 - Adds "Tag" targeting on tag archive. [PR #74](https://github.com/INN/doubleclick-for-wp/pull/74) for [issue #29](https://github.com/INN/doubleclick-for-wp/issues/29).
-- Fixes a number of PHP warnings and errors, including [issue #8](https://github.com/INN/doubleclick-for-wp/issues/8) and [issue #37](https://github.com/INN/doubleclick-for-wp/issues/37). ([PR #76](https://github.com/INN/doubleclick-for-wp/pull/76))
+- Fixes a number of PHP warnings and errors, including [issue #8](https://github.com/INN/doubleclick-for-wp/issues/8) and [issue #37](https://github.com/INN/doubleclick-for-wp/issues/37) in [PR #76](https://github.com/INN/doubleclick-for-wp/pull/76) and [issue #31](https://github.com/INN/doubleclick-for-wp/issues/31) in [PR #80](https://github.com/INN/doubleclick-for-wp/pull/80/).
 - Adds "Ad unit" label to widget settings for the "Identifier" setting, to match Google's language. [PR #73](https://github.com/INN/doubleclick-for-wp/pull/73) for [issue #26](https://github.com/INN/doubleclick-for-wp/issues/26).
 - Adds GitHub Pull Request template and Contributing guidelines files.
 - Adds a plugin text domain: `dfw`. ([PR #76](https://github.com/INN/doubleclick-for-wp/pull/76))
 - Adds the GPL2 license to the plugin header; this plugin has been GPL2 since 2015 but that wasn't marked in a WordPress-accessible way. ([PR #76](https://github.com/INN/doubleclick-for-wp/pull/76))
+- Moves the documentation index file from `docs/index.md` to `docs/readme.md` in the GitHub repository, so that the Markdown will display to all who visit [the docs directory](https://github.com/INN/doubleclick-for-wp/tree/master/docs). ([PR #80](https://github.com/INN/doubleclick-for-wp/pull/80))
 
 = 0.2.1 =
 
