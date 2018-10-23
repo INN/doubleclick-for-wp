@@ -7,11 +7,11 @@
  */
 function dfw_plugin_menu() {
 	add_options_page(
-		'DoubleClick for WordPress', 	// $page_title title of the page.
-		'DoubleClick', 	                // $menu_title the text to be used for the menu.
-		'manage_options', 				// $capability required capability for display.
-		'doubleclick-for-wordpress', 	// $menu_slug unique slug for menu.
-		'dfw_option_page_html' 			// $function callback.
+		'DoubleClick for WordPress', // $page_title title of the page.
+		'DoubleClick', 	             // $menu_title the text to be used for the menu.
+		'manage_options',            // $capability required capability for display.
+		'doubleclick-for-wordpress', // $menu_slug unique slug for menu.
+		'dfw_option_page_html'       // $function callback.
 	);
 }
 add_action( 'admin_menu', 'dfw_plugin_menu' );
@@ -129,6 +129,13 @@ function dfw_breakpoints_input() {
 
 	$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
+	/*
+	 * Note here that these are not individually named inputs!
+	 * These are all alike, forming a singular array that dfw_breakpoints_save()
+	 * breaks into an associative array using array_chunk()
+	 *
+	 * @todo: instead of $i being 5, count $breakpoints, then output a foreach of $breakpoints plus ( 5-n, minimum 1 ) additional fields.
+	 */
 	$i = 0;
 	while ( $i < 5 ) {
 		$identifier = ( isset( $breakpoints[ $i ]['identifier'] ) )? $breakpoints[ $i ]['identifier'] : '';
