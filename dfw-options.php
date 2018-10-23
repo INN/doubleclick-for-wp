@@ -129,8 +129,6 @@ function dfw_breakpoints_input() {
 
 	$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
-	error_log(var_export( $breakpoints, true));
-
 	/*
 	 * Note here that these are not individually named inputs!
 	 * These are all alike, forming a singular array that dfw_breakpoints_save()
@@ -169,7 +167,6 @@ function dfw_breakpoints_input() {
 }
 
 function dfw_breakpoints_save( $value ) {
-	error_log(var_export( $value , true));
 	$breakpoints = array();
 	$groups = array_chunk( $value, 3 );
 
