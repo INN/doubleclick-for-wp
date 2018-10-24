@@ -140,7 +140,6 @@ class DoubleClick {
 		// from the plugin.
 		$mappings = array();
 		foreach ( $this->ad_slots as $ad ) {
-			error_log(var_export( $ad, true));
 			if ( $ad->has_mapping() ) {
 				$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
 			}
@@ -153,7 +152,8 @@ class DoubleClick {
 		);
 
 		add_filter( 'dfw_js_data', function( $data ) {
-			//error_log(var_export( $data, true));
+			error_log(var_export( $data, true));
+			$data['test'] = 'testing';
 			return $data;
 		} );
 
@@ -165,7 +165,7 @@ class DoubleClick {
 		 * @param Array $data An associative array of things. The default is:
 		 *    array(
 		 *        'network_code' => the option from the plugin settings
-		 *        'mappings' => an array of things
+		 *        'mappings' => an array of ad mappings; not sure exactly what this is supposed to be
 		 *        'targeting' => the ad targeting data appropriate to this page
 		 *    )
 		 */
