@@ -5,14 +5,14 @@ and place ads directly within your theme.
 
 __Quick Function Links:__
 
- * [$DoubleClick->register_breakpoint($identifer,$args)](#doubleclick-register_breakpointidentiferargs)
- * [$DoubleClick->place_ad($identifer,$size,$breakpoints)](#doubleclick-place_adidentifersizebreakpoints)
+ * [$DoubleClick->register_breakpoint($identifier,$args)](#doubleclick-register_breakpointidentifierargs)
+ * [$DoubleClick->place_ad($identifier,$size,$breakpoints)](#doubleclick-place_adidentifiersizebreakpoints)
 
 * * *
 
 ## 1. Define Breakpoints
 
-##### $DoubleClick->register_breakpoint($identifer,$args)
+##### $DoubleClick->register_breakpoint($identifier,$args)
 
 You can make it easier for users to target breakpoints by defining them in `functions.php`
 
@@ -38,7 +38,7 @@ add_action('dfw_setup','ad_setup');
 
 ##### Paramaters:
 
-__$identifer__
+__$identifier__
 
 `String` A unique identifier for this breakpoint
 
@@ -50,7 +50,7 @@ __$args__
 
 ## 2. Place Ads
 
-### $DoubleClick->place_ad($identifer,$sizes,$args)
+### $DoubleClick->place_ad($identifier,$sizes,$args)
 
 Prints DOM to display an ad at the given breakpoint.
 
@@ -61,7 +61,7 @@ Prints DOM to display an ad at the given breakpoint.
 global $DoubleClick;
 
 // simple call:
-$DoubleClick->place_ad('my-identifer','300x250');
+$DoubleClick->place_ad('my-identifier','300x250');
 
 // more options:
 $sizes = array(
@@ -79,7 +79,7 @@ $DoubleClick->place_ad('my-identifier',$sizes,$args);
 
 ##### Paramaters:
 
-__$identifer__
+__$identifier__
 
 `String` The DFP identifier for an ad unit (DFP does not require you to create an identifier. If this does not match a value defined in DFP, a network-wide ad will still be requested).
 

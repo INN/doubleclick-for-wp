@@ -381,7 +381,7 @@ class DoubleClickAdSlot {
 	 *
 	 * @var String.
 	 */
-	public $identifer;
+	public $identifier;
 
 	/**
 	 * Either a string of sizes, or a size mapping.
@@ -401,14 +401,14 @@ class DoubleClickAdSlot {
 	 * @param String $identifier
 	 * @param Mixed $size
 	 */
-	public function __construct( $identifer, $size ) {
+	public function __construct( $identifier, $size ) {
 
 		global $doubleclick;
 
 		// doubleclick escapes '/' with '//' for some odd reason.
 		// currently we don't try to fix this, but could with this line:
 		// $this->identifier = str_replace('/','//',$identifier);
-		$this->identifier = $identifer;
+		$this->identifier = $identifier;
 		$this->sizes = $size;
 		$this->id = ++ DoubleClick::$count;
 	}
