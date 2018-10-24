@@ -12,4 +12,17 @@ Text Domain: dfw
 
 define( 'DFP_VERSION', '0.2.0' );
 
-include( 'dfw-init.php' );
+$includes = array(
+	'/inc/class-doubleclick.php',
+	'/inc/class-doubleclickadslot.php',
+	'/inc/class-doubleclickbreakpoint.php',
+	'/dfw-init.php',
+	'/inc/class-doubleclick-widget.php',
+	'/dfw-options.php',
+);
+
+foreach ( $includes as $include ) {
+	if ( 0 === validate_file( dirname( __FILE__ ) . $include ) ) {
+		require_once( dirname( __FILE__ ) . $include );
+	}
+}
