@@ -96,14 +96,13 @@
 		 * into the final markup, which is then serialized by Gutenberg into `post_content`.
 		 * @see https://wordpress.org/gutenberg/handbook/block-edit-save/#save
 		 *
+		 * Returns a Comment because of reasons documented at
+		 * https://github.com/INN/super-cool-ad-inserter-plugin/blob/v0.2/blocks/scaip-sidebar/block.js#L145-L166
+		 *
 		 * @return {Element}       Element to render.
 		 */
 		save: function() {
-			return el(
-				'p',
-				{},
-				__( 'Hello from the saved content!' )
-			);
+			return document.createComment( attributes );
 		}
 	} );
 } )(
