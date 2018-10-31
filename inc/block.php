@@ -105,7 +105,3 @@ function dfw_block_render_callback( $instance ) {
 	$widget = new DoubleClick_Widget();
 	$widget->widget( $args, $instance );
 }
-
-/**
- *
- * @see 
