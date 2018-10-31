@@ -1,12 +1,10 @@
 ## Changes
 
-<!-- what changed? -->
-
-- 
+- <!-- what changed? -->
 
 ## Why
 
-<!-- why did it change? -->
+- <!-- why did it change? -->
 
 For #
 
