@@ -1,7 +1,11 @@
 /**
  * The following styles are only applied inside the editor.
  */
-.wp-block-dfw-ad-unit {
+.wp-block-doubleclick-for-wp-dfw-ad-unit {
   padding: 14px;
-  background-color: #fef9f9;
+  border: 1px solid #e2e4e7;
+}
+.wp-block-doubleclick-for-wp-dfw-ad-unit .components-base-control__help {
+  font-style: normal;
+  font-size: inherit;
 }
