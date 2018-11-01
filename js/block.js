@@ -70,14 +70,35 @@
 		 * @return {Element}       Element to render.
 		 */
 		edit: function( props ) {
+
+			/**
+			 * Closure generator for edit function's size TextControl onchange callback
+			 */
+			function onchangecallbackGenerator( key, props ) {
+				return function( value ) {
+					console.log( value, key, props.attributes.sizes );
+					new_sizes = props.attributes.sizes;
+					if ( typeof new_sizes !== 'object' ) {
+						new_sizes = {};
+					}
+					new_sizes[key] = value;
+					props.setAttributes( { sizes: new_sizes } );
+					console.log( new_sizes );
+				};
+			}
+
 			var breakpoint_forms = [];
+			console.log( props.attributes);
 			for ( var key in dfw.breakpoints ) {
-				if ( typeof props.attributes.sizes === 'array' ) {
-					if ( props.attributes.sizes.length ) {
-						if ( typeof props.attributes.sizes.key === 'string' ) {
-							var value = props.attributes.sizes[key];
+				var value = 'silly';
+				if ( typeof props.attributes.sizes === 'object' ) {
+					console.log( Object.keys(props.attributes.sizes).length );
+					if ( Object.keys(props.attributes.sizes).length > 0 ) {
+						console.log( typeof props.attributes.sizes[key] );
+						if ( typeof props.attributes.sizes[key] === 'string' ) {
+							value = props.attributes.sizes[key];
 						} else {
-							var value = '';
+							value = '';
 						}
 					}
 				}
@@ -97,15 +118,9 @@
 								),
 							],
 							value: value,
-							onChange: function( value ) {
-								new_sizes = props.attributes.sizes;
-								console.log( key );
-								if ( typeof new_sizes !== 'array' ) {
-									new_sizes = [];
-								}
-								new_sizes[key] = value;
-								props.setAttributes( { sizes: new_sizes } )
-							},
+							// this does not work; while the "key" variable is now kept, the props aren't updated.
+							// I think this is because the local props in the generated callback is not the props outside the closure?
+							onChange: onchangecallbackGenerator( key, props )
 						}
 					)
 				);
@@ -192,8 +207,9 @@
 		 *
 		 * @return {Element}       Element to render.
 		 */
-		save: function( attributes ) {
-			return document.createComment( attributes );
+		save: function( props ) {
+			console.log( props.attributes );
+			return document.createComment( props );
 		}
 	} );
 } )(
