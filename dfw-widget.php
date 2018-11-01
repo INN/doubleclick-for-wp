@@ -35,6 +35,16 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// prepare size parameter.
 		if ( isset( $instance['sizes'] ) && ! empty( $instance['sizes'] ) ) {
+			// check to see if it's JSON, which is saved by the Gutenberg Block
+			if ( is_string( $instance['sizes'] ) ) {
+				$temporary = json_decode( $instance['sizes'] );
+				if ( json_last_error() === JSON_ERROR_NONE ) {
+					$instance['sizes'] = (array) $temporary;
+				}
+			}
+
+			error_log(var_export( $instance['sizes'] , true));
+
 			foreach ( $instance['sizes'] as $breakpoint => $size ) {
 				if ( isset( $instance['sizes'][ $breakpoint ] ) && empty( $instance['sizes'][ $breakpoint ] ) ) {
 					unset( $instance['sizes'][ $breakpoint ] );
