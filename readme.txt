@@ -1,14 +1,14 @@
-=== DoubleClick for WordPress ===
+=== Super Cool Ad Manager Plugin ===
 Contributors: innlabs, willhaynes24
 Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
-Tested up to: 4.9
+Tested up to: 5.0-beta2
 Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Serve DoubleClick ads natively in WordPress. Built to make serving and targeting responsive ads easy.
+Serve Google Ad Manager ads natively in WordPress. Built to make serving and targeting responsive ads easy.
 
 == Description ==
 
@@ -24,7 +24,7 @@ For more advanced documentation for developers and advanced users see [the offic
 1. Upload the plugin directory to your `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Define a network code and optional ad breakpoint information in plugin settings.
-4. Add DoubleClick ad widgets to your sidebars.
+4. Add ad widgets to your sidebars.
 
 For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/tree/master/docs/readme.md).
 
@@ -49,7 +49,7 @@ For more advanced documentation for developers and advanced users see [the offic
 - Widget now includes a default stylesheet:
 	- setting `.display-none` to `display: none;` to support `jQuery.dfp.js`' utility styles
 	- centering ad units within the ad widgets.
-	- creating a `:before` pseudoelement with the text 'Advertisement', to follow DoubleClick recommended practices on labeling ads
+	- creating a `:before` pseudoelement with the text 'Advertisement', to follow Google Ad Manager recommended practices on labeling ads
 - Documentation improvements
 - Fix for case where the widget element's closing tag was not output
 - Numerous small bugfixes
