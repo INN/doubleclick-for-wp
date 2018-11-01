@@ -10,8 +10,9 @@
 	 */
 	var el = wp.element.createElement,
 		TextControl = wp.components.TextControl,
+		ToggleControl = wp.components.ToggleControl,
 		ServerSideRender = wp.components.ServerSideRender,
-		InspectorControls = wp.editor.InspectorControlsm
+		InspectorControls = wp.editor.InspectorControls,
 		__ = wp.i18n.__;
 
 	/**
@@ -63,18 +64,35 @@
 		 * This represents what the editor will render when the block is used.
 		 * @see https://wordpress.org/gutenberg/handbook/block-edit-save/#edit
 		 *
+		 * Makes use of the window.dfw variable, created in function dfw_block_init().
+		 *
 		 * @param {Object} [props] Properties passed from the editor.
 		 * @return {Element}       Element to render.
 		 */
 		edit: function( props ) {
-			// going to have to process props to create appropriate sizes here
+			var breakpoint_forms = [];
+			for ( var key in dfw.breakpoints ) {
+				breakpoint_forms.push(
+					null
+				);
+			}
+
+
 			return [
 				el(
 					'div',
 					{
 						className: props.className
 					},
-					__( 'in-editor form' )
+					el(
+						TextControl,
+						{
+							label: __( 'Identifier/Ad code' ),
+							value: props.attributes.identifier,
+							onChange: function ( value ) { props.setAttributes( { identifier: value } ) },
+							help: __( 'This is the Google Ad Manager ad unit identifier for the ad code that will be output by this block.' ),
+						}
+					)
 				),
 				el(
 					InspectorControls,
@@ -84,7 +102,17 @@
 						{
 							label: __( 'Identifier/Ad code' ),
 							value: props.attributes.identifier,
-							onChange: function ( value ) { props.setAttributes( { src: value ] ) },
+							onChange: function ( value ) { props.setAttributes( { identifier: value } ) },
+							help: __( 'This is the Google Ad Manager ad unit identifier for the ad code that will be output by this block.' ),
+						}
+					),
+					el(
+						ToggleControl,
+						{
+							checked: props.attributes.lazyLoad,
+							onChange: function ( value ) { props.setAttributes( { lazyLoad: value }  ) },
+							label: __( 'Lazy load?' ),
+							help: __( 'Only load ad once it comes into view on screen.' ),
 						}
 					)
 				)
@@ -101,7 +129,8 @@
 		 *
 		 * @return {Element}       Element to render.
 		 */
-		save: function() {
+		save: function( attributes ) {
+			console.log( attributes );
 			return document.createComment( attributes );
 		}
 	} );

@@ -27,29 +27,45 @@ function dfw_block_init() {
 			'wp-blocks',
 			'wp-i18n',
 			'wp-element',
+			'wp-components',
+			'wp-editor',
 		),
 		filemtime( "$dir/$block_js" )
 	);
 
 	global $doubleclick;
+	if ( is_object( $doubleclick ) && is_array( $doubleclick->breakpoints ) ) {
+		$dfw_options = array(
+			'breakpoints' => $doubleclick->breakpoints,
+		);
+	} else {
+		$dfw_options = array(
+			'breakpoints' => array(),
+		);
+	}
+
+	wp_localize_script(
+		'dfw-block-editor',
+		'dfw',
+		$dfw_options
+	);
 
 	$editor_css = 'css/editor.css';
 	wp_register_style(
 		'dfw-block-editor',
 		plugins_url( $editor_css, dirname( __FILE__ ) ),
 		array(
-			'wp-blocks',
 		),
 		filemtime( "$dir/$block_js" )
 	);
 
-	register_block_type( 'dfw/dwf-ad-unit', array(
+	register_block_type( 'doubleclick-for-wp/dfw-ad-unit', array(
 		'attributes' => array(
 			'identifier' => array(
 				'type' => 'string',
 			),
 			'lazyLoad' => array(
-				'type' => 'string',
+				'type' => 'boolean',
 			),
 			'breakpoints' => array(
 				'type' => 'array',
@@ -86,8 +102,7 @@ add_action( 'init', 'dfw_block_init' );
  *
  * @param Array $args The widget/thing arguments
  */
-function dfw_block_render_callback( $instance ) {
-	error_log(var_export( $instance, true));
+function dfw_block_render_callback( $instance=array(), $content='', $tag='' ) {
 	/*
 	 * Widget needs two arguments: args, instance
 	 *
@@ -102,6 +117,17 @@ function dfw_block_render_callback( $instance ) {
 		'widget_name' => 'DoubleClick Ad',
 	);
 
+	/*
+	 * Type juggling
+	 */
+	if ( isset( $instance['lazyLoad'] ) && true === $instance['lazyLoad'] ) {
+		$instance['lazyLoad'] = '1';
+	}
+
+	// create the widget and capture its output.
+	ob_start();
 	$widget = new DoubleClick_Widget();
 	$widget->widget( $args, $instance );
+	$return = ob_get_clean();
+	return $return;
 }
