@@ -72,8 +72,62 @@
 		edit: function( props ) {
 			var breakpoint_forms = [];
 			for ( var key in dfw.breakpoints ) {
+				if ( typeof props.attributes.sizes === 'array' ) {
+					if ( props.attributes.sizes.length ) {
+						if ( typeof props.attributes.sizes.key === 'string' ) {
+							var value = props.attributes.sizes[key];
+						} else {
+							var value = '';
+						}
+					}
+				}
 				breakpoint_forms.push(
-					null
+					el(
+						TextControl,
+						{
+							key: key,
+							label: [
+								key,
+								el(
+									'i',
+									{},
+									' (',
+									dfw.breakpoints[key]['min_width'],
+									'+)'
+								),
+							],
+							value: value,
+							onChange: function( value ) {
+								new_sizes = props.attributes.sizes;
+								console.log( key );
+								if ( typeof new_sizes !== 'array' ) {
+									new_sizes = [];
+								}
+								new_sizes[key] = value;
+								props.setAttributes( { sizes: new_sizes } )
+							},
+						}
+					)
+				);
+			}
+
+			// add some instructional text, to match what we put in the widget.
+			if ( breakpoint_forms.length > 0 ) {
+				breakpoint_forms.unshift(
+					el(
+						'a',
+						{
+							href: 'https://github.com/INN/doubleclick-for-wp/blob/master/docs/readme.md#1-via-reusable-widget',
+							target: '_blank'
+						},
+						__( '(Help?)' )
+					)
+				);
+				breakpoint_forms.unshift(
+					' '
+				);
+				breakpoint_forms.unshift(
+					__( 'Configure ad unit sizes to be displayed for each breakpoint' )
 				);
 			}
 
@@ -104,6 +158,7 @@
 							value: props.attributes.identifier,
 							onChange: function ( value ) { props.setAttributes( { identifier: value } ) },
 							help: __( 'This is the Google Ad Manager ad unit identifier for the ad code that will be output by this block.' ),
+							className: 'dfw-component-margin',
 						}
 					),
 					el(
@@ -113,7 +168,15 @@
 							onChange: function ( value ) { props.setAttributes( { lazyLoad: value }  ) },
 							label: __( 'Lazy load?' ),
 							help: __( 'Only load ad once it comes into view on screen.' ),
+							className: 'dfw-component-margin',
 						}
+					),
+					el(
+						'div',
+						{
+							className: 'dfw-component-margin',
+						},
+						breakpoint_forms
 					)
 				)
 			]
@@ -130,7 +193,6 @@
 		 * @return {Element}       Element to render.
 		 */
 		save: function( attributes ) {
-			console.log( attributes );
 			return document.createComment( attributes );
 		}
 	} );
