@@ -35,9 +35,12 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// prepare size parameter.
 		if ( isset( $instance['sizes'] ) && ! empty( $instance['sizes'] ) ) {
-			foreach ( $instance['sizes'] as $breakpoint => $sizes ) {
-				if ( isset( $sizes[ $breakpoint ] ) && empty( $sizes[ $breakpoint ] ) ) {
-					unset( $sizes[ $breakpoint ] );
+			error_log(var_export( $instance, true));
+
+			// this does nothing
+			foreach ( $instance['sizes'] as $breakpoint => $size ) {
+				if ( isset( $instance['sizes'][ $breakpoint ] ) && empty( $instance['sizes'][ $breakpoint ] ) ) {
+					unset( $instance['sizes'][ $breakpoint ] );
 				}
 			}
 		} else {
@@ -65,7 +68,7 @@ class DoubleClick_Widget extends WP_Widget {
 		}
 
 		// and finally, place the ad.
-		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
+		$doubleclick->place_ad( $identifier, $instance['sizes'], $dfw_args );
 
 		echo wp_kses_post( $args['after_widget'] );
 	}
