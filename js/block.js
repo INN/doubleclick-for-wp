@@ -77,7 +77,7 @@
 
 			for ( var key in dfw.breakpoints ) {
 				var value = 'silly';
-				console.log( typeof props.attributes.sizes, props.attributes.sizes );
+				//console.log( typeof props.attributes.sizes, props.attributes.sizes );
 				if ( typeof props.attributes.sizes === 'object' ) {
 					if ( Object.keys(props.attributes.sizes).length > 0 ) {
 						if ( typeof props.attributes.sizes[key] === 'string' ) {
@@ -104,8 +104,6 @@
 								),
 							],
 							value: value,
-							// this does not work; while the "key" variable is now kept, the props aren't updated.
-							// I think this is because the local props in the generated callback is not the props outside the closure?
 							onChange: function( value ) {
 								new_sizes = props.attributes.sizes;
 
@@ -114,7 +112,6 @@
 									new_sizes = {};
 								}
 
-								console.log( value );
 								// add this given size to the size array
 								new_sizes[event.target.attributes['data-key'].value] = value;
 
@@ -125,7 +122,8 @@
 				);
 			}
 
-			// add some instructional text, to match what we put in the widget.
+			// Add some instructional text, to match what we put in the widget.
+			// Because this uses unshift to add enw items to the front of the array, we do it in reverse order to what's read.
 			if ( breakpoint_forms.length > 0 ) {
 				breakpoint_forms.unshift(
 					el(
@@ -144,7 +142,6 @@
 					__( 'Configure ad unit sizes to be displayed for each breakpoint' )
 				);
 			}
-
 
 			return [
 				el(
@@ -207,7 +204,6 @@
 		 * @return {Element}       Element to render.
 		 */
 		save: function( props ) {
-			//console.log( props.attributes );
 			return document.createComment( props );
 		}
 	} );
