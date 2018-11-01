@@ -28,7 +28,6 @@ class DoubleClick_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-
 		global $doubleclick;
 
 		// prepare identifier parameter.
@@ -42,9 +41,10 @@ class DoubleClick_Widget extends WP_Widget {
 				}
 			}
 		} else {
-			printf(
-				'<!-- %1$s -->',
-				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' )
+			echo sprintf(
+				'<!-- %1$s %2$s-->',
+				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' ),
+				var_export( $instance, true )
 			);
 			return;
 		}
