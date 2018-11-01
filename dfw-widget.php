@@ -98,7 +98,7 @@ class DoubleClick_Widget extends WP_Widget {
 
 				<p>
 					<strong>Configure ad unit sizes to be displayed for each breakpoint</strong>
-					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/index.md#1-via-reusable-widget">
+					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/readme.md#1-via-reusable-widget" target="_blank">
 						<?php echo wp_kses_post( __( '(Help?)', 'dfw' ) ); ?>
 					</a>
 				</p>
