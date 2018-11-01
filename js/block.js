@@ -66,43 +66,15 @@
 		 *
 		 * Makes use of the window.dfw variable, created in function dfw_block_init().
 		 *
+		 * This method is pretty complex because we need to create a form input for every breakpoint that is stored in the DB, and then store that as he block's attributes.
+		 *
 		 * @param {Object} [props] Properties passed from the editor.
 		 * @return {Element}       Element to render.
 		 */
 		edit: function( props ) {
 
-			/**
-			 * Closure generator for edit function's size TextControl onchange callback
-			 */
-			function onchangecallbackGenerator( key ) {
-				return function( value ) {
-					/*
-					console.log( {
-						value: value,
-						key: key,
-						props: props,
-						event: event
-					} );
-					*/
-
-					new_sizes = props.attributes.sizes;
-
-					// what if there aren't any sizes saved yet?
-					if ( typeof new_sizes !== 'object' ) {
-						new_sizes = {};
-					}
-
-					console.log( value );
-					// add this given size to the size array
-					new_sizes[event.target.attributes['data-key'].value] = value;
-					//console.log( new_sizes );
-
-					props.setAttributes( { sizes: new_sizes } );
-					//console.log( props.attributes );
-				};
-			}
-
 			var breakpoint_forms = [];
+
 			for ( var key in dfw.breakpoints ) {
 				var value = 'silly';
 				console.log( typeof props.attributes.sizes, props.attributes.sizes );
@@ -134,7 +106,20 @@
 							value: value,
 							// this does not work; while the "key" variable is now kept, the props aren't updated.
 							// I think this is because the local props in the generated callback is not the props outside the closure?
-							onChange: onchangecallbackGenerator( key )
+							onChange: function( value ) {
+								new_sizes = props.attributes.sizes;
+
+								// what if there aren't any sizes saved yet?
+								if ( typeof new_sizes !== 'object' ) {
+									new_sizes = {};
+								}
+
+								console.log( value );
+								// add this given size to the size array
+								new_sizes[event.target.attributes['data-key'].value] = value;
+
+								props.setAttributes( { sizes: new_sizes } );
+							}
 						}
 					)
 				);
