@@ -74,27 +74,40 @@
 			/**
 			 * Closure generator for edit function's size TextControl onchange callback
 			 */
-			function onchangecallbackGenerator( key, props ) {
+			function onchangecallbackGenerator( key ) {
 				return function( value ) {
-					console.log( value, key, props.attributes.sizes );
+					/*
+					console.log( {
+						value: value,
+						key: key,
+						props: props,
+						event: event
+					} );
+					*/
+
 					new_sizes = props.attributes.sizes;
+
+					// what if there aren't any sizes saved yet?
 					if ( typeof new_sizes !== 'object' ) {
 						new_sizes = {};
 					}
-					new_sizes[key] = value;
+
+					console.log( value );
+					// add this given size to the size array
+					new_sizes[event.target.attributes['data-key'].value] = value;
+					//console.log( new_sizes );
+
 					props.setAttributes( { sizes: new_sizes } );
-					console.log( new_sizes );
+					//console.log( props.attributes );
 				};
 			}
 
 			var breakpoint_forms = [];
-			console.log( props.attributes);
 			for ( var key in dfw.breakpoints ) {
 				var value = 'silly';
+				console.log( typeof props.attributes.sizes, props.attributes.sizes );
 				if ( typeof props.attributes.sizes === 'object' ) {
-					console.log( Object.keys(props.attributes.sizes).length );
 					if ( Object.keys(props.attributes.sizes).length > 0 ) {
-						console.log( typeof props.attributes.sizes[key] );
 						if ( typeof props.attributes.sizes[key] === 'string' ) {
 							value = props.attributes.sizes[key];
 						} else {
@@ -106,6 +119,7 @@
 					el(
 						TextControl,
 						{
+							'data-key': key,
 							key: key,
 							label: [
 								key,
@@ -120,7 +134,7 @@
 							value: value,
 							// this does not work; while the "key" variable is now kept, the props aren't updated.
 							// I think this is because the local props in the generated callback is not the props outside the closure?
-							onChange: onchangecallbackGenerator( key, props )
+							onChange: onchangecallbackGenerator( key )
 						}
 					)
 				);
@@ -208,7 +222,7 @@
 		 * @return {Element}       Element to render.
 		 */
 		save: function( props ) {
-			console.log( props.attributes );
+			//console.log( props.attributes );
 			return document.createComment( props );
 		}
 	} );
