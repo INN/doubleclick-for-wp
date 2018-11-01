@@ -64,7 +64,7 @@
 		 * This represents what the editor will render when the block is used.
 		 * @see https://wordpress.org/gutenberg/handbook/block-edit-save/#edit
 		 *
-		 * Makes use of the window.dfw variable, created in function dfw_block_init().
+		 * Makes use of the window.dfw variable, created in function dfw_block_init() in inc/block.php
 		 *
 		 * This method is pretty complex because we need to create a form input for every breakpoint that is stored in the DB, and then store that as he block's attributes.
 		 *
@@ -73,21 +73,42 @@
 		 */
 		edit: function( props ) {
 
-			var breakpoint_forms = [];
+			// Add some instructional text, to match what we put in the widget.
+			// Because this uses unshift to add enw items to the front of the array, we do it in reverse order to what's read.
+			var breakpoint_forms = [
+				__( 'Configure ad unit sizes to be displayed for each breakpoint' ),
+				' ',
+				el(
+					'a',
+					{
+						href: 'https://github.com/INN/doubleclick-for-wp/blob/master/docs/readme.md#1-via-reusable-widget',
+						target: '_blank'
+					},
+					__( '(Help?)' )
+				)
+			];
 
 			for ( var key in dfw.breakpoints ) {
 				var value = 'silly';
-				//console.log( typeof props.attributes.sizes, props.attributes.sizes );
-				if ( typeof props.attributes.sizes === 'object' ) {
-					if ( Object.keys(props.attributes.sizes).length > 0 ) {
-						if ( typeof props.attributes.sizes[key] === 'string' ) {
-							value = props.attributes.sizes[key];
-						} else {
-							value = '';
-						}
+
+				if ( typeof props.attributes.sizes === 'string' ) {
+					var sizes = JSON.parse( props.attributes.sizes );
+				} else if ( typeof props.attributes.sizes === 'object' ) {
+					var sizes = props.attributes.sizes;
+				} else {
+					var sizes = {};
+				}
+
+				if ( Object.keys( sizes ).length > 0 ) {
+					if ( typeof sizes[key] === 'string' ) {
+						value = sizes[key];
+					} else {
+						value = '';
 					}
 				}
-				breakpoint_forms.push(
+
+				// push here so that we modify the existing breakpoint_forms outside the for loop
+				breakpoint_forms.push( [
 					el(
 						TextControl,
 						{
@@ -105,6 +126,7 @@
 							],
 							value: value,
 							onChange: function( value ) {
+								// copy existing sizes
 								new_sizes = props.attributes.sizes;
 
 								// what if there aren't any sizes saved yet?
@@ -115,34 +137,14 @@
 								// add this given size to the size array
 								new_sizes[event.target.attributes['data-key'].value] = value;
 
-								props.setAttributes( { sizes: new_sizes } );
+								props.setAttributes( { sizes: JSON.stringify( new_sizes ) } );
 							}
 						}
 					)
-				);
+				] );
 			}
 
-			// Add some instructional text, to match what we put in the widget.
-			// Because this uses unshift to add enw items to the front of the array, we do it in reverse order to what's read.
-			if ( breakpoint_forms.length > 0 ) {
-				breakpoint_forms.unshift(
-					el(
-						'a',
-						{
-							href: 'https://github.com/INN/doubleclick-for-wp/blob/master/docs/readme.md#1-via-reusable-widget',
-							target: '_blank'
-						},
-						__( '(Help?)' )
-					)
-				);
-				breakpoint_forms.unshift(
-					' '
-				);
-				breakpoint_forms.unshift(
-					__( 'Configure ad unit sizes to be displayed for each breakpoint' )
-				);
-			}
-
+			// the prep work done, let's now return the actual forms for the page.
 			return [
 				el(
 					'div',

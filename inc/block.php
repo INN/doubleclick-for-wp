@@ -71,7 +71,7 @@ function dfw_block_init() {
 				'type' => 'array',
 			),
 			'sizes' => array(
-				'type' => 'object',
+				'type' => 'string',
 			),
 			'size' => array(
 				'type' => 'string',
