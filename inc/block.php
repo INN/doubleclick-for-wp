@@ -79,6 +79,9 @@ function dfw_block_init() {
 			'align' => array(
 				'type' => 'string',
 			),
+			'customClassName' => array(
+				'type' => 'string',
+			),
 		),
 		'editor_script' => 'dfw-block-editor',
 		'editor_style' => 'dfw-block-editor',
@@ -106,8 +109,6 @@ add_action( 'init', 'dfw_block_init' );
  * @param Array $args The widget/thing arguments
  */
 function dfw_block_render_callback( $instance=array(), $content='', $tag='' ) {
-	$align = ( isset( $instance['align'] ) ) ? 'align' . $instance['align'] : '';
-
 	/*
 	 * Widget needs two arguments: args, instance
 	 *
@@ -116,8 +117,9 @@ function dfw_block_render_callback( $instance=array(), $content='', $tag='' ) {
 	 */
 	$args = array(
 		'before_widget' => sprintf(
-			'<aside class="widget widget_doubleclick_widget%1$s">',
-			' ' . esc_attr( $align )
+			'<aside class="widget widget_doubleclick_widget %1$s %2$s wp-block-doubleclick-for-wp-dfw-ad-unit">',
+			( isset( $instance['align'] ) ) ? esc_attr( 'align' . $instance['align'] ) : '',
+			( isset( $instance['customClassName'] ) ) ? esc_attr( $instance['customClassName'] ) : ''
 		),
 		'after_widget' => '</aside>',
 		'name' => 'In Post',
