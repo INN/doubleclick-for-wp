@@ -127,9 +127,12 @@
 								// copy existing sizes
 								new_sizes = props.attributes.sizes;
 
-								// what if there aren't any sizes saved yet?
-								if ( typeof new_sizes !== 'object' ) {
+								// Gotta destringify it.
+								if ( typeof new_sizes === 'string' ) {
 									new_sizes = JSON.parse( new_sizes );
+								// what if there aren't any sizes saved yet?
+								} else if ( typeof new_sizes === 'undefined' ) {
+									new_sizes = {}
 								}
 
 								// add this given size to the size array
