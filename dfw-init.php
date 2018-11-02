@@ -216,6 +216,7 @@ class DoubleClick {
 	}
 
 	private function targeting() {
+		global $wp_query;
 		/** @see http://codex.wordpress.org/Conditional_Tags */
 
 		$targeting = array();
@@ -263,7 +264,12 @@ class DoubleClick {
 		}
 
 		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
-			$cats = get_the_category();
+			// https://wordpress.org/support/topic/categories-tags-bug-and-solution/
+			$cat_post_id = $wp_query->get_queried_object_id();
+			if ( 0 === $cat_post_id ) {
+				$cat_post_id = null; // get_queried_object_id returns 0 for no post found; get_the_category expects null;
+			}
+			$cats = get_the_category( $cat_post_id );
 			$targeting['Category'] = array();
 
 			if ( ! empty( $cats ) ) {
@@ -281,8 +287,13 @@ class DoubleClick {
 			$targeting['Category'][] = $queried_object->slug;
 		}
 
-		if ( is_single() ) {
-			$tags = get_the_tags();
+		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
+			// https://wordpress.org/support/topic/categories-tags-bug-and-solution/
+			$tag_post_id = $wp_query->get_queried_object_id();
+			if ( 0 === $tag_post_id ) {
+				$tag_post_id = null; // get_queried_object_id returns 0 for no post found; get_the_tags expects null;
+			}
+			$tags = get_the_tags( $tag_post_id );
 			if ( $tags ) {
 				$targeting['Tag'] = array();
 				foreach ( $tags as $t ) {
