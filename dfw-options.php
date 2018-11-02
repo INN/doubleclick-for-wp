@@ -1,4 +1,7 @@
 <?php
+/**
+ * Functions related to the options page
+ */
 
 /**
  * Register option page.
