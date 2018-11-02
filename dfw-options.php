@@ -31,7 +31,7 @@ function dfw_option_page_html() {
 	}
 
 	echo '<div class="wrap">';
-	echo '<h2>Super Cool Ad ManagerOptions</h2>';
+	echo '<h2>Super Cool Ad Manager Options</h2>';
 	echo '<form method="post" action="options.php">';
 
 	settings_fields( 'doubleclick-for-wordpress' );
