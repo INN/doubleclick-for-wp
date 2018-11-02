@@ -1,13 +1,13 @@
 <?php
 /**
- * An object-oriented apprach to managing ad slots
+ * An object-oriented approach to managing ad slots
  *
  * @since 0.1
  */
 class DoubleClickAdSlot {
 
 	/**
-	 * DFP ad code.
+	 * Google Ad Manager ad code/identifier.
 	 *
 	 * @var String.
 	 */

@@ -1,6 +1,6 @@
 # Targeting
 
-This plugin implements advanced DFP targeting criteria to allow trafficers to specify pages or groups of pages where line items should serve.
+This plugin implements advanced Google Ad Manager targeting criteria to allow trafficers to specify pages or groups of pages where line items should serve.
 
 * * *
 
@@ -52,15 +52,15 @@ Additional targeting criteria set by the URL of the page.
 
 	> eg. target the url [example.com/?**movie=12**](http://example.com/news/) with the targeting string 'p:12'
 
-__Warning__: Targeting strings are limited to 40 characters long by DFP. Targeting URLIs or domains longer than that will result in error.
+__Warning__: Targeting strings are limited to 40 characters long by Google Ad Manager. Targeting URLIs or domains longer than that will result in error.
 
 This plugin uses `jQuery.dfp.js`, which provides [a number of other targeting parameters](https://github.com/coop182/jquery.dfp.js#default-url-targeting).
 
 * * *
 
-## 3. Defining targeting criteria in DFP
+## 3. Defining targeting criteria in Google Ad Manager
 
-DFP needs to be told what filter keys exist before they can be used.
+Google Ad Manager needs to be told what filter keys exist before they can be used.
 
 #### Example
 

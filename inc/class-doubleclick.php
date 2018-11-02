@@ -8,7 +8,7 @@
 class DoubleClick {
 
 	/**
-	 * Network code from DFP.
+	 * Network code from GAM.
 	 *
 	 * @var int
 	 */
@@ -16,7 +16,7 @@ class DoubleClick {
 
 	/**
 	 * If true, plugin prints debug units instead of
-	 * making a call to dfp.
+	 * making a call to GAM.
 	 *
 	 * @var boolean
 	 */
@@ -213,6 +213,7 @@ class DoubleClick {
 	}
 
 	private function targeting() {
+		global $wp_query;
 		/** @see http://codex.wordpress.org/Conditional_Tags */
 
 		$targeting = array();
@@ -260,7 +261,12 @@ class DoubleClick {
 		}
 
 		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
-			$cats = get_the_category();
+			// https://wordpress.org/support/topic/categories-tags-bug-and-solution/
+			$cat_post_id = $wp_query->get_queried_object_id();
+			if ( 0 === $cat_post_id ) {
+				$cat_post_id = null; // get_queried_object_id returns 0 for no post found; get_the_category expects null;
+			}
+			$cats = get_the_category( $cat_post_id );
 			$targeting['Category'] = array();
 
 			if ( ! empty( $cats ) ) {
@@ -279,7 +285,13 @@ class DoubleClick {
 		}
 
 		if ( is_single() ) {
-			$tags = get_the_tags();
+			// https://wordpress.org/support/topic/categories-tags-bug-and-solution/
+			$tag_post_id = $wp_query->get_queried_object_id();
+			if ( 0 === $tag_post_id ) {
+				$tag_post_id = null; // get_queried_object_id returns 0 for no post found; get_the_tags expects null;
+			}
+			$tags = get_the_tags( $tag_post_id );
+
 			if ( $tags ) {
 				$targeting['Tag'] = array();
 				foreach ( $tags as $t ) {
@@ -302,9 +314,9 @@ class DoubleClick {
 	}
 
 	/**
-	 * Place a DFP ad.
+	 * Place a Google Ad Manager ad.
 	 *
-	 * @param string       $identifier A DFP identifier.
+	 * @param string       $identifier A Google Ad Manager ad unit identifier.
 	 * @param string|array $sizes the dimensions the ad could be.
 	 * @param string|array $args additional args.
 	 */
@@ -325,7 +337,7 @@ class DoubleClick {
 	/**
 	 * Build the ad code.
 	 *
-	 * @param string       $identifier A DFP identifier.
+	 * @param string       $identifier A Google Ad Manager ad unit identifier.
 	 * @param string|array $sizes the dimensions the ad could be.
 	 * @param string|array $args additional args.
 	 */

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Initialize Super Cool Ad Manager Plugin
+ */
 
 /**
  * Global instances for DoubleClick object.

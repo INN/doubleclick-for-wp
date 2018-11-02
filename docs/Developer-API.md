@@ -81,7 +81,7 @@ $DoubleClick->place_ad('my-identifier',$sizes,$args);
 
 __$identifier__
 
-`String` The DFP identifier for an ad unit (DFP does not require you to create an identifier. If this does not match a value defined in DFP, a network-wide ad will still be requested).
+`String` The Google Ad Manager identifier for an ad unit (GAM does not require you to create an identifier. If this does not match a value defined in GAM, a network-wide ad will still be requested).
 
 __$sizes__
 
