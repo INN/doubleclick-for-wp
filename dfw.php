@@ -13,3 +13,4 @@ Text Domain: dfw
 define( 'DFP_VERSION', '0.2.0' );
 
 include( 'dfw-init.php' );
+include( 'inc/block.php' );

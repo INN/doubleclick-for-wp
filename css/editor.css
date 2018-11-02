@@ -1,0 +1,15 @@
+/**
+ * The following styles are only applied inside the editor.
+ */
+.wp-block-doubleclick-for-wp-dfw-ad-unit {
+  padding: 14px;
+  border: 1px solid #e2e4e7;
+}
+.wp-block-doubleclick-for-wp-dfw-ad-unit .components-base-control__help {
+  font-style: normal;
+  font-size: inherit;
+}
+.dfw-component-margin{
+  margin-top: 16px;
+  margin-bottom: 16px;
+}

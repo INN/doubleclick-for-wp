@@ -28,7 +28,6 @@ class DoubleClick_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-
 		global $doubleclick;
 
 		// prepare identifier parameter.
@@ -36,15 +35,24 @@ class DoubleClick_Widget extends WP_Widget {
 
 		// prepare size parameter.
 		if ( isset( $instance['sizes'] ) && ! empty( $instance['sizes'] ) ) {
-			foreach ( $instance['sizes'] as $breakpoint => $sizes ) {
-				if ( isset( $sizes[ $breakpoint ] ) && empty( $sizes[ $breakpoint ] ) ) {
-					unset( $sizes[ $breakpoint ] );
+			// check to see if it's JSON, which is saved by the Gutenberg Block
+			if ( is_string( $instance['sizes'] ) ) {
+				$temporary = json_decode( $instance['sizes'] );
+				if ( json_last_error() === JSON_ERROR_NONE ) {
+					$instance['sizes'] = (array) $temporary;
+				}
+			}
+
+			foreach ( $instance['sizes'] as $breakpoint => $size ) {
+				if ( isset( $instance['sizes'][ $breakpoint ] ) && empty( $instance['sizes'][ $breakpoint ] ) ) {
+					unset( $instance['sizes'][ $breakpoint ] );
 				}
 			}
 		} else {
-			printf(
-				'<!-- %1$s -->',
-				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' )
+			echo sprintf(
+				'<!-- %1$s %2$s-->',
+				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' ),
+				var_export( $instance, true )
 			);
 			return;
 		}
@@ -65,7 +73,7 @@ class DoubleClick_Widget extends WP_Widget {
 		}
 
 		// and finally, place the ad.
-		$doubleclick->place_ad( $identifier, $sizes, $dfw_args );
+		$doubleclick->place_ad( $identifier, $instance['sizes'], $dfw_args );
 
 		echo wp_kses_post( $args['after_widget'] );
 	}
@@ -95,7 +103,7 @@ class DoubleClick_Widget extends WP_Widget {
 
 				<p>
 					<strong>Configure ad unit sizes to be displayed for each breakpoint</strong>
-					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/index.md#1-via-reusable-widget">
+					<a href="https://github.com/INN/doubleclick-for-wp/blob/master/docs/readme.md#1-via-reusable-widget" target="_blank">
 						<?php echo wp_kses_post( __( '(Help?)', 'dfw' ) ); ?>
 					</a>
 				</p>
