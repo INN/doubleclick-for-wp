@@ -89,8 +89,6 @@
 			];
 
 			for ( var key in dfw.breakpoints ) {
-				var value = 'silly';
-
 				if ( typeof props.attributes.sizes === 'string' ) {
 					var sizes = JSON.parse( props.attributes.sizes );
 				} else if ( typeof props.attributes.sizes === 'object' ) {
@@ -101,9 +99,9 @@
 
 				if ( Object.keys( sizes ).length > 0 ) {
 					if ( typeof sizes[key] === 'string' ) {
-						value = sizes[key];
+						var value = sizes[key];
 					} else {
-						value = '';
+						var value = '';
 					}
 				}
 
@@ -131,7 +129,7 @@
 
 								// what if there aren't any sizes saved yet?
 								if ( typeof new_sizes !== 'object' ) {
-									new_sizes = {};
+									new_sizes = JSON.parse( new_sizes );
 								}
 
 								// add this given size to the size array
