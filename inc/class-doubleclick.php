@@ -60,6 +60,15 @@ class DoubleClick {
 	public static $count = 0;
 
 	/**
+	 * The plugin file for this plugin
+	 *
+	 * For feeding to https://codex.wordpress.org/Function_Reference/plugins_url
+	 *
+	 * @var string
+	 */
+	private $plugin_file = '';
+
+	/**
 	 * Create a new DoubleClick object
 	 *
 	 * @param string $network_code The code for your dfp instance.
@@ -88,6 +97,8 @@ class DoubleClick {
 				$this->register_breakpoint( $breakpoint['identifier'], $args );
 			}
 		endif;
+
+		$this->plugin_file = dirname( __DIR__ ) . '/dfw.php';
 
 	}
 
@@ -123,14 +134,14 @@ class DoubleClick {
 
 		wp_register_script(
 			'jquery.dfp.js',
-			plugins_url( 'js/vendor/jquery.dfp.js/jquery.dfp' . $suffix . '.js', __FILE__ ),
+			plugins_url( 'js/vendor/jquery.dfp.js/jquery.dfp' . $suffix . '.js', $this->plugin_file  ),
 			array( 'jquery' ),
 			DFP_VERSION,
 			true
 		);
 		wp_register_script(
 			'jquery.dfw.js',
-			plugins_url( 'js/jquery.dfw.js', __FILE__ ),
+			plugins_url( 'js/jquery.dfw.js', $this->plugin_file ),
 			array( 'jquery.dfp.js' ),
 			DFP_VERSION,
 			true
@@ -152,7 +163,6 @@ class DoubleClick {
 		);
 
 		add_filter( 'dfw_js_data', function( $data ) {
-			error_log(var_export( $data, true));
 			$data['test'] = 'testing';
 			return $data;
 		} );
@@ -176,7 +186,7 @@ class DoubleClick {
 
 		wp_enqueue_style(
 			'dfp',
-			plugins_url( 'css/dfp.css', __FILE__ ),
+			plugins_url( 'css/dfp.css', $this->plugin_file ),
 			array(),
 			DFP_VERSION,
 			'all'

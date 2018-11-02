@@ -16,13 +16,15 @@ function dfw_block_init() {
 		return false;
 	}
 
+	$plugin_file = dirname( __DIR__ ) . '/dfw.php';
+
 	// double dirname to get the plugin dir because this file is in `/inc/`.
 	$dir = dirname( dirname( __FILE__ ) );
 
 	$block_js = 'js/block.js';
 	wp_register_script(
 		'dfw-block-editor',
-		plugins_url( $block_js, dirname( __FILE__ ) ),
+		plugins_url( $block_js, $plugin_file ),
 		array(
 			'wp-blocks',
 			'wp-i18n',
@@ -53,7 +55,7 @@ function dfw_block_init() {
 	$editor_css = 'css/editor.css';
 	wp_register_style(
 		'dfw-block-editor',
-		plugins_url( $editor_css, dirname( __FILE__ ) ),
+		plugins_url( $editor_css, $plugin_file ),
 		array(
 		),
 		filemtime( "$dir/$block_js" )
