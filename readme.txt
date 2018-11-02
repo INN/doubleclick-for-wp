@@ -33,12 +33,15 @@ For more advanced documentation for developers and advanced users see [the offic
 
 = 0.3 =
 
+Thanks to WordPress.org user [onlineforbusiness](https://wordpress.org/support/users/onlineforbusiness/) and GitHub user [dbeniaminov](https://github.com/dbeniaminov) for their contributions to this release.
+
 - Rebrands from "DoubleClick for WordPress" to "Super Cool Ad Manager Plugin", because [Google merged DoubleClick for Publishers into Google Ad Manager](https://www.blog.google/products/admanager/introducing-google-ad-manager/).
 - Updates to `jquery.dfp.js` version 2.4.2, adding `setCentering` support. [PR #67](https://github.com/INN/doubleclick-for-wp/pull/67) for [issue #66](https://github.com/INN/doubleclick-for-wp/issues/66)
 - Removes 'single' page targeting from post-type archives and from static front pages. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61), thanks to GitHub user [dbeniaminov](https://github.com/dbeniaminov).
 - Adds "Category" targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61).
 - Adds "Tag" targeting on tag archive. [PR #74](https://github.com/INN/doubleclick-for-wp/pull/74) for [issue #29](https://github.com/INN/doubleclick-for-wp/issues/29).
 - Fixes a number of PHP warnings and errors, including [issue #8](https://github.com/INN/doubleclick-for-wp/issues/8) and [issue #37](https://github.com/INN/doubleclick-for-wp/issues/37) in [PR #76](https://github.com/INN/doubleclick-for-wp/pull/76) and [issue #31](https://github.com/INN/doubleclick-for-wp/issues/31) in [PR #80](https://github.com/INN/doubleclick-for-wp/pull/80/).
+- Fixes a targeting problem that occurred when wp_footer ran outside The Loop. ([PR #87](https://github.com/INN/doubleclick-for-wp/pull/87) for [this support topic](https://wordpress.org/support/topic/categories-tags-bug-and-solution/).)
 - Adds "Ad unit" label to widget settings for the "Identifier" setting, to match Google's language. [PR #73](https://github.com/INN/doubleclick-for-wp/pull/73) for [issue #26](https://github.com/INN/doubleclick-for-wp/issues/26).
 - Adds GitHub Pull Request template and Contributing guidelines files.
 - Adds a plugin text domain: `dfw`. ([PR #76](https://github.com/INN/doubleclick-for-wp/pull/76))
