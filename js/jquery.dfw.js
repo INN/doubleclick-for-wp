@@ -1,6 +1,8 @@
 /**
- * A few lines of javascript to help the DoubleClick for WordPress plugin.
- * Extends jquery.dfw.min.js with some event listeners specific to us.
+ * A few lines of javascript to help the Google Ad Manager for WordPress plugin
+ * Extends jquery.dfw.min.js with some event listeners specific to us:
+ *
+ * - lazyload
  */
 (function() {
 	var $ = jQuery;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions related to the DFW plugin's blocks.
+ * Functions related to the SCAMP plugin's blocks.
  *
  * @link https://github.com/INN/doubleclick-for-wp/issues/70
  */

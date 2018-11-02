@@ -31,7 +31,7 @@ add_action( 'wp_loaded', 'dfw_add_action' );
 class DoubleClick {
 
 	/**
-	 * Network code from DFP.
+	 * Network code from GAM.
 	 *
 	 * @var int
 	 */
@@ -305,9 +305,9 @@ class DoubleClick {
 	}
 
 	/**
-	 * Place a DFP ad.
+	 * Place a Google Ad Manager ad.
 	 *
-	 * @param string       $identifier A DFP identifier.
+	 * @param string       $identifier A Google Ad Manager ad unit identifier.
 	 * @param string|array $sizes the dimensions the ad could be.
 	 * @param string|array $args additional args.
 	 */
@@ -328,7 +328,7 @@ class DoubleClick {
 	/**
 	 * Build the ad code.
 	 *
-	 * @param string       $identifier A DFP identifier.
+	 * @param string       $identifier A Google Ad Manager ad identifier.
 	 * @param string|array $sizes the dimensions the ad could be.
 	 * @param string|array $args additional args.
 	 */
@@ -374,10 +374,13 @@ class DoubleClick {
 }
 
 
+/**
+ * Store information for a given ad on a page
+ */
 class DoubleClickAdSlot {
 
 	/**
-	 * DFP ad code.
+	 * Google Ad Manager ad code/identifier.
 	 *
 	 * @var String.
 	 */
