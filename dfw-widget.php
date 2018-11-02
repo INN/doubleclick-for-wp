@@ -1,6 +1,6 @@
 <?php
 /**
- * The DoubleClick Ad widget, and related functions
+ * The Google Ad Manager Ad widget, and related functions
  */
 
 /**
@@ -14,8 +14,8 @@ class DoubleClick_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'doubleclick_widget', // Base ID
-			__( 'DoubleClick Ad', 'dfw' ), // Name
-			array( 'description' => __( 'Serve ads from DFP.', 'dfw' ) ) // Args.
+			__( 'Google Ad Manager Ad', 'dfw' ), // Name
+			array( 'description' => __( 'Serve ads from Google Ad Manager.', 'dfw' ) ) // Args.
 		);
 	}
 
@@ -51,7 +51,7 @@ class DoubleClick_Widget extends WP_Widget {
 		} else {
 			echo sprintf(
 				'<!-- %1$s %2$s-->',
-				esc_html__( 'This DoubleClick for WordPress widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' ),
+				esc_html__( 'This Google Ad Manager Ad widget is not appearing because the widget has no sizes set for its breakpoints.', 'dfw' ),
 				var_export( $instance, true )
 			);
 			return;

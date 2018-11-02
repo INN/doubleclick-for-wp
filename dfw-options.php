@@ -7,8 +7,8 @@
  */
 function dfw_plugin_menu() {
 	add_options_page(
-		'DoubleClick for WordPress', // $page_title title of the page.
-		'DoubleClick', 	             // $menu_title the text to be used for the menu.
+		'Super Cool Ad Manager Plugin', // $page_title title of the page.
+		'DoubleClick/Ad Manager',       // $menu_title the text to be used for the menu.
 		'manage_options',            // $capability required capability for display.
 		'doubleclick-for-wordpress', // $menu_slug unique slug for menu.
 		'dfw_option_page_html'       // $function callback.
@@ -28,7 +28,7 @@ function dfw_option_page_html() {
 	}
 
 	echo '<div class="wrap">';
-	echo '<h2>DoubleClick for WordPress Options</h2>';
+	echo '<h2>Super Cool Ad ManagerOptions</h2>';
 	echo '<form method="post" action="options.php">';
 
 	settings_fields( 'doubleclick-for-wordpress' );
@@ -72,7 +72,7 @@ function dfw_register_options() {
 	// Network Code
 	add_settings_field(
 		'dfw_network_code',
-		'DoubleClick Network Code',
+		'Google Ad Manager Network Code',
 		'dfw_network_code_input',
 		'doubleclick-for-wordpress',
 		'dfw_network_options'
@@ -94,7 +94,7 @@ function dfw_register_options() {
 add_action( 'admin_init', 'dfw_register_options' );
 
 function dfw_settings_section_intro() {
-	echo "Enter a DoubleClick for Publisher's Network Code ( <a href='https://developers.google.com/doubleclick-publishers/docs/start#signup' target='_blank'>?</a> )";
+	echo "Enter a Google Ad Manager Network Code ( <a href='https://developers.google.com/doubleclick-publishers/docs/start#signup' target='_blank'>?</a> )";
 }
 
 function dfw_breakpoints_section_intro() {
