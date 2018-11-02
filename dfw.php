@@ -17,7 +17,7 @@ $includes = array(
 	'/inc/class-doubleclickadslot.php',
 	'/inc/class-doubleclickbreakpoint.php',
 	'/dfw-init.php',
-	'/block.php',
+	'/inc/block.php',
 	'/inc/class-doubleclick-widget.php',
 	'/dfw-options.php',
 );
