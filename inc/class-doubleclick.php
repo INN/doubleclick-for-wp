@@ -158,14 +158,10 @@ class DoubleClick {
 
 		$data = array(
 			'network_code' => $this->network_code,
+			'networkCode' => $this->network_code,
 			'mappings' => $mappings,
 			'targeting' => $this->targeting(),
 		);
-
-		add_filter( 'dfw_js_data', function( $data ) {
-			$data['test'] = 'testing';
-			return $data;
-		} );
 
 		/**
 		 * Allow sites to filter the DFP settings passed to jquery.dfp.js
@@ -200,7 +196,7 @@ class DoubleClick {
 	 * @return String network code.
 	 */
 	private function network_code() {
-		return isset( $this->network_code ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
+		return ( isset( $this->network_code ) && ! empty( $this->network_code ) ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
 	}
 
 	public function footer_script() {
@@ -212,12 +208,7 @@ class DoubleClick {
 				}
 			} ?>
 			<script type="text/javascript">
-				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: '<?php echo esc_js( $this->network_code() ); ?>',
-					collapseEmptyDivs: false,
-					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
-					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
-				});
+				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp( window.dfw );
 			</script>
 		<?php }
 	}

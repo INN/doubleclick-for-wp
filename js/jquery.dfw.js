@@ -32,12 +32,13 @@
 
 		// if we have some ads, then load 'em!
 		if (toLoad.length > 0) {
-			dfp_options = {
+			dfp_options = Object.assign( dfw, {
 				"dfpID": dfw.networkCode,
 				"collapseEmptyDivs": false,
 				"sizeMapping": dfw.mappings,
 				"setTargeting": dfw.targeting
-			};
+			});
+			window.dfp_options = dfp_options;
 			$( toLoad ).dfp( dfp_options ).addClass( 'dfw-loaded' );
 		}
 	};
