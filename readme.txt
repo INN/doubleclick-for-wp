@@ -47,6 +47,7 @@ New features:
 Changes and fixes:
 
 - Rebrands from "DoubleClick for WordPress" to "Super Cool Ad Manager Plugin", because [Google merged DoubleClick for Publishers into Google Ad Manager](https://www.blog.google/products/admanager/introducing-google-ad-manager/).
+- **Potentially-breaking changes**: Renames a number of varibles from `camelCase` to `snake_case` in [pull request #46](https://github.com/INN/doubleclick-for-wp/pull/46) for Wordpress.com VIP compatibility. This includes renaming the global variable `$DoubleClick` to `$doubleclick`, and many of its properties from `$DoubleClick->camelCase` to `$doubleclick->snake_case`. If you modify this plugin's features via filters or actions, or if you call this plugin's functions and methods directly from your code, 
 - Updates to `jquery.dfp.js` version 2.4.2, adding `setCentering` support. [PR #67](https://github.com/INN/doubleclick-for-wp/pull/67) for [issue #66](https://github.com/INN/doubleclick-for-wp/issues/66)
 - Adds "Category" targeting on category archive. [PR #72](https://github.com/INN/doubleclick-for-wp/pull/72) for [issue #61](https://github.com/INN/doubleclick-for-wp/issues/61).
 - Adds "Tag" targeting on tag archive. [PR #74](https://github.com/INN/doubleclick-for-wp/pull/74) for [issue #29](https://github.com/INN/doubleclick-for-wp/issues/29).
@@ -84,3 +85,5 @@ Documentation updates:
 = 0.3 =
 
 This update adds support for direct insertion of ads in posts via Gutenberg, filter-based modificaiton of ad options, and resolves a number of bugs.
+
+This update renames the global variable `$DoubleClick` to `$doubleclick`, along with many of that class's properties. If you modify this plugin's functionality via filters or custom functionality, check your code before deploying to production.
