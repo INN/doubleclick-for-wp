@@ -4,7 +4,7 @@ Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
 Requires PHP: 5.3
-Tested up to: 5.0-beta2
+Tested up to: 5.0-beta3
 Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
