@@ -9,6 +9,7 @@ Plugin settings:
 - [ ] Does the settings page work?
 
 Frontend tests:
+
 - [ ] `window.dfw` contains`dfpID` and `network_code`, which are the same value, which is that of `get_option('dfw_network_code')`
 - [ ] a filter modifying `dfw_js_data` has its modifications output in the frontend `window.dfw` object
 
@@ -26,3 +27,8 @@ Gutenberg tests
 - [ ] on a site with Gutenberg not installed, the plugin functions
 - [ ] on a 4.9 site with Gutenberg installed, the plugin functions
 - [ ] on a 5.0 site, the plugin functions
+
+Plugin metadata:
+
+- [ ] Does the minimum PHP required version need to be updated in `readme.txt`?
+- [ ] Does the WordPress "Tested up to" version need to be updated? Check with [the phpcs PHPCompatibility rules](https://github.com/PHPCompatibility/PHPCompatibility).

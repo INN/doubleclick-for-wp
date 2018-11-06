@@ -3,6 +3,7 @@ Contributors: innlabs, willhaynes24
 Donate link: https://inn.org/donate
 Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
+Requires PHP: 5.3
 Tested up to: 5.0-beta2
 Stable tag: 0.2.1
 License: GPLv2 or later
