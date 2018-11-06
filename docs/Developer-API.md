@@ -1,18 +1,18 @@
 # Developer API
 
-A `global $DoubleClick` variable is defined on plugin init, making it possible to define breakpoints
+A `global $doubleclick` variable is defined on plugin init, making it possible to define breakpoints
 and place ads directly within your theme.
 
 __Quick Function Links:__
 
- * [$DoubleClick->register_breakpoint($identifier,$args)](#doubleclick-register_breakpointidentifierargs)
- * [$DoubleClick->place_ad($identifier,$size,$breakpoints)](#doubleclick-place_adidentifiersizebreakpoints)
+ * [$doubleclick->register_breakpoint($identifier,$args)](#doubleclick-register_breakpointidentifierargs)
+ * [$doubleclick->place_ad($identifier,$size,$breakpoints)](#doubleclick-place_adidentifiersizebreakpoints)
 
 * * *
 
 ## 1. Define Breakpoints
 
-##### $DoubleClick->register_breakpoint($identifier,$args)
+##### $doubleclick->register_breakpoint($identifier,$args)
 
 You can make it easier for users to target breakpoints by defining them in `functions.php`
 
@@ -21,16 +21,16 @@ You can make it easier for users to target breakpoints by defining them in `func
 ```php
 function ad_setup() {
 
-	global $DoubleClick;
+	global $doubleclick;
 
 	// Optionally define the network code directly in functions.php.
-	// $DoubleClick->networkCode = "xxxxxxx";
+	// $doubleclick->network_code = "xxxxxxx";
 
 	/* Define Breakpoints */
-	$DoubleClick->register_breakpoint('phone', array('minWidth'=> 0,'maxWidth'=>720));
-	$DoubleClick->register_breakpoint('tablet', array('minWidth'=>760,'maxWidth'=>1040));
-	$DoubleClick->register_breakpoint('desktop', array('minWidth'=>1040,'maxWidth'=>1220));
-	$DoubleClick->register_breakpoint('xl', array('minWidth'=>1220,'maxWidth'=>9999));
+	$doubleclick->register_breakpoint('phone', array('min_width'=> 0,'max_width'=>720));
+	$doubleclick->register_breakpoint('tablet', array('min_width'=>760,'max_width'=>1040));
+	$doubleclick->register_breakpoint('desktop', array('min_width'=>1040,'max_width'=>1220));
+	$doubleclick->register_breakpoint('xl', array('min_width'=>1220,'max_width'=>9999));
 
 }
 add_action('dfw_setup','ad_setup');
@@ -50,7 +50,7 @@ __$args__
 
 ## 2. Place Ads
 
-### $DoubleClick->place_ad($identifier,$sizes,$args)
+### $doubleclick->place_ad($identifier,$sizes,$args)
 
 Prints DOM to display an ad at the given breakpoint.
 
@@ -58,10 +58,10 @@ Prints DOM to display an ad at the given breakpoint.
 
 ```php
 
-global $DoubleClick;
+global $doubleclick;
 
 // simple call:
-$DoubleClick->place_ad('my-identifier','300x250');
+$doubleclick->place_ad('my-identifier','300x250');
 
 // more options:
 $sizes = array(
@@ -73,7 +73,7 @@ $args = array(
 		'lazyLoad' => false 	// if set to true, the ad will load only once its within view on screen.
 	);
 
-$DoubleClick->place_ad('my-identifier',$sizes,$args);
+$doubleclick->place_ad('my-identifier',$sizes,$args);
 ```
 
 
