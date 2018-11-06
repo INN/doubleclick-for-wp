@@ -33,7 +33,6 @@
 		// if we have some ads, then load 'em!
 		if (toLoad.length > 0) {
 			dfp_options = Object.assign( dfw, {
-				"dfpID": dfw.networkCode,
 				"collapseEmptyDivs": false,
 				"sizeMapping": dfw.mappings,
 				"setTargeting": dfw.targeting
