@@ -54,7 +54,7 @@
 			alignwide: true,
 			anchor: false,
 			customClassName: true,
-			className: false,
+			className: true,
 			inserter: true,
 			multuple: true,
 		},
