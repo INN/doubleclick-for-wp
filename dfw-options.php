@@ -143,7 +143,25 @@ function dfw_breakpoints_input() {
 	while ( $i < 5 ) {
 		$identifier = ( isset( $breakpoints[ $i ]['identifier'] ) )? $breakpoints[ $i ]['identifier'] : '';
 		$min_width = ( isset( $breakpoints[ $i ]['min-width'] ) )? $breakpoints[ $i ]['min-width'] : '';
-		$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : ''; ?>
+		$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : '';
+
+		// fallbacks for post-https://github.com/INN/doubleclick-for-wp/pull/46 compatibility.
+		if ( empty( $min_width ) && isset( $breakpoints[ $i ][ 'minWidth' ] ) ) {
+			$min_width = ( isset( $breakpoints[ $i ]['minWidth'] ) )? $breakpoints[ $i ]['minWidth'] : '';
+		}
+		if ( empty( $max_width ) && isset( $breakpoints[ $i ][ 'maxWidth' ] ) ) {
+			$max_width = ( isset( $breakpoints[ $i ]['maxWidth'] ) )? $breakpoints[ $i ]['maxWidth'] : '';
+		}
+
+		// fallbacks, continued.
+		if ( empty( $min_width ) && isset( $breakpoints[ $i ][ 'min-width' ] ) ) {
+			$min_width = ( isset( $breakpoints[ $i ]['min-width'] ) )? $breakpoints[ $i ]['min-width'] : '';
+		}
+		if ( empty( $max_width ) && isset( $breakpoints[ $i ][ 'max-width' ] ) ) {
+			$max_width = ( isset( $breakpoints[ $i ]['max-width'] ) )? $breakpoints[ $i ]['max-width'] : '';
+		}
+
+		?>
 		<input value="<?php echo esc_attr( $identifier ); ?>"
 				placeholder="Name"
 				name="dfw_breakpoints[]"

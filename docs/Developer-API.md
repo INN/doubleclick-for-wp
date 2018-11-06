@@ -44,7 +44,7 @@ __$identifier__
 
 __$args__
 
-`Array` An array of properties about the breakpoint. Currently the only keys supported are minWidth and maxWidth.
+`Array` An array of properties about the breakpoint. Currently the only keys supported are min_width and max_width.
 
 * * *
 
