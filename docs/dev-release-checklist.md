@@ -2,6 +2,8 @@
 
 See also https://github.com/INN/docs/blob/master/projects/wordpress-plugins/release.sh.md
 
+- [ ] Are we on the latest version of `jquery.dfp.js`? See [related docs for updating that dependency](./dev-update-dependencies.md)
+
 ## Testing before release:
 
 Plugin settings:
