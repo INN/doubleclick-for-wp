@@ -7,6 +7,7 @@ See also https://github.com/INN/docs/blob/master/projects/wordpress-plugins/rele
 Plugin settings:
 
 - [ ] Does the settings page work?
+- [ ] Do settings saved in a previous version of this plugin work?
 
 Frontend tests:
 
@@ -19,6 +20,7 @@ Widget tests
 - [ ] A widget outputs its HTML, and the widget's settings are added to `window.dfw`
 - [ ] An `[ad number=1]` or `[ad number=2]` shortcode should display the relevant sidebar.
 - [ ] An `[ad number=2 align=left]` shortcode should have the class `alignleft`.
+- [ ] Do settings saved in a previous version of this plugin work?
 
 Gutenberg tests
 
@@ -27,6 +29,7 @@ Gutenberg tests
 - [ ] on a site with Gutenberg not installed, the plugin functions
 - [ ] on a 4.9 site with Gutenberg installed, the plugin functions
 - [ ] on a 5.0 site, the plugin functions
+- [ ] Do settings saved in a previous version of this plugin work?
 
 Plugin metadata:
 
