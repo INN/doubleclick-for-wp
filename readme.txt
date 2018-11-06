@@ -18,6 +18,8 @@ Implementing is simple. Configure your network code and input your identifiers. 
 
 For more advanced documentation for developers and advanced users see [the official plugin docs](https://github.com/INN/DoubleClick-for-WordPress/blob/master/docs/readme.md).
 
+To contribute to this plugin, please [visit it on GitHub](https://github.com/INN/doubleclick-for-wp/issues), or send us an email at [support@inn.org](mailto:support@inn.org).
+
 
 == Installation ==
 
