@@ -20,8 +20,6 @@ Widget tests
 
 - [ ] A widget's breakpoints are reflected in the widget's corresponding `mapping*` entry in `window.dfw`
 - [ ] A widget outputs its HTML, and the widget's settings are added to `window.dfw`
-- [ ] An `[ad number=1]` or `[ad number=2]` shortcode should display the relevant sidebar.
-- [ ] An `[ad number=2 align=left]` shortcode should have the class `alignleft`.
 - [ ] Do settings saved in a previous version of this plugin work?
 
 Gutenberg tests
