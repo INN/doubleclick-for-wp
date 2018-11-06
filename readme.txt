@@ -77,3 +77,8 @@ Documentation updates:
 - Initial beta release.
 - Add support for displaying different sizes of ad unit based on the size of the viewport
 
+== Upgrade Notice ==
+
+= 0.3 =
+
+This update adds support for direct insertion of ads in posts via Gutenberg, filter-based modificaiton of ad options, and resolves a number of bugs.
