@@ -9,6 +9,7 @@
   * Register all block assets so they can be enqueued through Gutenberg in the corresponding context
   *
   * @link https://wordpress.org/gutenberg/handbook/blocks/writing-your-first-block-type/#enqueuing-block-scripts
+  * @since 0.3
   */
 function dfw_block_init() {
 	if( ! function_exists( 'register_block_type' ) ) {
@@ -109,6 +110,7 @@ add_action( 'init', 'dfw_block_init' );
  *     - provide classes
  *
  * @param Array $args The widget/thing arguments
+ * @since 0.3
  */
 function dfw_block_render_callback( $instance=array(), $content='', $tag='' ) {
 	/*
