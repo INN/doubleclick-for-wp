@@ -5,7 +5,7 @@ Tags: ads, doubleclick, publishers, news
 Requires at least: 4.0.0
 Requires PHP: 5.3
 Tested up to: 5.0-beta3
-Stable tag: 0.2.1
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,7 @@ New features:
 
 - Adds a Gutenberg Block for manual insertion of ads in posts. [Pull request #82](https://github.com/INN/doubleclick-for-wp/pull/82) for [issue #70](https://github.com/INN/doubleclick-for-wp/issues/70).
 - Adds a PHP filter `'dfw_js_data'`, to allow modification of the `window.dfw` object before it's output on the page. Refactors widgets and blocks to draw all details needed from `window.dfw` instead of separately-enqueued JSON blobs. This should allow you to `setRequestNonPersonalizedAds. [PR #81](https://github.com/INN/doubleclick-for-wp/pull/81) for [issue #63](https://github.com/INN/doubleclick-for-wp/issues/63), with thanks to GitHub user [tienvooracht](https://github.com/tienvooracht) for the idea.
+- Tested up to WordPress 5.0-beta3
 
 Changes and fixes:
 
