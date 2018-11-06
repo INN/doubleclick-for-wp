@@ -36,25 +36,25 @@ class DoubleClickBreakpoint {
 	public $option;
 
 	public function __construct( $identifier, $args = null ) {
+		// specify all the options because there has been come confusion, historically
 		if ( isset( $args['min_width'] ) ) {
 			$this->min_width = $args['min_width'];
+		} else if ( isset( $args['minWidth'] ) ) {
+			$this->min_width = $args['minWidth'];
+		} else if ( isset( $args['min-width'] ) ) {
+			$this->max_width = $args['min-width'];
 		}
 
 		if ( isset( $args['max_width'] ) ) {
 			$this->max_width = $args['max_width'];
+		} else if ( isset( $args['maxWidth'] ) ) {
+			$this->max_width = $args['maxWidth'];
+		} else if ( isset( $args['max-width'] ) ) {
+			$this->max_width = $args['max-width'];
 		}
 
 		if ( isset( $args['_option'] ) && $args['_option'] ) {
 			$this->option = true;
-		}
-
-
-		// Same, but with different spelling
-		if ( isset( $args['max-width'] ) ) {
-			$this->max_width = $args['max-width'];
-		}
-		if ( isset( $args['min-width'] ) ) {
-			$this->min_width = $args['min-width'];
 		}
 
 		$this->identifier = $identifier;
