@@ -156,9 +156,12 @@ class DoubleClick {
 
 		$data = array(
 			'dfpID' => $this->network_code(),
-			'network_code' => $this->network_code(),
 			'sizeMapping' => $mappings,
 			'setTargeting' => $this->targeting(),
+			// The following are legacy support for pre-0.3.1 user code
+			'network_code' => $this->network_code(),
+			'mappings' => $mappings,
+			'targeting' => $this->targeting(),
 		);
 
 		/**
@@ -168,9 +171,10 @@ class DoubleClick {
 		 * @link https://github.com/INN/doubleclick-for-wp/issues/63#issuecomment-393342611
 		 * @param Array $data An associative array of things. The default is:
 		 *    array(
+		 *        'dfpID' => the option from the plugin settings
 		 *        'network_code' => the option from the plugin settings
-		 *        'mappings' => an array of ad mappings; not sure exactly what this is supposed to be
-		 *        'targeting' => the ad targeting data appropriate to this page
+		 *        'sizeMapping' => an array of ad mappings; not sure exactly what this is supposed to be
+		 *        'setTargeting' => the ad targeting data appropriate to this page
 		 *    )
 		 */
 		$data = apply_filters( 'dfw_js_data', $data );
