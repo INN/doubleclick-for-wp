@@ -34,6 +34,17 @@ For more advanced documentation for developers and advanced users see [the offic
 
 == Changelog ==
 
+= 0.3.1 =
+
+Fixes:
+
+- Fixes an issue where non-lazy-loaded ads were not being loaded with the correct mappings, leading to ads requesting creatives with sizes that matched the size of the ad condainer, such as 1090x0. [Pull request #97](https://github.com/INN/doubleclick-for-wp/pull/97) for issues [#96](https://github.com/INN/doubleclick-for-wp/issues/96), [#95](https://github.com/INN/doubleclick-for-wp/issues/95).
+- Fixes an issue where [Autoptimize](https://wordpress.org/plugins/autoptimize/) was breaking non-lazy-load ads. [Pull request #97](https://github.com/INN/doubleclick-for-wp/pull/97) for issue [#95](https://github.com/INN/doubleclick-for-wp/issues/95).
+
+Cleanup:
+
+- Removes some antiquated copied of jquery.dfp.js that were kept in the plugin, despite not being referenced. [Pull request #97](https://github.com/INN/doubleclick-for-wp/pull/97) for issue [#94](https://github.com/INN/doubleclick-for-wp/issues/94).
+
 = 0.3 =
 
 Thanks to WordPress.org user [onlineforbusiness](https://wordpress.org/support/users/onlineforbusiness/) and GitHub users [dbeniaminov](https://github.com/dbeniaminov) and [tienvooracht](https://github.com/tienvooracht) for their contributions to this release.
