@@ -83,8 +83,6 @@ class DoubleClick {
 			$this::$enqueued = true;
 		}
 
-		add_action( 'wp_print_footer_scripts', array( $this, 'footer_script' ) );
-
 		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 		if ( ! empty( $breakpoints ) ) :
@@ -197,20 +195,6 @@ class DoubleClick {
 	 */
 	private function network_code() {
 		return ( isset( $this->network_code ) && ! empty( $this->network_code ) ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
-	}
-
-	public function footer_script() {
-		if ( ! $this->debug ) {
-			$mappings = array();
-			foreach ( $this->ad_slots as $ad ) {
-				if ( $ad->has_mapping() ) {
-					$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
-				}
-			} ?>
-			<script type="text/javascript">
-				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp( window.dfw );
-			</script>
-		<?php }
 	}
 
 	private function targeting() {
