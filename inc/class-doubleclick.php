@@ -159,8 +159,8 @@ class DoubleClick {
 		$data = array(
 			'dfpID' => $this->network_code(),
 			'network_code' => $this->network_code(),
-			'mappings' => $mappings,
-			'targeting' => $this->targeting(),
+			'sizeMapping' => $mappings,
+			'setTargeting' => $this->targeting(),
 		);
 
 		/**
